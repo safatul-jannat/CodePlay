@@ -14,3 +14,4 @@ UI (FXML)
 ## Status
 Project structure and wiring complete.
 Game logic and visualization to be implemented next.
+
