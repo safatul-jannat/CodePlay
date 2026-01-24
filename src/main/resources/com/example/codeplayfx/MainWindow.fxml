@@ -9,7 +9,7 @@
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1200.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.codeplayfx.HelloController">
    <children>
       <Pane fx:id="gamepane" prefHeight="200.0" prefWidth="200.0" />
-      <Button fx:id="runButton" mnemonicParsing="false" text="Button" />
+      <!--<Button fx:id="runButton" mnemonicParsing="false" text="Button" /> -->
       <TextArea fx:id="codeTextArea" prefHeight="200.0" prefWidth="200.0" />
    </children>
 </VBox>
