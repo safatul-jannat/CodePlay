@@ -7,5 +7,9 @@ module com.example.codeplayfx {
     requires com.almasb.fxgl.all;
 
     opens com.example.codeplayfx to javafx.fxml;
+    opens com.example.codeplayfx.ui to javafx.fxml;
+
+
+
     exports com.example.codeplayfx;
 }
