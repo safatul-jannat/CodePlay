@@ -24,74 +24,33 @@ public class ToolPanel extends UIPanel {
         helpButton = (Button) loader.getNamespace().get("helpButton");
         backButton = (Button) loader.getNamespace().get("backButton");
 
-        VBox leftPanel = (VBox) loader.getNamespace().get("leftPanel");
-        this.root = leftPanel;
+        VBox toolContainer = (VBox) loader.getNamespace().get("toolContainer");
+        this.root = toolContainer;
     }
 
     @Override
     public void initialize() {
-        setupButtonStyles();
         setupButtonActions();
-        selectCodeButton(); // Auto-select Code on startup
-    }
-
-    private void setupButtonStyles() {
-        String selectedStyle = "-fx-background-color: #0e639c; -fx-text-fill: white;";
-        String normalStyle = "-fx-background-color: #2d2d30; -fx-text-fill: white;";
-
-        codeButton.setStyle(selectedStyle);
-        saveButton.setStyle(normalStyle);
-        docButton.setStyle(normalStyle);
-        helpButton.setStyle(normalStyle);
-        backButton.setStyle(normalStyle);
     }
 
     private void setupButtonActions() {
-        codeButton.setOnAction(e -> {
-            selectCodeButton();
-            mainWindow.focusCodeEditor();
-        });
+        // Code button - focus editor
+        codeButton.setOnAction(e -> mainWindow.focusCodeEditor());
 
-        saveButton.setOnAction(e -> {
-            resetButtonStyles();
-            saveButton.setStyle("-fx-background-color: #2d2d30; -fx-text-fill: #0e639c;");
-            mainWindow.showSaveDialog();
-        });
+        // Save button
+        saveButton.setOnAction(e -> mainWindow.showSaveDialog());
 
-        docButton.setOnAction(e -> {
-            resetButtonStyles();
-            docButton.setStyle("-fx-background-color: #2d2d30; -fx-text-fill: #0e639c;");
-            mainWindow.showDocDialog();
-        });
+        // Documentation button
+        docButton.setOnAction(e -> mainWindow.showDocDialog());
 
-        helpButton.setOnAction(e -> {
-            resetButtonStyles();
-            helpButton.setStyle("-fx-background-color: #2d2d30; -fx-text-fill: #0e639c;");
-            mainWindow.showHelpDialog();
-        });
+        // Help button
+        helpButton.setOnAction(e -> mainWindow.showHelpDialog());
 
-        backButton.setOnAction(e -> {
-            mainWindow.navigateToWelcome();
-        });
-    }
-
-    public void selectCodeButton() {
-        resetButtonStyles();
-        codeButton.setSelected(true);
-        codeButton.setStyle("-fx-background-color: #0e639c; -fx-text-fill: white;");
+        // Back button - go to welcome
+        backButton.setOnAction(e -> mainWindow.navigateToWelcome());
     }
 
     public void returnToCodeView() {
-        selectCodeButton();
-    }
-
-    private void resetButtonStyles() {
-        String normalStyle = "-fx-background-color: #2d2d30; -fx-text-fill: white;";
-        codeButton.setStyle(normalStyle);
-        saveButton.setStyle(normalStyle);
-        docButton.setStyle(normalStyle);
-        helpButton.setStyle(normalStyle);
-
-        codeButton.setSelected(false);
+        mainWindow.focusCodeEditor();
     }
 }

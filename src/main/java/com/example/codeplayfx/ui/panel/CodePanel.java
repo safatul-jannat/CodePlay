@@ -122,22 +122,24 @@ public class CodePanel extends UIPanel {
 
     public void setDefaultCode() {
         String defaultCode = """
-            // Welcome to CodePlay IDE!
-            // Start coding your game here
-            
-            function init() {
-                console.log("Game initialized!");
+        public class Game {
+            public void execute() {
+                // Create a bot
+                Bot player = createBot(100, 200, "Player1");
+                
+                // Move the bot
+                moveRight(player);
+                sleep(1000);
+                moveRight(player, 50);
+                
+                // Create a zombie
+                Zombie z = createZombie(300, 200);
+                
+                // Log something
+                log("Game started!");
             }
-            
-            function update() {
-                // Game logic here
-            }
-            
-            function draw() {
-                // Drawing here
-            }
-            """;
-
+        }
+        """;
         codeEditor.setText(defaultCode);
         currentText = defaultCode;
         undoStack.clear();

@@ -78,7 +78,7 @@
                <!-- Right: Canvas -->
                <VBox  fx:id="canvasContainerWrapper">
                   <!-- Canvas Toolbar -->
-                  <HBox fx:id="controlToolbar" prefHeight="37.0" prefWidth="398.0" spacing="5" style="-fx-background-color: #2d2d30; -fx-padding: 5;">
+                  <HBox fx:id="controlToolbar" prefHeight="37.0" prefWidth="398.0" spacing="5" style="-fx-background-color: #323030; -fx-padding: 5;">
                      <Button fx:id="runButton" style="-fx-background-color: #0e639c; -fx-text-fill: white; -fx-font-weight: bold;" text="▶ Run" />
                      <Button fx:id="pauseButton" text="⏸ Pause" />
                      <Button fx:id="stopButton" text="⏹ Stop" />
@@ -87,7 +87,7 @@
                   </HBox>
 
                   <!-- Canvas Area -->
-                  <Pane fx:id="canvasContainer" prefHeight="396.0" prefWidth="432.0" style="-fx-background-color: black; -fx-min-width: 400; -fx-min-height: 300;" VBox.vgrow="ALWAYS">
+                  <Pane fx:id="canvasContainer" prefHeight="396.0" prefWidth="432.0" style="-fx-background-color: #dad4d4; -fx-min-width: 400; -fx-min-height: 300;" VBox.vgrow="ALWAYS">
                      <!-- Canvas will be drawn here -->
                      <Label alignment="CENTER" style="-fx-text-fill: #666666; -fx-font-size: 18px;" text="Game Preview" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                   </Pane>
@@ -116,7 +116,7 @@
       </HBox>
    </bottom>
    <left>
-      <VBox prefHeight="630.0" prefWidth="62.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="toolContainer" prefHeight="630.0" prefWidth="62.0" BorderPane.alignment="CENTER">
          <children>
             <ToggleButton fx:id="codeButton" mnemonicParsing="false" prefHeight="62.0" prefWidth="62.0" text="Code" />
             <Separator prefWidth="200.0" />
