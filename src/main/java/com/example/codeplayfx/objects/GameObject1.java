@@ -5,7 +5,7 @@ package com.example.codeplayfx.objects;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public abstract class GameObject {
+public abstract class GameObject1 {
     protected double x;
     protected double y;
     protected double width;
@@ -13,7 +13,7 @@ public abstract class GameObject {
     protected Color color;
     protected String id;
 
-    public GameObject(double x, double y, double width, double height, Color color, String id) {
+    public GameObject1(double x, double y, double width, double height, Color color, String id) {
         this.x = x;
         this.y = y;
         this.width = width;
