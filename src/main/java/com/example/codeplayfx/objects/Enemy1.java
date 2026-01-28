@@ -5,8 +5,8 @@ package com.example.codeplayfx.objects;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class Enemy extends GameObject {
-    public Enemy(double x, double y, String id) {
+public class Enemy1 extends GameObject1 {
+    public Enemy1(double x, double y, String id) {
         super(x, y, 50, 50, Color.RED, id);
     }
 

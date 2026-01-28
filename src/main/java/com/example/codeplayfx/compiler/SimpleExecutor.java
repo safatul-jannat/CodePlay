@@ -1,8 +1,8 @@
 package com.example.codeplayfx.compiler;
 
 import com.example.codeplayfx.core.GameWorld;
-import com.example.codeplayfx.objects.Player;
-import com.example.codeplayfx.objects.Enemy;
+import com.example.codeplayfx.objects.Player1;
+import com.example.codeplayfx.objects.Enemy1;
 
 public class SimpleExecutor {
 
@@ -22,13 +22,13 @@ public class SimpleExecutor {
                 }
 
                 if (line.contains("new Player(")) {
-                    Player player = parsePlayer(line);
+                    Player1 player = parsePlayer(line);
                     if (player != null) {
                         gameWorld.addObject(player);
                         objectsCreated++;
                     }
                 } else if (line.contains("new Enemy(")) {
-                    Enemy enemy = parseEnemy(line);
+                    Enemy1 enemy = parseEnemy(line);
                     if (enemy != null) {
                         gameWorld.addObject(enemy);
                         objectsCreated++;
@@ -47,7 +47,7 @@ public class SimpleExecutor {
         }
     }
 
-    private Player parsePlayer(String line) {
+    private Player1 parsePlayer(String line) {
         try {
             // Find "new Player(" in the line
             int start = line.indexOf("new Player(") + 11; // "new Player(" is 11 chars
@@ -69,7 +69,7 @@ public class SimpleExecutor {
             String id = parseString(parts[2].trim());
 
             System.out.println("✓ Parsed Player: " + id + " at (" + x + ", " + y + ")");
-            return new Player(x, y, id);
+            return new Player1(x, y, id);
 
         } catch (Exception e) {
             System.err.println("✗ Failed to parse Player: " + e.getMessage() + " in line: " + line);
@@ -77,7 +77,7 @@ public class SimpleExecutor {
         }
     }
 
-    private Enemy parseEnemy(String line) {
+    private Enemy1 parseEnemy(String line) {
         try {
             // Find "new Enemy(" in the line
             int start = line.indexOf("new Enemy(") + 10; // "new Enemy(" is 10 chars
@@ -99,7 +99,7 @@ public class SimpleExecutor {
             String id = parseString(parts[2].trim());
 
             System.out.println("✓ Parsed Enemy: " + id + " at (" + x + ", " + y + ")");
-            return new Enemy(x, y, id);
+            return new Enemy1(x, y, id);
 
         } catch (Exception e) {
             System.err.println("✗ Failed to parse Enemy: " + e.getMessage() + " in line: " + line);
