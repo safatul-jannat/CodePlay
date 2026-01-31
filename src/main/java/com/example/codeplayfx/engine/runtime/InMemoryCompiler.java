@@ -2,93 +2,106 @@ package com.example.codeplayfx.engine.runtime;
 
 import javax.tools.*;
 import java.io.*;
-import java.net.*;
+import java.net.URI;
 import java.util.*;
 
 public class InMemoryCompiler {
-    private static Map<String, byte[]> compiledClasses = new HashMap<>();
-    private static Class<?> lastCompiledClass = null;
 
+    private static Class<?> lastCompiledClass;
+
+    // ==================================================
+    // MAIN COMPILE METHOD
+    // ==================================================
     public static Class<?> compile(String className, String sourceCode) {
+
         try {
             System.out.println("=== IN-MEMORY COMPILATION ===");
             System.out.println("Compiling: " + className);
 
-            // Get Java compiler
             JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
             if (compiler == null) {
-                throw new RuntimeException("No Java compiler found. Use JDK (not JRE)!");
+                throw new IllegalStateException(
+                        "JavaCompiler not found. Make sure you are using a JDK, not a JRE."
+                );
             }
 
-            // Create in-memory file manager
-            MemoryFileManager fileManager = new MemoryFileManager(
-                    compiler.getStandardFileManager(null, null, null)
-            );
+            StandardJavaFileManager standardFileManager =
+                    compiler.getStandardFileManager(null, null, null);
 
-            // Create compilation unit from string
-            JavaFileObject source = new JavaSourceFromString(className, sourceCode);
+            MemoryFileManager fileManager =
+                    new MemoryFileManager(standardFileManager);
 
-            // Prepare compilation
+            JavaFileObject source =
+                    new JavaSourceFromString(className, sourceCode);
+
             List<String> options = Arrays.asList(
                     "-classpath", getClassPath(),
-                    "-Xlint:unchecked"
+                    "--module-path", getModulePath(),
+                    "--add-modules", "ALL-MODULE-PATH"
             );
 
-            List<JavaFileObject> compilationUnits = Arrays.asList(source);
+            JavaCompiler.CompilationTask task =
+                    compiler.getTask(
+                            null,
+                            fileManager,
+                            null,
+                            options,
+                            null,
+                            List.of(source)
+                    );
 
-            StringWriter output = new StringWriter();
-            JavaCompiler.CompilationTask task = compiler.getTask(
-                    output, fileManager, null, options, null, compilationUnits
-            );
-
-            // Compile!
             boolean success = task.call();
-            System.out.println("Compilation " + (success ? "SUCCESS" : "FAILED"));
 
             if (!success) {
-                System.err.println("Compilation output:\n" + output.toString());
+                System.err.println("Compilation FAILED");
                 return null;
             }
 
-            // Get compiled bytes
-            compiledClasses = fileManager.getClassBytes();
-            System.out.println("Compiled classes: " + compiledClasses.keySet());
+            System.out.println("Compilation SUCCESS");
 
-            // Load the main class
-            InMemoryClassLoader classLoader = new InMemoryClassLoader(compiledClasses);
+            InMemoryClassLoader classLoader =
+                    new InMemoryClassLoader(fileManager.getClassBytes());
+
             lastCompiledClass = classLoader.loadClass(className);
+            System.out.println("Loaded class: " + className);
 
-            System.out.println("Class loaded: " + lastCompiledClass.getName());
             return lastCompiledClass;
 
         } catch (Exception e) {
-            System.err.println("Compilation error: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
+    }
+
+    // ==================================================
+    // HELPERS
+    // ==================================================
+    private static String getClassPath() {
+        return System.getProperty("java.class.path");
+    }
+
+    private static String getModulePath() {
+        return System.getProperty("jdk.module.path");
     }
 
     public static Class<?> getLastCompiledClass() {
         return lastCompiledClass;
     }
 
-    public static void clearCache() {
-        compiledClasses.clear();
-        lastCompiledClass = null;
-    }
-
-    private static String getClassPath() {
-        return System.getProperty("java.class.path");
-    }
-
-    // ===== HELPER CLASSES =====
-
+    // ==================================================
+    // SOURCE FROM STRING
+    // ==================================================
     static class JavaSourceFromString extends SimpleJavaFileObject {
-        final String code;
 
-        JavaSourceFromString(String name, String code) {
-            super(URI.create("string:///" + name.replace('.', '/') + Kind.SOURCE.extension),
-                    Kind.SOURCE);
+        private final String code;
+
+        JavaSourceFromString(String className, String code) {
+            super(
+                    URI.create("string:///" +
+                            className.replace('.', '/') +
+                            Kind.SOURCE.extension),
+                    Kind.SOURCE
+            );
             this.code = code;
         }
 
@@ -98,36 +111,42 @@ public class InMemoryCompiler {
         }
     }
 
-    static class MemoryFileManager extends ForwardingJavaFileManager<JavaFileManager> {
+    // ==================================================
+    // IN-MEMORY FILE MANAGER
+    // ==================================================
+    static class MemoryFileManager
+            extends ForwardingJavaFileManager<StandardJavaFileManager> {
+
         private final Map<String, byte[]> classBytes = new HashMap<>();
 
-        MemoryFileManager(JavaFileManager fileManager) {
+        MemoryFileManager(StandardJavaFileManager fileManager) {
             super(fileManager);
         }
 
         @Override
-        public JavaFileObject getJavaFileForOutput(Location location, String className,
-                                                   JavaFileObject.Kind kind,
-                                                   FileObject sibling) throws IOException {
-            if (kind == JavaFileObject.Kind.CLASS) {
-                return new SimpleJavaFileObject(
-                        URI.create("mem:///" + className.replace('.', '/') + kind.extension),
-                        kind
-                ) {
-                    @Override
-                    public OutputStream openOutputStream() {
-                        return new ByteArrayOutputStream() {
-                            @Override
-                            public void close() throws IOException {
-                                super.close();
-                                classBytes.put(className, toByteArray());
-                                System.out.println("  -> Stored class: " + className);
-                            }
-                        };
-                    }
-                };
-            }
-            return super.getJavaFileForOutput(location, className, kind, sibling);
+        public JavaFileObject getJavaFileForOutput(
+                Location location,
+                String className,
+                JavaFileObject.Kind kind,
+                FileObject sibling
+        ) {
+            return new SimpleJavaFileObject(
+                    URI.create("mem:///" +
+                            className.replace('.', '/') +
+                            kind.extension),
+                    kind
+            ) {
+                @Override
+                public OutputStream openOutputStream() {
+                    return new ByteArrayOutputStream() {
+                        @Override
+                        public void close() throws IOException {
+                            classBytes.put(className, toByteArray());
+                            super.close();
+                        }
+                    };
+                }
+            };
         }
 
         Map<String, byte[]> getClassBytes() {
@@ -135,18 +154,25 @@ public class InMemoryCompiler {
         }
     }
 
+    // ==================================================
+    // CLASS LOADER
+    // ==================================================
     static class InMemoryClassLoader extends ClassLoader {
+
         private final Map<String, byte[]> classBytes;
 
         InMemoryClassLoader(Map<String, byte[]> classBytes) {
+            super(ClassLoader.getSystemClassLoader());
             this.classBytes = classBytes;
         }
 
         @Override
-        protected Class<?> findClass(String name) throws ClassNotFoundException {
+        protected Class<?> findClass(String name)
+                throws ClassNotFoundException {
+
             byte[] bytes = classBytes.get(name);
             if (bytes == null) {
-                throw new ClassNotFoundException(name);
+                return super.findClass(name);
             }
             return defineClass(name, bytes, 0, bytes.length);
         }
