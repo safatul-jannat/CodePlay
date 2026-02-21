@@ -1,0 +1,419 @@
+/* outrun-theme.css - Fixed version without unsupported pseudo-selector */
+
+.root {
+    -fx-font-family: 'Segoe UI', 'SF Pro Text', 'System';
+    -fx-background-color: #1a1b2f;
+    -fx-accent: #ff7acb;
+    -fx-focus-color: #6effe8;
+}
+
+/* ===== TOP NAVIGATION ===== */
+#topNavigation {
+    -fx-background-color: #1f1f2e;
+    -fx-padding: 8px 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 2);
+}
+
+#topNavigation .label {
+    -fx-text-fill: #ff7acb;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, #ff7acb, 15, 0.5, 0, 0);
+    -fx-padding: 0 0 0 5;
+}
+
+/* Toggle Buttons */
+.toggle-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #b7b7c9;
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+    -fx-padding: 8px 15px;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-border-width: 0 0 2px 0;
+    -fx-border-color: transparent;
+    -fx-transition: all 0.2s ease;
+}
+
+.toggle-button:selected {
+    -fx-text-fill: #ff7acb;
+    -fx-border-color: #ff7acb;
+    -fx-effect: dropshadow(gaussian, #ff7acb, 10, 0.3, 0, 0);
+}
+
+.toggle-button:hover {
+    -fx-background-color: rgba(255, 122, 203, 0.1);
+    -fx-text-fill: #ff9ae0;
+}
+
+/* ===== TOOLBAR ===== */
+.tool-bar {
+    -fx-background-color: #26273b;
+    -fx-padding: 8px 15px;
+    -fx-spacing: 15px;
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: #3d3e5a;
+}
+
+.tool-bar .label {
+    -fx-text-fill: #ffb86b;
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-effect: dropshadow(gaussian, #ffb86b, 5, 0.3, 0, 0);
+}
+
+/* ===== LEFT TOOLBAR (VERTICAL) ===== */
+#toolContainer {
+    -fx-background-color: #1f1f2e;
+    -fx-padding: 10px 0;
+    -fx-border-width: 0 1px 0 0;
+    -fx-border-color: #3d3e5a;
+    -fx-spacing: 5;
+}
+
+#toolContainer .toggle-button, #toolContainer .button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #b7b7c9;
+    -fx-font-size: 13px;
+    -fx-min-width: 62px;
+    -fx-max-width: 62px;
+    -fx-min-height: 62px;
+    -fx-max-height: 62px;
+    -fx-graphic-text-gap: 8px;
+    -fx-content-display: TOP;
+    -fx-padding: 10px 0;
+    -fx-background-radius: 0;
+    -fx-cursor: hand;
+    -fx-border-width: 0 0 0 3px;
+    -fx-border-color: transparent;
+}
+
+#toolContainer .toggle-button:selected {
+    -fx-text-fill: #6effe8;
+    -fx-border-color: #6effe8;
+    -fx-effect: dropshadow(gaussian, #6effe8, 10, 0.3, 0, 0);
+    -fx-background-color: linear-gradient(to right, rgba(110, 255, 232, 0.1), transparent);
+}
+
+#toolContainer .button:hover, #toolContainer .toggle-button:hover {
+    -fx-text-fill: #6effe8;
+    -fx-background-color: rgba(110, 255, 232, 0.1);
+}
+
+/* ===== CODE EDITOR CONTAINER ===== */
+#editorContainer {
+    -fx-background-color: #1e1f2c;
+}
+
+#editorContainer .hbox {
+    -fx-background-color: #26273b;
+    -fx-padding: 8px 12px;
+    -fx-spacing: 10px;
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: #3d3e5a;
+}
+
+#editorContainer .button {
+    -fx-background-color: #363855;
+    -fx-text-fill: #e0e0e0;
+    -fx-font-size: 13px;
+    -fx-padding: 6px 12px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, #000000, 3, 0.2, 0, 1);
+}
+
+#editorContainer .button:hover {
+    -fx-background-color: #474b70;
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, #ff7acb, 5, 0.3, 0, 0);
+}
+
+#editorContainer .button:disabled {
+    -fx-opacity: 0.5;
+    -fx-background-color: #2a2b3a;
+}
+
+#editorContainer .label {
+    -fx-text-fill: #b7b7c9;
+    -fx-font-size: 13px;
+}
+
+/* RichTextFX Code Area Styles */
+.code-area {
+    -fx-background-color: #1a1b2f;
+    -fx-font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', monospace;
+    -fx-font-size: 14px;
+    -fx-background-insets: 0;
+    -fx-padding: 10px 0 10px 45px;
+}
+
+.code-area .text {
+    -fx-fill: #f8f8f2;
+}
+
+/* Line numbers */
+.lineno {
+    -fx-background-color: #1a1b2f;
+    -fx-text-fill: #6b6e9c;
+    -fx-font-family: 'JetBrains Mono', 'Monaco', monospace;
+    -fx-font-size: 12px;
+    -fx-padding: 0 5px 0 5px;
+    -fx-border-width: 0 1px 0 0;
+    -fx-border-color: #3d3e5a;
+}
+
+/* Syntax Highlighting Colors */
+.keyword {
+    -fx-fill: #ff7acb;
+    -fx-font-weight: bold;
+}
+
+.string {
+    -fx-fill: #6effe8;
+}
+
+.comment {
+    -fx-fill: #797c9a;
+}
+
+.number {
+    -fx-fill: #ffb86b;
+}
+
+.method {
+    -fx-fill: #ae81ff;
+}
+
+.class {
+    -fx-fill: #a6e22e;
+}
+
+.annotation {
+    -fx-fill: #f92672;
+}
+
+.operator {
+    -fx-fill: #ff7acb;
+}
+
+.bracket {
+    -fx-fill: #f8f8f2;
+}
+
+/* Caret */
+.code-area .caret {
+    -fx-stroke: #ff7acb;
+    -fx-stroke-width: 2px;
+}
+
+/* Selection */
+.code-area .selection {
+    -fx-fill: rgba(255, 122, 203, 0.3);
+}
+
+/* Current line highlight - using standard CSS */
+.code-area .paragraph-box:selected {
+    -fx-background-color: rgba(110, 255, 232, 0.05);
+}
+
+/* Scroll bars */
+.code-area .scroll-pane {
+    -fx-background-color: #1a1b2f;
+}
+
+.code-area .scroll-bar:vertical {
+    -fx-background-color: #26273b;
+    -fx-pref-width: 14px;
+}
+
+.code-area .scroll-bar:vertical .thumb {
+    -fx-background-color: #4d4f73;
+    -fx-background-radius: 7px;
+}
+
+.code-area .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #6b6e9c;
+}
+
+/* ===== CANVAS SECTION ===== */
+#canvasContainerWrapper {
+    -fx-background-color: #1f1f2e;
+}
+
+#controlToolbar {
+    -fx-background-color: #26273b;
+    -fx-padding: 8px 12px;
+    -fx-spacing: 10px;
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: #3d3e5a;
+}
+
+#runButton {
+    -fx-background-color: #6effe8;
+    -fx-text-fill: #1a1b2f;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 6px 15px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, #6effe8, 10, 0.5, 0, 0);
+}
+
+#runButton:hover {
+    -fx-background-color: #8afff0;
+    -fx-effect: dropshadow(gaussian, #6effe8, 15, 0.7, 0, 0);
+}
+
+#pauseButton, #stopButton {
+    -fx-background-color: #363855;
+    -fx-text-fill: #e0e0e0;
+    -fx-font-size: 13px;
+    -fx-padding: 6px 15px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+}
+
+#pauseButton:hover {
+    -fx-background-color: #ffb86b;
+    -fx-text-fill: #1a1b2f;
+}
+
+#stopButton:hover {
+    -fx-background-color: #ff6b6b;
+    -fx-text-fill: #1a1b2f;
+}
+
+#coordLabel {
+    -fx-text-fill: #ffb86b;
+    -fx-font-family: 'JetBrains Mono', 'Monospace';
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, #ffb86b, 5, 0.3, 0, 0);
+}
+
+#canvasLabel {
+    -fx-text-fill: #ff7acb;
+    -fx-font-size: 13px;
+}
+
+#canvasContainer {
+    -fx-background-color: #1a1b2f;
+    -fx-border-width: 0;
+}
+
+/* ===== CONSOLE ===== */
+#consoleContainer {
+    -fx-background-color: #1a1b2f;
+}
+
+#consoleContainer .label {
+    -fx-background-color: #ff7acb;
+    -fx-text-fill: #1a1b2f;
+    -fx-padding: 6px 12px;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-effect: dropshadow(gaussian, #ff7acb, 5, 0.3, 0, 0);
+}
+
+#console {
+    -fx-control-inner-background: #1e1f2c;
+    -fx-background-color: #1e1f2c;
+    -fx-text-fill: #b7b7c9;
+    -fx-font-family: 'JetBrains Mono', 'Consolas', monospace;
+    -fx-font-size: 12px;
+    -fx-highlight-fill: #ff7acb;
+    -fx-background-insets: 0;
+    -fx-padding: 10px;
+}
+
+#console .content {
+    -fx-background-color: #1e1f2c;
+}
+
+/* ===== STATUS BAR ===== */
+.bottom {
+    -fx-background-color: #ff7acb;
+}
+
+.bottom .hbox {
+    -fx-background-color: #ff7acb;
+    -fx-padding: 6px 15px;
+}
+
+#statusLabel {
+    -fx-text-fill: #1a1b2f;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-effect: dropshadow(gaussian, #ffffff, 3, 0.2, 0, 0);
+}
+
+/* ===== SPLIT PANES ===== */
+.split-pane {
+    -fx-background-color: #1a1b2f;
+    -fx-border-width: 0;
+}
+
+.split-pane:horizontal .split-pane-divider {
+    -fx-background-color: #3d3e5a;
+    -fx-pref-width: 2px;
+}
+
+.split-pane:vertical .split-pane-divider {
+    -fx-background-color: #3d3e5a;
+    -fx-pref-height: 2px;
+}
+
+/* ===== SEPARATORS ===== */
+.separator {
+    -fx-background-color: #3d3e5a;
+}
+
+.separator:vertical .line {
+    -fx-border-color: #3d3e5a;
+    -fx-border-width: 0 1 0 0;
+}
+
+.separator:horizontal .line {
+    -fx-border-color: #3d3e5a;
+    -fx-border-width: 1 0 0 0;
+}
+
+/* ===== TOOLTIPS ===== */
+.tooltip {
+    -fx-background-color: #363855;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-padding: 8px 12px;
+    -fx-background-radius: 6px;
+    -fx-effect: dropshadow(gaussian, #ff7acb, 10, 0.3, 0, 2);
+    -fx-border-color: #ff7acb;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes neonPulse {
+    0% { -fx-effect: dropshadow(gaussian, #ff7acb, 5, 0.3, 0, 0); }
+    50% { -fx-effect: dropshadow(gaussian, #ff7acb, 15, 0.7, 0, 0); }
+    100% { -fx-effect: dropshadow(gaussian, #ff7acb, 5, 0.3, 0, 0); }
+}
+
+@keyframes gradientShift {
+    0% { -fx-background-color: linear-gradient(to right, #ff7acb, #6effe8); }
+    50% { -fx-background-color: linear-gradient(to right, #6effe8, #ffb86b); }
+    100% { -fx-background-color: linear-gradient(to right, #ffb86b, #ff7acb); }
+}
+
+#topNavigation .label {
+    -fx-animation: neonPulse 3s infinite;
+}
+
+#runButton {
+    -fx-animation: neonPulse 2s infinite;
+}
+
+.bottom .hbox {
+    -fx-animation: gradientShift 8s infinite;
+}

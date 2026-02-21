@@ -53,4 +53,5 @@ public class ToolPanel extends UIPanel {
     public void returnToCodeView() {
         mainWindow.focusCodeEditor();
     }
+    public Button getSaveButton() { return saveButton; }
 }
