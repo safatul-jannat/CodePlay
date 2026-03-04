@@ -2,31 +2,26 @@ package com.example.codeplayfx.ui.screen;
 
 import com.example.codeplayfx.ui.panel.*;
 import com.example.codeplayfx.engine.core.GameEngine;
-import com.example.codeplayfx.engine.core.GridConfig;
+import com.example.codeplayfx.ui.SynthwaveThemeApplier;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class MainWindowScreen extends Screen {
 
-    // Panels
     private CodePanel codePanel;
     private GamePanel gamePanel;
     private ControlPanel controlPanel;
     private ToolPanel toolPanel;
     private TopNavigationPanel topNavPanel;
     private ConsolePanel consolePanel;
-
-    // Engine
     private GameEngine gameEngine;
-    private GridConfig gridConfig;
-
-    // Stage reference
-    private Stage stage;
+    private final Stage stage;
 
     public MainWindowScreen(Stage stage) {
         this.stage = stage;
-        this.gridConfig = new GridConfig();
 
         try {
             FXMLLoader loader = new FXMLLoader(
@@ -34,10 +29,6 @@ public class MainWindowScreen extends Screen {
             );
             root = loader.load();
 
-            // Initialize GameEngine
-            gameEngine = new GameEngine(gridConfig);
-
-            // Initialize ALL panels with 'this' reference
             codePanel = new CodePanel(loader, this);
             gamePanel = new GamePanel(loader, this);
             controlPanel = new ControlPanel(loader, this);
@@ -45,8 +36,31 @@ public class MainWindowScreen extends Screen {
             topNavPanel = new TopNavigationPanel(loader, this);
             consolePanel = new ConsolePanel(loader, this);
 
+            gameEngine = gamePanel.getGameEngine();
+
+            // Create scene with the root
+            Scene scene = new Scene(root, 1400, 800);
+
+            // Load CSS immediately
+            loadCss(scene);
+
+            // Set the scene on this screen's view
+            ((Parent)root).getScene(); // This is just to ensure, but we'll store scene separately
+            this.root = root; // Already set by Screen class
+
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void loadCss(Scene scene) {
+        try {
+            String cssPath = "/com/example/codeplayfx/css/synthwave-theme.css";
+            String css = getClass().getResource(cssPath).toExternalForm();
+            scene.getStylesheets().add(css);
+            System.out.println("✅ CSS loaded: " + cssPath);
+        } catch (Exception e) {
+            System.err.println("❌ Failed to load CSS: " + e.getMessage());
         }
     }
 
@@ -54,81 +68,74 @@ public class MainWindowScreen extends Screen {
     public void onShow() {
         System.out.println("Main Window Loaded");
 
-        // Initialize all panels
         codePanel.initialize();
         gamePanel.initialize();
         controlPanel.initialize();
         toolPanel.initialize();
         topNavPanel.initialize();
         consolePanel.initialize();
+
+        // Apply Synthwave theme after scene is ready
+        Platform.runLater(() -> {
+            try {
+                SynthwaveThemeApplier.apply(
+                        getView().getScene(),  // Get scene from view
+                        topNavPanel.getLogoLabel(),
+                        codePanel.getCodeEditor(),
+                        gamePanel.getCanvasContainer(),
+                        controlPanel.getStatusLabel(),
+                        controlPanel.getRunButton(),
+                        controlPanel.getPauseButton(),
+                        controlPanel.getStopButton(),
+                        toolPanel.getSaveButton()
+                );
+                System.out.println("✅ Synthwave theme applied");
+            } catch (Exception e) {
+                System.err.println("❌ Failed to apply theme: " + e.getMessage());
+                e.printStackTrace();
+            }
+        });
+
+        Platform.runLater(() -> {
+            if (codePanel != null) {
+                codePanel.setupKeyboardShortcuts();
+            }
+        });
     }
 
-    // ===== GETTERS for panels to access =====
-    public Stage getStage() { return stage; }
-    public GameEngine getGameEngine() { return gameEngine; }
+    // Getters
     public CodePanel getCodePanel() { return codePanel; }
     public GamePanel getGamePanel() { return gamePanel; }
     public ConsolePanel getConsolePanel() { return consolePanel; }
     public ControlPanel getControlPanel() { return controlPanel; }
     public ToolPanel getToolPanel() { return toolPanel; }
     public TopNavigationPanel getTopNavPanel() { return topNavPanel; }
+    public GameEngine getGameEngine() { return gameEngine; }
+    public Stage getStage() { return stage; }
 
-    // ===== NAVIGATION METHODS (called by panels) =====
-
-    // For backButton in FXML
+    // Navigation methods
     public void navigateToWelcome() {
-        System.out.println("Back button clicked - navigating to Welcome");
         try {
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+            FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/com/example/codeplayfx/welcomescreen.fxml")
             );
-            javafx.scene.Parent root = loader.load();
-            stage.setScene(new javafx.scene.Scene(root, 900, 600));
-            stage.show();
+            Parent root = loader.load();
+            WelcomeScreen welcomeScreen = new WelcomeScreen(stage); // Adjust based on your WelcomeScreen constructor
+            ScreenManager.show(welcomeScreen);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    // For saveButton in FXML
-    public void showSaveDialog() {
-        System.out.println("Save button clicked");
-        focusCodeEditor();
-    }
+    public void showSaveDialog() { focusCodeEditor(); }
+    public void showDocDialog() { focusCodeEditor(); }
+    public void showHelpDialog() { focusCodeEditor(); }
+    public void focusCodeEditor() { if (codePanel != null) codePanel.focusEditor(); }
+    public void returnToCodeView() { focusCodeEditor(); }
 
-    // For docButton in FXML
-    public void showDocDialog() {
-        System.out.println("Documentation button clicked");
-        focusCodeEditor();
-    }
-
-    // For helpButton in FXML
-    public void showHelpDialog() {
-        System.out.println("Help button clicked");
-        focusCodeEditor();
-    }
-
-    // For codeButton in FXML (to focus editor)
-    public void focusCodeEditor() {
-        System.out.println("Focusing code editor");
-        if (codePanel != null) {
-            codePanel.focusEditor();
-        }
-    }
-
-    // For ToolPanel class methods
-    public void returnToCodeView() {
-        System.out.println("Returning to code view");
-        focusCodeEditor();
-    }
-
-    // ===== TOP NAV METHODS =====
-    public void onCreateTabClicked() {
-        System.out.println("Create tab clicked - already here");
-    }
+    public void onCreateTabClicked() { focusCodeEditor(); }
 
     public void onGalleryTabClicked() {
-        System.out.println("Gallery tab clicked");
         try {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
                     getClass().getResource("/com/example/codeplayfx/Gallery.fxml")
@@ -140,9 +147,7 @@ public class MainWindowScreen extends Screen {
             e.printStackTrace();
         }
     }
-
     public void onLibraryTabClicked() {
-        System.out.println("Library tab clicked");
         try {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
                     getClass().getResource("/com/example/codeplayfx/Library.fxml")
@@ -156,7 +161,6 @@ public class MainWindowScreen extends Screen {
     }
 
     public void onAboutTabClicked() {
-        System.out.println("About tab clicked");
         try {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
                     getClass().getResource("/com/example/codeplayfx/About.fxml")
@@ -169,8 +173,6 @@ public class MainWindowScreen extends Screen {
         }
     }
 
-    public void onHomeTabClicked() {
-        System.out.println("Home tab clicked");
-        navigateToWelcome();
-    }
+    public void onHomeTabClicked() { navigateToWelcome(); }
+    public void setGameEngine(GameEngine gameEngine) { this.gameEngine = gameEngine; }
 }

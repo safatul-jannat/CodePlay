@@ -2,6 +2,9 @@ package com.example.codeplayfx.ui.panel;
 
 import com.example.codeplayfx.ui.screen.MainWindowScreen;
 import com.example.codeplayfx.engine.core.GameEngine;
+import com.example.codeplayfx.compiler.GameCompiler;
+import com.example.codeplayfx.compiler.CompilationException;
+import com.example.codeplayfx.scripting.runtime.UserGame;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -46,19 +49,18 @@ public class ControlPanel extends UIPanel {
     }
 
     private void onRunClicked() {
-        GameEngine engine = mainWindow.getGameEngine();
+        GameEngine engine = mainWindow.getGamePanel().getGameEngine();
         String code = mainWindow.getCodePanel().getCode();
 
-        if (!isRunning) {
-            // First time running
-            engine.start(code);
-            isRunning = true;
-            isPaused = false;
-            codeModified = false;
+        if (engine == null) {
+            updateStatus("Error: Game engine not initialized");
+            mainWindow.getConsolePanel().error("Game engine not initialized");
+            return;
+        }
 
-            updateButtonStates();
-            updateStatus("Game running...");
-            mainWindow.getConsolePanel().log("Game started");
+        if (!isRunning) {
+            // First time running - compile and start
+            startGame(engine, code);
 
         } else if (isPaused) {
             // Resuming from pause
@@ -69,17 +71,70 @@ public class ControlPanel extends UIPanel {
             mainWindow.getConsolePanel().log("Game resumed");
 
         } else if (codeModified) {
-            // Code changed while running - restart
+            // Code changed while running - recompile and restart
+            engine.getGameWorld().clear();
             engine.stop();
-            engine.start(code);
+            mainWindow.getGamePanel().clearGameObjects();
+            startGame(engine, code);
+        }
+    }
+
+    /**
+     * Compile user code and start the game
+     */
+    private void startGame(GameEngine engine, String code) {
+        try {
+            engine.getGameWorld().clear();
+            engine.stop();
+            // Clear console before compilation
+            mainWindow.getConsolePanel().clear();
+            mainWindow.getConsolePanel().log("Compiling user code...");
+
+            // Compile user code
+            UserGame userGame = GameCompiler.compile(code);
+
+            mainWindow.getConsolePanel().log("✓ Compilation successful");
+            mainWindow.getConsolePanel().log("Starting game...");
+
+            // Load user game into engine
+            engine.loadUserGame(userGame);
+
+            // Start engine
+            engine.start();
+
+            isRunning = true;
+            isPaused = false;
             codeModified = false;
-            updateStatus("Game restarted with new code");
-            mainWindow.getConsolePanel().log("Game restarted");
+
+            updateButtonStates();
+            updateStatus("Game running...");
+            mainWindow.getConsolePanel().log("✓ Game started successfully");
+
+        } catch (CompilationException e) {
+            // Compilation failed - show error in console
+            updateStatus("Compilation failed");
+            mainWindow.getConsolePanel().error("Compilation failed:");
+            mainWindow.getConsolePanel().error(e.getMessage());
+
+            isRunning = false;
+            isPaused = false;
+            updateButtonStates();
+
+        } catch (Exception e) {
+            // Unexpected error
+            updateStatus("Error: " + e.getMessage());
+            mainWindow.getConsolePanel().error("Unexpected error:");
+            mainWindow.getConsolePanel().error(e.getMessage());
+            e.printStackTrace();
+
+            isRunning = false;
+            isPaused = false;
+            updateButtonStates();
         }
     }
 
     private void onPauseClicked() {
-        GameEngine engine = mainWindow.getGameEngine();
+        GameEngine engine = mainWindow.getGamePanel().getGameEngine();
 
         if (isRunning && !isPaused) {
             engine.pause();
@@ -98,10 +153,12 @@ public class ControlPanel extends UIPanel {
     }
 
     private void onStopClicked() {
-        GameEngine engine = mainWindow.getGameEngine();
+        GameEngine engine = mainWindow.getGamePanel().getGameEngine();
 
         if (isRunning) {
             engine.stop();
+            mainWindow.getGamePanel().clearGameObjects();
+
             isRunning = false;
             isPaused = false;
             updateButtonStates();
@@ -143,4 +200,16 @@ public class ControlPanel extends UIPanel {
     public boolean isCodeModified() {
         return codeModified;
     }
+
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    public boolean isPaused() {
+        return isPaused;
+    }
+    public Button getRunButton() { return runButton; }
+    public Button getPauseButton() { return pauseButton; }
+    public Button getStopButton() { return stopButton; }
+    public Label getStatusLabel() { return statusLabel; }
 }

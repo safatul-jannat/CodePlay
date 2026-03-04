@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
 
@@ -29,7 +30,7 @@
                <ToggleButton fx:id="createButton" prefHeight="41.0" prefWidth="90.0" style="-fx-background-color: #3c3c3c; -fx-text-fill: white;" text="Create" />
                <ToggleButton fx:id="galleryButton" prefHeight="40.0" prefWidth="90.0" style="-fx-background-color: #3c3c3c; -fx-text-fill: white;" text="Gallery" />
                <ToggleButton fx:id="libraryButton" prefHeight="44.0" prefWidth="90.0" style="-fx-background-color: #3c3c3c; -fx-text-fill: white;" text="Library" />
-               <ToggleButton  fx:id="aboutButton" prefHeight="38.0" prefWidth="90.0" style="-fx-background-color: #3c3c3c; -fx-text-fill: white;" text="About" />
+               <ToggleButton fx:id="aboutButton" prefHeight="38.0" prefWidth="90.0" style="-fx-background-color: #3c3c3c; -fx-text-fill: white;" text="About" />
                <ToggleButton fx:id="home" prefHeight="38.0" prefWidth="90.0" style="-fx-background-color: #3c3c3c; -fx-text-fill: white;" text="Home" />
             </HBox>
          </HBox>
@@ -52,7 +53,7 @@
             <SplitPane dividerPositions="0.40003808073115" orientation="HORIZONTAL">
 
                <!-- Left: Code Editor -->
-               <VBox fx:id="editorContainer">
+               <VBox fx:id="editorContainer" VBox.vgrow="ALWAYS">
                   <!-- Editor Toolbar -->
                   <HBox spacing="5" style="-fx-background-color: #2d2d30; -fx-padding: 5;">
                      <Button fx:id="undoButton" prefHeight="26.0" prefWidth="40.0" text="⟲">
@@ -68,22 +69,28 @@
                      <Button fx:id="clearButton" prefHeight="26.0" prefWidth="55.0" text="Clear" />
                      <Separator orientation="VERTICAL" />
                      <Label prefHeight="28.0" prefWidth="58.0" style="-fx-text-fill: white;" text="Font Size:" />
-                     <Button prefHeight="26.0" prefWidth="28.0" text="-" />
-                     <Button prefHeight="26.0" prefWidth="30.0" text="+" />
+                     <Button fx:id="fontUp" prefHeight="26.0" prefWidth="28.0" text="-" />
+                     <Button fx:id="fontDown" prefHeight="26.0" prefWidth="30.0" text="+" />
                      <VBox HBox.hgrow="ALWAYS" />
                   </HBox>
                   <TextArea fx:id="codeEditor" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                </VBox>
 
                <!-- Right: Canvas -->
-               <VBox  fx:id="canvasContainerWrapper">
+               <VBox fx:id="canvasContainerWrapper">
                   <!-- Canvas Toolbar -->
                   <HBox fx:id="controlToolbar" prefHeight="37.0" prefWidth="398.0" spacing="5" style="-fx-background-color: #323030; -fx-padding: 5;">
-                     <Button fx:id="runButton" style="-fx-background-color: #0e639c; -fx-text-fill: white; -fx-font-weight: bold;" text="▶ Run" />
+                     <Button fx:id="runButton"  text="▶ Run" />
                      <Button fx:id="pauseButton" text="⏸ Pause" />
                      <Button fx:id="stopButton" text="⏹ Stop" />
                      <VBox prefHeight="12.0" prefWidth="114.0" HBox.hgrow="ALWAYS" />
-                     <Label fx:id="canvasLabel"  style="-fx-text-fill: #cccccc;" text="Canvas " />
+                     <Label fx:id="coordLabel" style="-fx-text-fill: #cccccc; -fx-font-family: 'Monospace';" text="X: 0.0 Y: 0.0">
+                        <font>
+                           <Font name="Arial Black" size="14.0" />
+                        </font></Label>
+
+                     <Separator orientation="VERTICAL" />
+                     <Label fx:id="canvasLabel" style="-fx-text-fill: #cccccc;" text="Canvas " />
                   </HBox>
 
                   <!-- Canvas Area -->
@@ -96,9 +103,9 @@
             </SplitPane>
 
             <!-- Bottom: Console -->
-            <VBox  fx:id="consoleContainer">
-               <Label style="-fx-background-color: #007acc; -fx-text-fill: white; -fx-padding: 5; -fx-font-weight: bold;" text="Console" />
-               <TextArea fx:id="console" editable="false" prefHeight="164.0" prefWidth="1050.0" style="-fx-control-inner-background: #1e1e1e; -fx-text-fill: #d4d4d4; -fx-font-family: 'Monospace'; -fx-font-size: 12px;" wrapText="true" VBox.vgrow="ALWAYS">
+            <VBox fx:id="consoleContainer">
+               <Label fx:id="consoleLabel"  text="Console" />
+               <TextArea fx:id="console" editable="false" prefHeight="164.0" prefWidth="1050.0"  wrapText="true" VBox.vgrow="ALWAYS">
                   <padding>
                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                   </padding>
