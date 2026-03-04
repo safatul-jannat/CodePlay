@@ -1,34 +1,152 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
+<StackPane fx:id="rootPane" prefHeight="600" prefWidth="900" style="-fx-background-color: #050a1a;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.codeplayfx.ui.controller.AboutController">
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.codeplayfx.ui.SimpleBackController">
-    <top>
-        <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER_LEFT">
-            <children>
-                <Button mnemonicParsing="false" onAction="#goBack" prefWidth="50.0" text="&lt;-">
-                    <font>
-                        <Font name="System Bold" size="14.0" />
-                    </font>
-                </Button>
-            </children>
-            <padding>
-                <Insets bottom="10.0" left="10.0" top="10.0" />
-            </padding>
-        </HBox>
-    </top>
-    <center>
-        <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-            <children>
-                <Label text="About" />
-            </children>
-        </StackPane>
-    </center>
-</BorderPane>
+    <!-- ═══════════════════════════════════════════════════
+         BACKGROUND LAYERS (SAME AS WELCOME/SCREENS)
+    ════════════════════════════════════════════════════ -->
+
+    <!-- LAYER 0 — Dark gradient background -->
+    <Pane fx:id="bgPane" prefHeight="600" prefWidth="900" style="-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #050a1a 0%, #0d0824 40%, #110a30 70%, #000408 100%);" />
+
+    <!-- LAYER 1 — Grid overlay (lines drawn in controller) -->
+    <Pane fx:id="gridPane" mouseTransparent="true" opacity="0.045" prefHeight="600" prefWidth="900" />
+
+    <!-- LAYER 2 — Particle canvas (AnimationTimer in controller) -->
+    <Canvas fx:id="particleCanvas" height="600" mouseTransparent="true" width="900" />
+
+    <!-- LAYER 3 — Ambient glow orbs (added in controller) -->
+    <Pane fx:id="orbPane" mouseTransparent="true" prefHeight="600" prefWidth="900" />
+
+    <!-- ═══════════════════════════════════════════════════
+         LAYER 4 — ABOUT CONTENT
+    ════════════════════════════════════════════════════ -->
+    <BorderPane fx:id="contentBorderPane" prefHeight="600" prefWidth="900" style="-fx-background-color: transparent;">
+
+        <!-- TOP BAR - Navigation buttons with onAction bindings -->
+        <top>
+            <HBox alignment="CENTER_LEFT" prefHeight="81.0" prefWidth="900.0" spacing="10" style="-fx-padding: 15 20;">
+                <Text style="-fx-font-family: 'Arial Black'; -fx-font-size: 29px; -fx-fill: rgba(220,230,255,0.9);" text="ABOUT" />
+
+                <!-- Navigation buttons -->
+                <Button fx:id="backButton" onAction="#goBack" prefHeight="45.0" prefWidth="95.0" text="← BACK" />
+                <Button fx:id="mainWindowButton" onAction="#goMainWindow" prefHeight="45.0" prefWidth="95.0" text="EDITOR" />
+                <Button fx:id="galleryButton" onAction="#goGallery" prefHeight="46.0" prefWidth="116.0" text="PROJECTS" />
+                <Button fx:id="libraryButton" onAction="#goLibrary" prefHeight="45.0" prefWidth="95.0" text="LIBRARY" />
+                <Button fx:id="homeButton" onAction="#goHome" prefHeight="45.0" prefWidth="95.0" text="HOME" />
+            </HBox>
+        </top>
+
+        <!-- LEFT SPACER -->
+        <left>
+            <VBox prefWidth="40.0" />
+        </left>
+
+        <!-- RIGHT SPACER -->
+        <right>
+            <VBox prefWidth="40.0" />
+        </right>
+
+        <!-- BOTTOM SPACER -->
+        <bottom>
+            <HBox prefHeight="40.0" />
+        </bottom>
+
+        <!-- CENTER - Scrollable about content with multiple sections -->
+        <center>
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background: transparent; -fx-background-color: transparent;" BorderPane.alignment="CENTER">
+                <VBox spacing="20" style="-fx-padding: 20; -fx-background-color: rgba(30,40,60,0.4); -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: rgba(100,150,255,0.3); -fx-border-width: 2;">
+
+                    <!-- App Logo/Title Section -->
+                    <VBox alignment="CENTER" spacing="10" style="-fx-padding: 10;">
+                        <Text style="-fx-font-family: 'Arial Black'; -fx-font-size: 48px; -fx-fill: linear-gradient(from 0% 0% to 100% 100%, #88aaff, #ff6ec7);" text="CodePlay" />
+                        <Text style="-fx-font-family: 'Arial'; -fx-font-size: 18px; -fx-fill: rgba(220,230,255,0.8);" text="OOP Based Gaming" />
+                        <Label style="-fx-text-fill: #aaa; -fx-font-size: 14px;" text="Version 1.0.0 " />
+                    </VBox>
+
+                    <!-- App Description Section -->
+                    <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: rgba(20,30,50,0.5); -fx-background-radius: 15;">
+                        <Text style="-fx-font-family: 'Arial Black'; -fx-font-size: 20px; -fx-fill: #88aaff;" text="📱 About CodePlay" />
+                        <TextArea fx:id="appDescriptionArea" editable="false" prefHeight="120" styleClass="about-text-area" text="CodePlay is a gaming...." wrapText="true" />
+                    </VBox>
+
+                    <!-- Developers Section -->
+                    <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: rgba(20,30,50,0.5); -fx-background-radius: 15;">
+                        <Text style="-fx-font-family: 'Arial Black'; -fx-font-size: 20px; -fx-fill: #ff6ec7;" text="👨‍💻 Development Team" />
+
+                        <!-- Developer Cards in FlowPane for responsive layout -->
+                        <FlowPane hgap="20" style="-fx-padding: 10;" vgap="20">
+
+                            <!-- Developer 1 -->
+                            <VBox prefWidth="200" spacing="8" style="-fx-padding: 15; -fx-background-color: rgba(40,30,60,0.6); -fx-background-radius: 10; -fx-border-color: rgba(136,170,255,0.3); -fx-border-radius: 10;">
+                                <Text style="-fx-font-family: 'Arial Black'; -fx-font-size: 18px; -fx-fill: #88aaff;" text="Mst. Safatul Jannat Shupti" />
+                                <Text style="-fx-font-family: 'Arial'; -fx-font-size: 14px; -fx-fill: #ffb3ff;" />
+                                <Text style="-fx-font-family: 'Arial'; -fx-font-size: 12px; -fx-fill: #aaa;" />
+                                <Label style="-fx-text-fill: #88aaff; -fx-font-size: 11px;" />
+                            </VBox>
+
+                            <!-- Developer 2 -->
+                            <VBox prefWidth="200" spacing="8" style="-fx-padding: 15; -fx-background-color: rgba(40,30,60,0.6); -fx-background-radius: 10; -fx-border-color: rgba(255,110,199,0.3); -fx-border-radius: 10;">
+                                <Text style="-fx-font-family: 'Arial Black'; -fx-font-size: 18px; -fx-fill: #ff6ec7;" text="Safia Tasnim" />
+                                <Text style="-fx-font-family: 'Arial'; -fx-font-size: 14px; -fx-fill: #ffb3ff;" />
+                                <Text style="-fx-font-family: 'Arial'; -fx-font-size: 12px; -fx-fill: #aaa;" />
+                                <Label style="-fx-text-fill: #ff6ec7; -fx-font-size: 11px;" />
+                            </VBox>
+
+                            <!-- Developer 3 -->
+                            <VBox prefWidth="200" spacing="8" style="-fx-padding: 15; -fx-background-color: rgba(40,30,60,0.6); -fx-background-radius: 10; -fx-border-color: rgba(3,237,249,0.3); -fx-border-radius: 10;">
+                                <Text style="-fx-font-family: 'Arial Black'; -fx-font-size: 18px; -fx-fill: #03edf9;" text="Tuzana Shahrin Arna" />
+                                <Text style="-fx-font-family: 'Arial'; -fx-font-size: 14px; -fx-fill: #ffb3ff;" />
+                                <Text style="-fx-font-family: 'Arial'; -fx-font-size: 12px; -fx-fill: #aaa;" />
+                                <Label style="-fx-text-fill: #03edf9; -fx-font-size: 11px;" />
+                            </VBox>
+                        </FlowPane>
+                    </VBox>
+
+                    <!-- Technologies Section -->
+                    <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: rgba(20,30,50,0.5); -fx-background-radius: 15;">
+                        <Text style="-fx-font-family: 'Arial Black'; -fx-font-size: 20px; -fx-fill: #03edf9;" text="⚙️ Built With" />
+                        <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 10;">
+                            <VBox spacing="5">
+                                <Label style="-fx-text-fill: #88aaff; -fx-font-weight: bold;" text="• Java 25" />
+                                <Label style="-fx-text-fill: #88aaff; -fx-font-weight: bold;" text="• JavaFX 21" />
+                                <Label style="-fx-text-fill: #88aaff; -fx-font-weight: bold;" text="• Maven" />
+                            </VBox>
+                            <VBox spacing="5">
+                                <Label style="-fx-text-fill: #ff6ec7; -fx-font-weight: bold;" />
+                                <Label style="-fx-text-fill: #ff6ec7; -fx-font-weight: bold;" />
+                                <Label style="-fx-text-fill: #ff6ec7; -fx-font-weight: bold;" />
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Contact/Links Section -->
+                    <VBox spacing="15" style="-fx-padding: 15; -fx-background-color: rgba(86,5,181,0.3); -fx-background-radius: 15;">
+                        <Text style="-fx-font-family: 'Arial Black'; -fx-font-size: 20px; -fx-fill: white;" text="🔗 Connect With Us" />
+                        <HBox alignment="CENTER" spacing="20">
+                            <Button styleClass="about-social-button" text="GitHub" />
+                            <Button styleClass="about-social-button" text="X" />
+                            <Button styleClass="about-social-button" text="Discord" />
+                        </HBox>
+                        <Label style="-fx-text-fill: #aaa; -fx-font-size: 12px; -fx-padding: 10 0 0 0;" text="CodePlay" />
+                    </VBox>
+
+                </VBox>
+            </ScrollPane>
+        </center>
+
+    </BorderPane>
+</StackPane>

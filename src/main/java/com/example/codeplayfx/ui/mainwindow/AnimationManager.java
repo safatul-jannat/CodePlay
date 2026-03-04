@@ -1,16 +1,12 @@
-package com.example.codeplayfx.ui;
+package com.example.codeplayfx.ui.mainwindow;
 
 import javafx.animation.*;
 import javafx.scene.Node;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
-import org.fxmisc.richtext.CodeArea;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -92,17 +88,18 @@ public class AnimationManager {
     }
 
     public static void selectionGlow(Node editorNode) {
+        stopAnimation(editorNode);
         DropShadow glow = new DropShadow();
-        glow.setColor(Color.web("#ff008d", 0.33));
-        glow.setRadius(35);
+        glow.setColor(Color.web("#6600ff", 0.33));
+        glow.setRadius(30);
         glow.setSpread(0.15);
         editorNode.setEffect(glow);
 
-        FadeTransition fade = new FadeTransition(Duration.millis(600), editorNode);
-        fade.setFromValue(1.0);
-        fade.setToValue(1.0);
-        fade.setOnFinished(e -> startCursorPulse(editorNode));
-        fade.play();
+//        FadeTransition fade = new FadeTransition(Duration.millis(600), editorNode);
+//        fade.setFromValue(1.0);
+//        fade.setToValue(1.0);
+//        fade.setOnFinished(e -> startCursorPulse(editorNode));
+//        fade.play();
     }
 
     public static void flashGlow(Node node, Color color) {

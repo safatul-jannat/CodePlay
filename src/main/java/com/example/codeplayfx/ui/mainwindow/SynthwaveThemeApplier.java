@@ -1,4 +1,4 @@
-package com.example.codeplayfx.ui;
+package com.example.codeplayfx.ui.mainwindow;
 
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -31,12 +31,15 @@ public class SynthwaveThemeApplier {
         if (codeEditor != null) {
 
 
-                    AnimationManager.startCursorPulse(codeEditor);
+                   // AnimationManager.startCursorPulse(codeEditor);
 
 
             codeEditor.selectedTextProperty().addListener((obs, oldSel, newSel) -> {
                 if (newSel != null && !newSel.isEmpty()) {
                     AnimationManager.selectionGlow(codeEditor);
+                }else {
+                    // Remove glow when selection is cleared
+                    AnimationManager.stopAnimation(codeEditor);
                 }
             });
         }

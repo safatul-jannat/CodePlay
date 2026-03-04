@@ -1,4 +1,4 @@
-package com.example.codeplayfx.ui.panel;
+package com.example.codeplayfx.ui.mainwindow.panel;
 
 import com.example.codeplayfx.ui.screen.MainWindowScreen;
 import com.example.codeplayfx.engine.core.GameEngine;
@@ -109,11 +109,11 @@ public class GamePanel extends UIPanel {
         double height = gridCanvas.getHeight();
 
         // Clear with dark background
-        gc.setFill(Color.rgb(26, 27, 47));
+        gc.setFill(Color.rgb(7, 5, 10));
         gc.fillRect(0, 0, width, height);
 
         // Draw neon grid lines
-        gc.setStroke(Color.rgb(110, 255, 232, 0.3));
+        gc.setStroke(Color.rgb(137, 96, 247, 0.6));
         gc.setLineWidth(1);
 
         // Add glow effect

@@ -1,4 +1,4 @@
-package com.example.codeplayfx.ui.panel;
+package com.example.codeplayfx.ui.mainwindow.panel;
 
 import javafx.scene.layout.Pane;
 

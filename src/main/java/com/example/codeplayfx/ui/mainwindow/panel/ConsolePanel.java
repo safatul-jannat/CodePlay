@@ -1,14 +1,12 @@
-package com.example.codeplayfx.ui.panel;
+package com.example.codeplayfx.ui.mainwindow.panel;
 
 import com.example.codeplayfx.ui.screen.MainWindowScreen;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
-import javafx.scene.paint.Color;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -217,6 +215,9 @@ public class ConsolePanel extends UIPanel {
                 console.positionCaret(console.getText().length());
             }
         });
+    }
+    public Pane getRoot() {
+        return (Pane) root;
     }
     public Label getConsoleLabel() { return consoleLabel; }
 }

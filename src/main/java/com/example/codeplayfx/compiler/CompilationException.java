@@ -1,7 +1,7 @@
 package com.example.codeplayfx.compiler;
 
-/**
- * CompilationException - Thrown when user code compilation fails.
+/*
+CompilationException - Thrown when user code compilation fails.
  */
 public class CompilationException extends RuntimeException {
     

@@ -1,4 +1,4 @@
-package com.example.codeplayfx.ui.highlighting;
+package com.example.codeplayfx.ui.mainwindow.highlighting;
 
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;

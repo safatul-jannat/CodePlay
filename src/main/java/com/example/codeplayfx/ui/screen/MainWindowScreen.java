@@ -1,12 +1,20 @@
 package com.example.codeplayfx.ui.screen;
 
-import com.example.codeplayfx.ui.panel.*;
+import com.example.codeplayfx.manager.GalleryManager;
+import com.example.codeplayfx.model.Project;
+import com.example.codeplayfx.ui.mainwindow.PopupManager;
+import com.example.codeplayfx.ui.mainwindow.panel.*;
 import com.example.codeplayfx.engine.core.GameEngine;
-import com.example.codeplayfx.ui.SynthwaveThemeApplier;
+import com.example.codeplayfx.ui.mainwindow.SynthwaveThemeApplier;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 
 public class MainWindowScreen extends Screen {
@@ -20,6 +28,13 @@ public class MainWindowScreen extends Screen {
     private GameEngine gameEngine;
     private final Stage stage;
 
+
+    private String savedCodeContent = "";
+    private boolean isFirstShow = true;
+    private Label projectTitleLabel;
+    private String currentProjectName = "untitled";
+    private boolean isNewProject = true;
+
     public MainWindowScreen(Stage stage) {
         this.stage = stage;
 
@@ -29,6 +44,7 @@ public class MainWindowScreen extends Screen {
             );
             root = loader.load();
 
+            projectTitleLabel = (Label) loader.getNamespace().get("projectTitleLabel");
             codePanel = new CodePanel(loader, this);
             gamePanel = new GamePanel(loader, this);
             controlPanel = new ControlPanel(loader, this);
@@ -39,7 +55,7 @@ public class MainWindowScreen extends Screen {
             gameEngine = gamePanel.getGameEngine();
 
             // Create scene with the root
-            Scene scene = new Scene(root, 1400, 800);
+             scene = new Scene(root, 1400, 800);
 
             // Load CSS immediately
             loadCss(scene);
@@ -68,6 +84,10 @@ public class MainWindowScreen extends Screen {
     public void onShow() {
         System.out.println("Main Window Loaded");
 
+        updateProjectTitle();
+        setupKeyboardShortcuts();
+        codePanel.initialize(isFirstShow);
+
         codePanel.initialize();
         gamePanel.initialize();
         controlPanel.initialize();
@@ -75,11 +95,18 @@ public class MainWindowScreen extends Screen {
         topNavPanel.initialize();
         consolePanel.initialize();
 
+        if (!isFirstShow && !savedCodeContent.isEmpty()) {
+            codePanel.setCodeContent(savedCodeContent);
+            System.out.println("✅ Restored saved code content (" + savedCodeContent.length() + " chars)");
+        }
+
+        isFirstShow = false;
+
         // Apply Synthwave theme after scene is ready
         Platform.runLater(() -> {
             try {
                 SynthwaveThemeApplier.apply(
-                        getView().getScene(),  // Get scene from view
+                        scene,  // Get scene from view
                         topNavPanel.getLogoLabel(),
                         codePanel.getCodeEditor(),
                         gamePanel.getCanvasContainer(),
@@ -103,6 +130,13 @@ public class MainWindowScreen extends Screen {
         });
     }
 
+    public void onHide() {
+        if (codePanel != null) {
+            savedCodeContent = codePanel.getCodeContent();
+            System.out.println("💾 Saved code content before leaving (" + savedCodeContent.length() + " chars)");
+        }
+    }
+
     // Getters
     public CodePanel getCodePanel() { return codePanel; }
     public GamePanel getGamePanel() { return gamePanel; }
@@ -113,19 +147,15 @@ public class MainWindowScreen extends Screen {
     public GameEngine getGameEngine() { return gameEngine; }
     public Stage getStage() { return stage; }
 
-    // Navigation methods
-    public void navigateToWelcome() {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/example/codeplayfx/welcomescreen.fxml")
-            );
-            Parent root = loader.load();
-            WelcomeScreen welcomeScreen = new WelcomeScreen(stage); // Adjust based on your WelcomeScreen constructor
-            ScreenManager.show(welcomeScreen);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    // Navigation methods
+//    public void navigateToWelcome() {
+//        try {
+//            ScreenManager.pushCurrentToHistory(this);
+//            ScreenManager.goToWelcome();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public void showSaveDialog() { focusCodeEditor(); }
     public void showDocDialog() { focusCodeEditor(); }
@@ -136,43 +166,126 @@ public class MainWindowScreen extends Screen {
     public void onCreateTabClicked() { focusCodeEditor(); }
 
     public void onGalleryTabClicked() {
-        try {
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-                    getClass().getResource("/com/example/codeplayfx/Gallery.fxml")
-            );
-            javafx.scene.Parent root = loader.load();
-            stage.setScene(new javafx.scene.Scene(root, 900, 600));
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        System.out.println("MainWindow: Gallery button clicked");
+        onHide();
+
+        ScreenManager.goToGallery();
     }
+
     public void onLibraryTabClicked() {
-        try {
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-                    getClass().getResource("/com/example/codeplayfx/Library.fxml")
-            );
-            javafx.scene.Parent root = loader.load();
-            stage.setScene(new javafx.scene.Scene(root, 900, 600));
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        System.out.println("MainWindow: Library button clicked");
+        onHide();
+
+        ScreenManager.goToLibrary(); // Smart method handles caching
     }
 
     public void onAboutTabClicked() {
-        try {
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-                    getClass().getResource("/com/example/codeplayfx/About.fxml")
-            );
-            javafx.scene.Parent root = loader.load();
-            stage.setScene(new javafx.scene.Scene(root, 900, 600));
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
+        System.out.println("MainWindow: About button clicked");
+        onHide();
+        ScreenManager.goToAbout();
+    }
+
+
+    public void onHomeTabClicked() {
+        System.out.println("MainWindow: Home button clicked");
+        onHide();
+        ScreenManager.goToWelcome();
+    }
+    public void setGameEngine(GameEngine gameEngine) { this.gameEngine = gameEngine; }
+
+    // Add this method to load a project from gallery
+    public void loadProject(Project project) {
+        if (codePanel != null) {
+            codePanel.setCodeContent(project.getCode());
+            this.currentProjectName = project.getName();
+            this.isNewProject = false;
+            updateProjectTitle();
+            System.out.println("Loaded project: " + project.getName());
         }
     }
 
-    public void onHomeTabClicked() { navigateToWelcome(); }
-    public void setGameEngine(GameEngine gameEngine) { this.gameEngine = gameEngine; }
+    public void setCurrentProjectName(String name) {
+        this.currentProjectName = name;
+        updateProjectTitle();
+    }
+    private void updateProjectTitle() {
+        // Update window title
+        if (stage != null) {
+            stage.setTitle("CodePlay - " + currentProjectName);
+        }
+
+        // If you have a label in your UI showing project name, update it
+        if (projectTitleLabel != null) {
+            projectTitleLabel.setText(currentProjectName);
+        }
+
+        System.out.println("Project title updated to: " + currentProjectName);
+    }
+    public String getCurrentProjectName() {
+        return currentProjectName;
+    }
+    public void setProjectTitleLabel(Label label) {
+        this.projectTitleLabel = label;
+        updateProjectTitle();
+    }
+
+    public void setupKeyboardShortcuts() {
+        // Add Ctrl+S shortcut
+        Scene scene = getScene();
+        if (scene != null) {
+            scene.getAccelerators().put(
+                    new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN),
+                    this::quickSave
+            );
+        }
+    }
+
+    /**
+     * Quick save - if project has a name, save directly without popup
+     * If it's untitled, show save popup
+     */
+    public void quickSave() {
+        System.out.println("Quick save triggered: " + currentProjectName);
+
+        if (!isNewProject && !"untitled".equals(currentProjectName) &&
+                !"untitled.game".equals(currentProjectName)) {
+            // Already has a name - save directly
+            String code = codePanel.getCode();
+            GalleryManager.getInstance().saveProject(currentProjectName, code);
+            System.out.println("✅ Quick saved: " + currentProjectName);
+            showTemporaryMessage("Saved: " + currentProjectName);
+        } else {
+            // New/untitled project - show save popup
+            showSavePopup(false); // false = normal save (not Save As)
+        }
+    }
+    public void showSavePopup(boolean isSaveAs) {
+        String currentCode = codePanel.getCode();
+        Button anchorButton = isSaveAs ? toolPanel.getSaveAsButton() : toolPanel.getSaveButton();
+
+        // Use the 4-parameter version
+        PopupManager.showSavePopup(
+                anchorButton,
+                stage,
+                currentCode,
+                (savedProjectName) -> {
+                    this.currentProjectName = savedProjectName;
+                    this.isNewProject = false;
+                    updateProjectTitle();
+                    showTemporaryMessage((isSaveAs ? "Saved as: " : "Saved: ") + savedProjectName);
+                }
+        );
+    }
+    /**
+     * Save As - always show popup to choose new name
+     */
+    public void saveAs() {
+        showSavePopup(true); // true = Save As mode
+    }
+
+    private void showTemporaryMessage(String message) {
+        // You could show a toast or status message
+        System.out.println("ℹ️ " + message);
+        // TODO: Add a status bar or temporary popup
+    }
 }

@@ -1,4 +1,4 @@
-package com.example.codeplayfx.ui.panel;
+package com.example.codeplayfx.ui.mainwindow.panel;
 
 import com.example.codeplayfx.ui.screen.MainWindowScreen;
 import javafx.fxml.FXMLLoader;

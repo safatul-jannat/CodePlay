@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * InMemoryCompiler - Compiles Java source code using external javac process.
- * Most reliable for group projects - no VM options needed.
  */
 public class InMemoryCompiler {
 

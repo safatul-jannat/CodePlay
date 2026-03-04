@@ -7,9 +7,9 @@
 
 /* ===== TOP NAVIGATION ===== */
 #topNavigation {
-    -fx-background-color: #0c0e14;
+    /*-fx-background-color: #0c0e14; */
     -fx-padding: 8 15;
-    -fx-border-color: #fc28a8;
+    -fx-border-color: #5605b5;
     -fx-border-width: 0 0 2 0;
 }
 
@@ -20,24 +20,25 @@
 /*}*/
 
 /* ===== TOGGLE BUTTONS (TABS) ===== */
-.toggle-button {
-    -fx-background-color: #0c0e14;
-    -fx-text-fill: #61e2ff;
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-border-color: #9963ff44;
-    -fx-border-width: 1;
-    -fx-border-radius: 2;
-    -fx-background-radius: 2;
-    -fx-cursor: hand;
-    -fx-padding: 6 14;
+.toggle-button,.transparent-button {
+     -fx-background-color: transparent;
+        -fx-text-fill: rgba(220, 230, 255, 0.8);
+        -fx-font-size: 14px;
+        -fx-font-weight: bold;
+        -fx-border-color: transparent;  /* No border by default */
+        -fx-cursor: hand;
+        -fx-padding: 8 16;
+        -fx-focus-color: transparent;
+        -fx-faint-focus-color: transparent;
 }
 
-.toggle-button:hover {
+.toggle-button:hover, .transparent-button:hover {
     -fx-background-color: #160e1e;
-    -fx-text-fill: #03edf9;
-    -fx-border-color: #03edf9;
-    -fx-effect: dropshadow(gaussian, #03edf9, 12, 0.4, 0, 0);
+        -fx-text-fill: #03edf9;
+        -fx-border-color: #03edf9;
+        -fx-border-width: 1;
+        -fx-border-radius: 2;
+        -fx-effect: dropshadow(gaussian, #03edf9, 12, 0.4, 0, 0);
 }
 
 .toggle-button:selected {
@@ -51,7 +52,7 @@
 /* ===== TOOLBAR ===== */
 .tool-bar {
     -fx-background-color: #1e1f2c;
-    -fx-border-color: #9963ff33;
+    -fx-border-color: #5605b5;
     -fx-border-width: 0 0 1 0;
 }
 
@@ -64,7 +65,7 @@
 /* ===== LEFT TOOLBAR ===== */
 #toolContainer {
     -fx-background-color: #0c0e14;
-    -fx-border-color: #fc28a8;
+    -fx-border-color: #5605b5;
     -fx-border-width: 0 2 0 0;
 }
 
@@ -99,13 +100,13 @@
 
 /* ===== EDITOR CONTAINER ===== */
 #editorContainer {
-    -fx-background-color: linear-gradient(to bottom, #000000 65%, #3d0b43);
+    -fx-background-color: #131330;
 }
 
 #editorContainer .hbox {
     -fx-background-color: #1e1f2c;
     -fx-padding: 5;
-    -fx-border-color: #9963ff33;
+    -fx-border-color: #5605b5;
     -fx-border-width: 0 0 1 0;
 }
 
@@ -132,50 +133,35 @@
 }
 
 .code-area .text {
-    -fx-fill: #61e2ff;
+    -fx-fill: #d4d4d4;;
 }
 
 /* Line numbers */
 .lineno {
-    -fx-background-color: transparent;
-    -fx-text-fill: #8a2dc0;
-    -fx-font-family: "Fira Code", "Consolas", monospace;
-    -fx-font-size: 12px;
-    -fx-padding: 0 5 0 5;
-    -fx-border-width: 0 1 0 0;
-    -fx-border-color: #3d3e5a;
+     -fx-background-color: transparent;
+        -fx-text-fill: #8a2dc0;
+        -fx-font-family: "Fira Code", "Consolas", monospace;
+        -fx-font-size: 12px;
+        -fx-padding: 0 8px 0 5px;
+        -fx-border-width: 0 1px 0 0;
+        -fx-border-color: #3d3e5a;
+        -fx-min-width: 45px;  /* Force minimum width for all line numbers */
+        -fx-pref-width: 45px; /* Preferred width */
+        -fx-alignment: center-right;
 }
 
-/* Syntax highlighting */
-.keyword {
-    -fx-fill: #ff7acb;
-    -fx-font-weight: bold;
+.lineno .text {  /* Target the actual text node inside */
+    -fx-text-alignment: right;
 }
 
-.string {
-    -fx-fill: #6effe8;
+.lineno .text {
+    -fx-text-origin: top;
 }
 
-.comment {
-    -fx-fill: #797c9a;
-    -fx-font-style: italic;
-}
-
-.number {
-    -fx-fill: #ffb86b;
-}
-
-.method {
-    -fx-fill: #ae81ff;
-}
-
-.class {
-    -fx-fill: #a6e22e;
-}
 
 /* Selection */
 .code-area .selection {
-    -fx-fill: rgba(255, 0, 141, 0.3);
+    -fx-fill: rgba(89, 4, 224, 0.5);
 }
 
 /* Caret */
@@ -188,7 +174,7 @@
 #controlToolbar {
     -fx-background-color: #1e1f2c;
     -fx-padding: 5;
-    -fx-border-color: #9963ff33;
+    -fx-border-color: #5605b5;
     -fx-border-width: 0 0 1 0;
 }
 
@@ -251,35 +237,35 @@
 /* ===== CANVAS CONTAINER ===== */
 #canvasContainer {
     -fx-background-color: #0c0e14;
-    -fx-border-color: #fc28a8;
+    -fx-border-color: #5605b5;
     -fx-border-width: 2;
 }
 
 /* ===== CONSOLE ===== */
 #consoleContainer {
-    -fx-background-color: #0c0e14;
-    -fx-border-color: #fc28a8;
+    -fx-background-color:  linear-gradient(from 0% 0% to 100% 100%,                   #050a1a 0%, #0d0824 40%, #110a30 70%, #000408 100%);
+    -fx-border-color:#5605b5;
     -fx-border-width: 2 0 0 0;
 }
 
 #consoleContainer .label {
-    -fx-background-color: linear-gradient(to right, #fc28a8, #03edf9);
-    -fx-text-fill: #0c0e14;
+    -fx-background-color: linear-gradient(to right, rgba(33, 3, 79, 1) 32%, rgba(14, 1, 66, 1) 71%);
+    -fx-text-fill: #ad7df5;
     -fx-padding: 5 10;
     -fx-font-weight: bold;
     -fx-font-size: 12px;
 }
 
 #console {
-    -fx-control-inner-background: #0c0e14;
-    -fx-background-color: #0c0e14;
+    -fx-control-inner-background: #202042;
+    -fx-background-color: #202042;
     -fx-text-fill: #61e2ff;
     -fx-font-family: "Fira Code", "Consolas", monospace;
     -fx-font-size: 12px;
 }
 
 #console .content {
-    -fx-background-color: #0c0e14;
+    -fx-background-color:#202042;
 }
 
 /* ===== STATUS BAR ===== */
@@ -300,7 +286,7 @@
 }
 
 .split-pane > .split-pane-divider {
-    -fx-background-color: #fc28a8;
+    -fx-background-color: #5605b5;
     -fx-pref-width: 2;
 }
 
@@ -320,7 +306,7 @@
 
 /* ===== SEPARATORS ===== */
 .separator .line {
-    -fx-border-color: #9963ff33;
+    -fx-border-color: #1c003d;
     -fx-border-width: 1;
 }
 /* Logo styling */
@@ -330,16 +316,38 @@
     -fx-font-weight: bold;
 }
 
-/* Base text color */
-.code-area .text {
-    -fx-fill: #61e2ff;  /* Default cyan */
+.code-area .keyword {
+    -fx-fill: #05b7f2 !important;  /* Blue for keywords */
+    -fx-font-weight: bold !important;
 }
 
-/* Syntax colors - these override the base */
-.keyword { -fx-fill: #ff7acb; -fx-font-weight: bold; }
-.string { -fx-fill: #6effe8; }
-.comment { -fx-fill: #797c9a; -fx-font-style: italic; }
-.number { -fx-fill: #ffb86b; }
-.method { -fx-fill: #ae81ff; }
-.class { -fx-fill: #a6e22e; }
-.annotation { -fx-fill: #f92672; }
+.code-area .string {
+    -fx-fill: #f76b34 !important;  /* Orange/brown for strings */
+}
+
+.code-area .comment {
+    -fx-fill: #6a9955 !important;  /* Green for comments */
+    -fx-font-style: italic !important;
+}
+
+.code-area .number {
+    -fx-fill: #abfa82 !important;  /* Light green for numbers */
+}
+
+.code-area .method {
+    -fx-fill: #f2cb05 !important;  /* Yellow for methods */
+}
+
+.code-area .class {
+    -fx-fill:#e798f5 !important;  /* Teal for classes */
+}
+
+.code-area .annotation {
+    -fx-fill: #a15bfc !important;  /* Purple for annotations */
+}
+
+/* Punctuation like {} ; . etc */
+.code-area .text {
+    -fx-fill: #d4d4d4;
+    /* This covers braces, semicolons, etc. */
+}

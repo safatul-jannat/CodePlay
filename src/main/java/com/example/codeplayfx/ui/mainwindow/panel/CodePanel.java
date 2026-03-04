@@ -1,12 +1,11 @@
-package com.example.codeplayfx.ui.panel;
+package com.example.codeplayfx.ui.mainwindow.panel;
 
-import com.example.codeplayfx.ui.highlighting.SyntaxHighlighter;
+import com.example.codeplayfx.ui.mainwindow.highlighting.SyntaxHighlighter;
 import com.example.codeplayfx.ui.screen.MainWindowScreen;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -26,6 +25,9 @@ public class CodePanel extends UIPanel {
     private Stack<String> undoStack = new Stack<>();
     private Stack<String> redoStack = new Stack<>();
     private String currentText = "";
+
+    // Flag to track first show
+    private boolean isFirstShow = true;
 
     public CodePanel(FXMLLoader loader, MainWindowScreen mainWindow) {
         this.mainWindow = mainWindow;
@@ -51,7 +53,7 @@ public class CodePanel extends UIPanel {
         codeEditor.prefHeightProperty().bind(editorStack.heightProperty());
 
         editorStack.getChildren().add(codeEditor);
-        addGifBackground();
+        //addGifBackground();
         editorContainer.getChildren().add(editorStack);
         this.root = editorContainer;
     }
@@ -131,12 +133,41 @@ public class CodePanel extends UIPanel {
         );
     }
 
-    @Override
-    public void initialize() {
+    // SINGLE initialize method with parameter
+    public void initialize(boolean isFirstShow) {
+        this.isFirstShow = isFirstShow;
+
         setupCodeEditor();
         setupButtonActions();
-        setDefaultCode();
+
+        if (isFirstShow) {
+            // Only set default content on first show
+            if (codeEditor != null && codeEditor.getText().isEmpty()) {
+                setDefaultCode();
+            }
+        }
+
         updateButtonStates();
+    }
+
+    // Overload for backward compatibility (calls with true)
+    public void initialize() {
+        initialize(true);
+    }
+
+    public String getCodeContent() {
+        return codeEditor != null ? codeEditor.getText() : "";
+    }
+
+    public void setCodeContent(String content) {
+        if (codeEditor != null && content != null) {
+            codeEditor.replaceText(content);
+            currentText = content;
+            // Update syntax highlighting
+            Platform.runLater(() ->
+                    codeEditor.setStyleSpans(0, SyntaxHighlighter.computeHighlighting(content))
+            );
+        }
     }
 
     public void undo() {
@@ -185,31 +216,6 @@ public class CodePanel extends UIPanel {
         Platform.runLater(() ->
                 codeEditor.setStyleSpans(0, SyntaxHighlighter.computeHighlighting(code))
         );
-    }
-    private void addGifBackground() {
-        try {
-
-            String gifPath = "/com/example/codeplayfx/images/codeEditorBG.gif";
-            Image gifImage = new Image(getClass().getResourceAsStream(gifPath));
-
-            // Create background image that repeats and resizes
-            BackgroundImage backgroundImage = new BackgroundImage(
-                    gifImage,
-                    BackgroundRepeat.REPEAT,
-                    BackgroundRepeat.REPEAT,
-                    BackgroundPosition.DEFAULT,
-                    new BackgroundSize(100, 100, true, true, true, true)
-            );
-
-            // Apply background to editorStack
-            editorStack.setBackground(new Background(backgroundImage));
-
-            System.out.println("GIF background added");
-        } catch (Exception e) {
-            System.err.println(" Failed to load GIF: " + e.getMessage());
-            // Fallback to gradient if GIF fails
-            editorStack.setStyle("-fx-background-color: linear-gradient(to bottom, #000000 65%, #3d0b43);");
-        }
     }
 
     public String getCode() { return codeEditor.getText(); }

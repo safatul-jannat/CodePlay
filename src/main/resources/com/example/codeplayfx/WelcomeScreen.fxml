@@ -1,44 +1,151 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Ellipse?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.codeplayfx.ui.WelcomeController">
-    <top>
-        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="6.0" BorderPane.alignment="CENTER">
-            <padding>
-                <Insets bottom="15.0" top="30.0" />
-            </padding>
-            <children>
-                <Label text="WELCOME TO CODEPLAY">
-                    <font>
-                        <Font size="32.0" />
-                    </font>
-                </Label>
-                <Label text="BUILD . EXPERIMENT . PLAY">
-                    <font>
-                        <Font size="16.0" />
-                    </font>
-                </Label>
-            </children>
-        </VBox>
-    </top>
-    <bottom>
-        <HBox alignment="BOTTOM_CENTER" prefHeight="140.0" prefWidth="900.0" spacing="20.0" BorderPane.alignment="CENTER">
-            <padding>
-                <Insets bottom="80.0" top="15.0" />
-            </padding>
-            <children>
-                <Button mnemonicParsing="false" onAction="#openNew" prefHeight="45.0" prefWidth="150.0" text="New" textFill="#080808" />
-                <Button mnemonicParsing="false" onAction="#openGallery" prefHeight="45.0" prefWidth="150.0" text="Gallery" />
-                <Button mnemonicParsing="false" onAction="#openLibrary" prefHeight="45.0" prefWidth="150.0" text="Library" />
-                <Button mnemonicParsing="false" onAction="#openAbout" prefHeight="45.0" prefWidth="150.0" text="About" />
-            </children>
+<StackPane fx:id="rootPane" prefHeight="600" prefWidth="900" style="-fx-background-color: #050a1a;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.codeplayfx.ui.controller.WelcomeController">
+
+    <!-- ═══════════════════════════════════════════════════
+         LAYER 0 — Dark gradient background
+    ════════════════════════════════════════════════════ -->
+    <Pane fx:id="bgPane" prefHeight="600" prefWidth="900" style="-fx-background-color:               linear-gradient(from 0% 0% to 100% 100%,                   #050a1a 0%, #0d0824 40%, #110a30 70%, #000408 100%);" />
+
+    <!-- ═══════════════════════════════════════════════════
+         LAYER 1 — Grid overlay (lines drawn in controller)
+    ════════════════════════════════════════════════════ -->
+    <Pane fx:id="gridPane" mouseTransparent="true" opacity="0.045" prefHeight="600" prefWidth="900" />
+
+    <!-- ═══════════════════════════════════════════════════
+         LAYER 2 — Particle canvas (AnimationTimer in controller)
+    ════════════════════════════════════════════════════ -->
+    <Canvas fx:id="particleCanvas" height="600" mouseTransparent="true" width="900" />
+
+    <!-- ═══════════════════════════════════════════════════
+         LAYER 3 — Ambient glow orbs (added in controller)
+    ════════════════════════════════════════════════════ -->
+    <Pane fx:id="orbPane" mouseTransparent="true" prefHeight="600" prefWidth="900" />
+
+    <!-- ═══════════════════════════════════════════════════
+         LAYER 4 — MAIN CONTENT
+    ════════════════════════════════════════════════════ -->
+    <VBox fx:id="contentBox" alignment="CENTER" pickOnBounds="false" spacing="0">
+
+        <!-- ── Version badge ─────────────────────────────── -->
+        <Text fx:id="badgeText" style="                    -fx-text-fill: #f7db09;                    -fx-font-family: 'Consolas';                    -fx-font-size: 35px;" text="WELCOME TO">
+            <VBox.margin><Insets bottom="18" /></VBox.margin>
+         <fill>
+            <LinearGradient endX="0.6136364069851962" endY="0.8598484785267801" startY="0.6931818615306508">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.047600001096725464" green="0.6331316828727722" blue="0.6800000071525574" opacity="0.9800000190734863" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.47829240560531616" green="0.22596491873264313" blue="0.8842105269432068" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+         <font>
+            <Font name="Arial" size="20.0" />
+         </font>
+         <effect>
+            <Glow level="0.58" />
+         </effect>
+        </Text>
+
+        <!-- ── Title letters — each has its own fx:id for animation ── -->
+        <HBox fx:id="titleBox" alignment="CENTER" spacing="-2">
+
+            <Text fx:id="lC" opacity="0" style="-fx-font-family:'Arial Black';-fx-font-size:90px;-fx-font-weight:900;                          -fx-fill:white;-fx-effect:dropshadow(gaussian,#7755ff,28,0.5,0,4);" text="C" />
+            <Text fx:id="lO" opacity="0" style="-fx-font-family:'Arial Black';-fx-font-size:90px;-fx-font-weight:900;                          -fx-fill:white;-fx-effect:dropshadow(gaussian,#5599ff,28,0.5,0,4);" text="o" />
+            <Text fx:id="lD" opacity="0" style="-fx-font-family:'Arial Black';-fx-font-size:90px;-fx-font-weight:900;                          -fx-fill:white;-fx-effect:dropshadow(gaussian,#33aaff,28,0.5,0,4);" text="d" />
+            <Text fx:id="lE" opacity="0" style="-fx-font-family:'Arial Black';-fx-font-size:90px;-fx-font-weight:900;                          -fx-fill:white;-fx-effect:dropshadow(gaussian,#22ddcc,28,0.5,0,4);" text="e" />
+            <Text fx:id="lP" opacity="0" style="-fx-font-family:'Arial Black';-fx-font-size:90px;-fx-font-weight:900;                          -fx-fill:white;-fx-effect:dropshadow(gaussian,#ff33aa,28,0.5,0,4);" text="P" />
+            <Text fx:id="lL" opacity="0" style="-fx-font-family:'Arial Black';-fx-font-size:90px;-fx-font-weight:900;                          -fx-fill:white;-fx-effect:dropshadow(gaussian,#ff6633,28,0.5,0,4);" text="l" />
+            <Text fx:id="lA" opacity="0" style="-fx-font-family:'Arial Black';-fx-font-size:90px;-fx-font-weight:900;                          -fx-fill:white;-fx-effect:dropshadow(gaussian,#ff3399,28,0.5,0,4);" text="a" />
+            <Text fx:id="lY" opacity="0" style="-fx-font-family:'Arial Black';-fx-font-size:90px;-fx-font-weight:900;                          -fx-fill:white;-fx-effect:dropshadow(gaussian,#aa44ff,28,0.5,0,4);" text="y" />
         </HBox>
-    </bottom>
-</BorderPane>
+
+        <!-- ── Tagline typewriter ────────────────────────── -->
+        <Text fx:id="taglineText" opacity="0" style="-fx-font-family:'Consolas';-fx-font-style:italic;                      -fx-font-size:14px;-fx-fill:rgba(136,170,204,0.85);" text="">
+            <VBox.margin><Insets top="8" /></VBox.margin>
+         <font>
+            <Font name="Arial Bold Italic" size="20.0" />
+         </font>
+        </Text>
+
+        <!-- ── Glowing divider ───────────────────────────── -->
+        <HBox fx:id="dividerBox" alignment="CENTER" opacity="0" spacing="12">
+            <VBox.margin><Insets bottom="28" left="80" right="80" top="28" /></VBox.margin>
+            <Line endX="130" endY="0" startX="0" startY="0" style="-fx-stroke:rgba(68,102,255,0.7);-fx-stroke-width:1;" />
+            <Circle radius="4" style="-fx-fill:#88aaff;-fx-effect:dropshadow(gaussian,#4466ff,18,0.8,0,0);" />
+            <Line endX="130" endY="0" startX="0" startY="0" style="-fx-stroke:rgba(68,102,255,0.7);-fx-stroke-width:1;" />
+        </HBox>
+
+        <!-- ══════════════════════════════════════════════
+             BUTTONS ROW
+        ═══════════════════════════════════════════════ -->
+        <HBox fx:id="buttonRow" alignment="CENTER" spacing="22">
+
+            <!-- ── NEW ────────────────────────────────────── -->
+            <StackPane fx:id="btnNewWrap" opacity="0" prefHeight="88" prefWidth="150" style="-fx-cursor:hand;">
+                <Ellipse radiusX="62" radiusY="7" style="-fx-fill:rgba(0,0,0,0.45);                                 -fx-effect:dropshadow(gaussian,black,10,0,0,0);" translateY="40" />
+                <Rectangle fx:id="cardNew" arcHeight="20" arcWidth="20" height="82" style="-fx-fill:linear-gradient(from 0% 0% to 0% 100%,                                       rgba(255,255,255,0.09),rgba(255,255,255,0.02));                                   -fx-stroke:rgba(102,68,255,0.65);-fx-stroke-width:1.3;                                   -fx-effect:dropshadow(gaussian,#6644ff,28,0.35,0,7);" width="150" />
+                <!-- top shine stripe -->
+                <Rectangle arcHeight="4" arcWidth="4" height="1.5" style="-fx-fill:linear-gradient(from 0% 0% to 100% 0%,                                       transparent,rgba(255,255,255,0.35),transparent);" translateY="-30" width="120" />
+                <Text style="-fx-font-size:22px;-fx-fill:#8877ff;                              -fx-effect:dropshadow(gaussian,#6644ff,16,0.9,0,0);" text="⊕" translateY="-15" />
+                <Text style="-fx-font-family:'Arial Black';-fx-font-size:15px;                              -fx-font-weight:900;-fx-fill:white;                              -fx-effect:dropshadow(gaussian,#6644ff,12,0.7,0,0);" text="Create" translateY="14" />
+            </StackPane>
+
+            <!-- ── GALLERY ─────────────────────────────────── -->
+            <StackPane fx:id="btnGalleryWrap" opacity="0" prefHeight="88" prefWidth="150" style="-fx-cursor:hand;">
+                <Ellipse radiusX="62" radiusY="7" style="-fx-fill:rgba(0,0,0,0.45);                                 -fx-effect:dropshadow(gaussian,black,10,0,0,0);" translateY="40" />
+                <Rectangle fx:id="cardGallery" arcHeight="20" arcWidth="20" height="82" style="-fx-fill:linear-gradient(from 0% 0% to 0% 100%,                                       rgba(255,255,255,0.09),rgba(255,255,255,0.02));                                   -fx-stroke:rgba(0,153,255,0.65);-fx-stroke-width:1.3;                                   -fx-effect:dropshadow(gaussian,#0099ff,28,0.35,0,7);" width="150" />
+                <Rectangle arcHeight="4" arcWidth="4" height="1.5" style="-fx-fill:linear-gradient(from 0% 0% to 100% 0%,                                       transparent,rgba(255,255,255,0.35),transparent);" translateY="-30" width="120" />
+                <Text style="-fx-font-size:22px;-fx-fill:#33bbff;                              -fx-effect:dropshadow(gaussian,#0099ff,16,0.9,0,0);" text="◈" translateY="-15" />
+                <Text style="-fx-font-family:'Arial Black';-fx-font-size:15px;                              -fx-font-weight:900;-fx-fill:white;                              -fx-effect:dropshadow(gaussian,#0099ff,12,0.7,0,0);" text="Projects" translateY="14" />
+            </StackPane>
+
+            <!-- ── LIBRARY ──────────────────────────────────── -->
+            <StackPane fx:id="btnLibraryWrap" opacity="0" prefHeight="88" prefWidth="150" style="-fx-cursor:hand;">
+                <Ellipse radiusX="62" radiusY="7" style="-fx-fill:rgba(0,0,0,0.45);                                 -fx-effect:dropshadow(gaussian,black,10,0,0,0);" translateY="40" />
+                <Rectangle fx:id="cardLibrary" arcHeight="20" arcWidth="20" height="82" style="-fx-fill:linear-gradient(from 0% 0% to 0% 100%,                                       rgba(255,255,255,0.09),rgba(255,255,255,0.02));                                   -fx-stroke:rgba(0,204,170,0.65);-fx-stroke-width:1.3;                                   -fx-effect:dropshadow(gaussian,#00ccaa,28,0.35,0,7);" width="150" />
+                <Rectangle arcHeight="4" arcWidth="4" height="1.5" style="-fx-fill:linear-gradient(from 0% 0% to 100% 0%,                                       transparent,rgba(255,255,255,0.35),transparent);" translateY="-30" width="120" />
+                <Text style="-fx-font-size:22px;-fx-fill:#22eebb;                              -fx-effect:dropshadow(gaussian,#00ccaa,16,0.9,0,0);" text="⊞" translateY="-15" />
+                <Text style="-fx-font-family:'Arial Black';-fx-font-size:15px;                              -fx-font-weight:900;-fx-fill:white;                              -fx-effect:dropshadow(gaussian,#00ccaa,12,0.7,0,0);" text="Library" translateY="14" />
+            </StackPane>
+
+            <!-- ── ABOUT ────────────────────────────────────── -->
+            <StackPane fx:id="btnAboutWrap" opacity="0" prefHeight="88" prefWidth="150" style="-fx-cursor:hand;">
+                <Ellipse radiusX="62" radiusY="7" style="-fx-fill:rgba(0,0,0,0.45);                                 -fx-effect:dropshadow(gaussian,black,10,0,0,0);" translateY="40" />
+                <Rectangle fx:id="cardAbout" arcHeight="20" arcWidth="20" height="82" style="-fx-fill:linear-gradient(from 0% 0% to 0% 100%,                                       rgba(255,255,255,0.09),rgba(255,255,255,0.02));                                   -fx-stroke:rgba(255,51,153,0.65);-fx-stroke-width:1.3;                                   -fx-effect:dropshadow(gaussian,#ff3399,28,0.35,0,7);" width="150" />
+                <Rectangle arcHeight="4" arcWidth="4" height="1.5" style="-fx-fill:linear-gradient(from 0% 0% to 100% 0%,                                       transparent,rgba(255,255,255,0.35),transparent);" translateY="-30" width="120" />
+                <Text style="-fx-font-size:22px;-fx-fill:#ff66bb;                              -fx-effect:dropshadow(gaussian,#ff3399,16,0.9,0,0);" text="◉" translateY="-15" />
+                <Text style="-fx-font-family:'Arial Black';-fx-font-size:15px;                              -fx-font-weight:900;-fx-fill:white;                              -fx-effect:dropshadow(gaussian,#ff3399,12,0.7,0,0);" text="About" translateY="14" />
+            </StackPane>
+
+        </HBox>
+        <!-- end buttonRow -->
+
+    </VBox>
+    <!-- end contentBox -->
+
+</StackPane>

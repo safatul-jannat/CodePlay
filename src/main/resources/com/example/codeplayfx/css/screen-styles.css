@@ -1,0 +1,527 @@
+/* library-styles.css */
+
+/* TextArea styling */
+.transparent-text-area {
+    -fx-background-color: rgba(43, 5, 120, 0.4); /* Glass effect */
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-width: 2;
+    -fx-border-color: rgba(50, 6, 140, 0.8);
+    -fx-padding: 5;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* KEY: This removes the stubborn white background from the inner box */
+.transparent-text-area .content {
+    -fx-background-color: transparent !important;
+}
+
+/* Also make the scroll pane background transparent */
+.transparent-text-area .viewport {
+    -fx-background-color: transparent !important;
+}
+
+/* Text styling */
+.transparent-text-area .text {
+    -fx-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+/* Selection styling */
+.transparent-text-area .text:selected {
+    -fx-fill: white;
+}
+
+.transparent-text-area .content:selected {
+    -fx-background-color: rgba(100, 160, 255, 0.5);
+}
+
+/* Button styling - completely transparent by default */
+.transparent-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(220, 230, 255, 0.8);
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-border-color: transparent;  /* No border by default */
+    -fx-cursor: hand;
+    -fx-padding: 8 16;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* Hover effect - only appears on hover */
+.transparent-button:hover {
+    -fx-background-color: #160e1e;
+    -fx-text-fill: #03edf9;
+    -fx-border-color: #03edf9;
+    -fx-border-width: 1;
+    -fx-border-radius: 2;
+    -fx-effect: dropshadow(gaussian, #03edf9, 12, 0.4, 0, 0);
+}
+
+/* Pressed effect */
+.transparent-button:pressed {
+    -fx-background-color: #1c0a28;
+    -fx-text-fill: #fc28a8;
+    -fx-border-color: #fc28a8;
+}
+
+/* ===== GALLERY SCREEN STYLES ===== */
+
+/* Gallery List View - transparent background */
+.gallery-list {
+    -fx-background-color: rgba(20, 15, 30, 0.3);
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(100, 150, 255, 0.2);
+    -fx-border-radius: 10;
+    -fx-padding: 5;
+}
+
+.gallery-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-padding: 8;
+    -fx-font-size: 14px;
+}
+
+.gallery-list .list-cell:hover {
+    -fx-background-color: rgba(100, 150, 255, 0.2);
+    -fx-background-radius: 5;
+}
+
+.gallery-list .list-cell:selected {
+    -fx-background-color: rgba(255, 110, 199, 0.3);
+    -fx-background-radius: 5;
+    -fx-border-color: rgba(255, 110, 199, 0.5);
+    -fx-border-radius: 5;
+}
+
+/* Gallery Preview TextArea - transparent like library */
+.gallery-preview {
+    -fx-background-color: rgba(43, 5, 120, 0.3);  /* Glass effect */
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(50, 6, 140, 0.5);
+    -fx-border-radius: 10;
+    -fx-text-fill: #e0e0e0;
+    -fx-font-family: 'Consolas', 'Monospaced';
+    -fx-font-size: 13px;
+    -fx-padding: 10;
+    -fx-control-inner-background: transparent;
+}
+
+/* Remove white background from inner content */
+.gallery-preview .content {
+    -fx-background-color: transparent !important;
+}
+
+.gallery-preview .viewport {
+    -fx-background-color: transparent !important;
+}
+
+/* Text color in preview */
+.gallery-preview .text {
+    -fx-fill: #cccccc;
+}
+
+/* Gallery Tab Pane - remove blue border */
+.gallery-tab-pane {
+    -fx-background-color: transparent;
+    -fx-tab-border-color: transparent;
+}
+
+.gallery-tab-pane .tab-header-area {
+    -fx-background-color: transparent;
+    -fx-padding: 5 0 0 0;
+}
+
+.gallery-tab-pane .tab-header-background {
+    -fx-background-color: transparent;
+}
+
+.gallery-tab-pane .tab {
+    -fx-background-color: rgba(30, 20, 40, 0.5);
+    -fx-background-radius: 5 5 0 0;
+    -fx-padding: 8 20;
+    -fx-border-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.gallery-tab-pane .tab:selected {
+    -fx-background-color: rgba(86, 5, 181, 0.5);
+    -fx-border-color: rgba(255, 110, 199, 0.5);
+    -fx-border-width: 0 0 2 0;
+}
+
+.gallery-tab-pane .tab-label {
+    -fx-text-fill: #aaa;
+    -fx-font-weight: bold;
+}
+
+.gallery-tab-pane .tab:selected .tab-label {
+    -fx-text-fill: #ff6ec7;
+}
+
+/* Remove blue focus border from all controls */
+.gallery-tab-pane:focused,
+.tab:focused,
+.tab-pane:focused {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* Gallery Search Field */
+.gallery-search {
+    -fx-background-color: rgba(30, 20, 40, 0.5);
+    -fx-background-radius: 20;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #888;
+    -fx-border-color: rgba(255, 110, 199, 0.3);
+    -fx-border-radius: 20;
+    -fx-padding: 8 15;
+}
+
+.gallery-search:focused {
+    -fx-border-color: rgba(255, 110, 199, 0.8);
+    -fx-focus-color: transparent;
+}
+
+/* Gallery Labels */
+.gallery-info-label {
+    -fx-text-fill: #ffb3ff;
+    -fx-font-size: 14px;
+    -fx-background-color: rgba(0, 0, 0, 0.3);
+    -fx-background-radius: 5;
+    -fx-padding: 5 10;
+}
+
+.gallery-status-label {
+    -fx-text-fill: #888;
+    -fx-font-size: 11px;
+}
+
+/* Gallery Buttons - remove blue border */
+.gallery-primary-button,
+.gallery-secondary-button,
+.gallery-danger-button,
+.gallery-action-button {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.gallery-primary-button {
+    -fx-background-color: rgba(86, 5, 181, 0.7);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 25;
+    -fx-background-radius: 5;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+}
+
+.gallery-primary-button:hover {
+    -fx-background-color: rgba(106, 25, 201, 0.9);
+    -fx-effect: dropshadow(gaussian, #5605b5, 10, 0.5, 0, 0);
+}
+
+.gallery-primary-button:pressed {
+    -fx-background-color: rgba(146, 45, 241, 0.9);
+}
+
+.gallery-secondary-button {
+    -fx-background-color: rgba(3, 237, 249, 0.2);
+    -fx-text-fill: #03edf9;
+    -fx-font-weight: bold;
+    -fx-border-color: #03edf9;
+    -fx-border-width: 1;
+    -fx-padding: 10 25;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+.gallery-secondary-button:hover {
+    -fx-background-color: rgba(3, 237, 249, 0.3);
+}
+
+.gallery-danger-button {
+    -fx-background-color: rgba(180, 5, 70, 0.7);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 20;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.gallery-danger-button:hover {
+    -fx-background-color: rgba(200, 25, 90, 0.8);
+}
+
+.gallery-action-button {
+    -fx-background-color: rgba(60, 40, 80, 0.7);
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+    -fx-padding: 8 15;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.gallery-action-button:hover {
+    -fx-background-color: rgba(86, 5, 181, 0.7);
+}
+
+/* Disabled buttons */
+.gallery-primary-button:disabled,
+.gallery-secondary-button:disabled,
+.gallery-danger-button:disabled,
+.gallery-action-button:disabled {
+    -fx-opacity: 0.4;
+    -fx-cursor: default;
+}
+
+/* ===== ABOUT SCREEN STYLES ===== */
+
+/* About TextArea - similar to library but with different colors */
+.about-text-area {
+    -fx-background-color: rgba(43, 5, 120, 0.3);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-border-color: rgba(136, 170, 255, 0.5);
+    -fx-text-fill: #e0e0e0;
+    -fx-font-family: 'Arial';
+    -fx-font-size: 14px;
+    -fx-padding: 10;
+    -fx-control-inner-background: transparent;
+}
+
+.about-text-area .content {
+    -fx-background-color: transparent !important;
+}
+
+.about-text-area .viewport {
+    -fx-background-color: transparent !important;
+}
+
+.about-text-area .text {
+    -fx-fill: #cccccc;
+}
+
+/* Social/Contact buttons */
+.about-social-button {
+    -fx-background-color: rgba(86, 5, 181, 0.6);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-background-radius: 25;
+    -fx-border-color: rgba(255, 110, 199, 0.5);
+    -fx-border-radius: 25;
+    -fx-cursor: hand;
+}
+
+.about-social-button:hover {
+    -fx-background-color: rgba(106, 25, 201, 0.8);
+    -fx-border-color: #ff6ec7;
+    -fx-effect: dropshadow(gaussian, #ff6ec7, 10, 0.3, 0, 0);
+}
+
+.about-social-button:pressed {
+    -fx-background-color: rgba(146, 45, 241, 0.9);
+}
+
+/* ScrollPane styling for about screen */
+.scroll-pane {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+}
+
+.scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: rgba(30, 30, 50, 0.3);
+    -fx-background-radius: 5;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(136, 170, 255, 0.5);
+    -fx-background-radius: 5;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: rgba(136, 170, 255, 0.8);
+}
+
+.scroll-pane .scroll-bar:vertical .increment-button,
+.scroll-pane .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+/* Library Objects List */
+.library-objects-list {
+    -fx-background-color: rgba(30,20,40,0.4);
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(136,170,255,0.2);
+    -fx-border-radius: 10;
+}
+
+.library-objects-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-padding: 10;
+    -fx-font-size: 14px;
+}
+
+.library-objects-list .list-cell:hover {
+    -fx-background-color: rgba(136,170,255,0.2);
+    -fx-background-radius: 5;
+}
+
+.library-objects-list .list-cell:selected {
+    -fx-background-color: rgba(255,110,199,0.3);
+    -fx-background-radius: 5;
+    -fx-border-color: rgba(255,110,199,0.5);
+    -fx-border-radius: 5;
+}
+
+/* Method Cards Container */
+.method-card {
+    -fx-background-color: rgba(40,30,60,0.8);
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(136,170,255,0.5);
+    -fx-border-radius: 10;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.method-card:hover {
+    -fx-background-color: rgba(86,5,181,0.8);
+    -fx-border-color: #ff6ec7;
+}
+
+/* ScrollPane styling */
+.scroll-pane {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* ===== LIBRARY POPUP STYLES ===== */
+
+/* Popup container */
+.library-popup {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #050a1a 0%, #0d0824 100%);
+    -fx-padding: 25;
+    -fx-background-radius: 20;
+    -fx-border-color: rgba(100,150,255,0.5);
+    -fx-border-radius: 20;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 20, 0, 0, 0);
+}
+
+/* Popup title */
+.library-popup-title {
+    -fx-font-family: 'Arial Black';
+    -fx-font-size: 28px;
+    -fx-fill: #88aaff;
+}
+
+/* Section containers */
+.library-popup-section {
+    -fx-spacing: 5;
+}
+
+/* Section titles */
+.library-popup-section-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+}
+
+/* Section title colors - applied inline via controller */
+.library-popup-section-title.blue { -fx-text-fill: #88aaff; }
+.library-popup-section-title.pink { -fx-text-fill: #ff6ec7; }
+.library-popup-section-title.cyan { -fx-text-fill: #03edf9; }
+.library-popup-section-title.yellow { -fx-text-fill: #ffc864; }
+
+/* Popup TextArea - FULLY TRANSPARENT */
+.library-popup-textarea {
+    -fx-background-color: transparent;
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(255,255,255,0.2);
+    -fx-border-radius: 10;
+    -fx-border-width: 1.5;
+    -fx-text-fill: #e0e0e0;
+    -fx-font-family: 'Arial';
+    -fx-font-size: 13px;
+    -fx-padding: 8;
+    -fx-control-inner-background: transparent;
+}
+
+/* Kill the white background completely */
+.library-popup-textarea .content {
+    -fx-background-color: transparent !important;
+}
+
+.library-popup-textarea .viewport {
+    -fx-background-color: transparent !important;
+}
+
+.library-popup-textarea .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.library-popup-textarea .scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Popup buttons */
+.library-popup-close-btn {
+    -fx-background-color: rgba(86,5,181,0.7);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 30;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.library-popup-close-btn:hover {
+    -fx-background-color: rgba(106,25,201,0.9);
+    -fx-border-color: #ff6ec7;
+}
+
+.library-popup-copy-btn {
+    -fx-background-color: rgba(3,237,249,0.2);
+    -fx-text-fill: #03edf9;
+    -fx-font-weight: bold;
+    -fx-border-color: #03edf9;
+    -fx-border-width: 1;
+    -fx-padding: 10 20;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+.library-popup-copy-btn:hover {
+    -fx-background-color: rgba(3,237,249,0.3);
+}
+
+/* Temporary copied message */
+.library-popup-copied-msg {
+    -fx-text-fill: #88ff88;
+    -fx-font-weight: bold;
+}

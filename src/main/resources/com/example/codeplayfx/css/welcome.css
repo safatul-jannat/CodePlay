@@ -1,0 +1,107 @@
+/* welcome.css - Main stylesheet for Welcome screen */
+
+.border-pane {
+    -fx-background-color: linear-gradient(to bottom, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+
+/* Upper background gradient */
+.top-vbox {
+    -fx-background-color: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 20, 0, 0, 5);
+}
+
+/* Perspective Grid styling */
+.perspective-grid {
+    -fx-background-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(106, 13, 173, 0.3), 10, 0, 0, 0);
+}
+
+.grid-canvas {
+    -fx-background-color: transparent;
+}
+
+/* Welcome text fade effect */
+.welcome-text {
+    -fx-fill: rgba(255, 255, 255, 0.9);
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 10, 0, 0, 0);
+    -fx-opacity: 0;
+}
+
+/* CodePlay label with shadow effects */
+.codeplay-label {
+    -fx-font-family: "ArtifaktElement-Heavy";
+    -fx-font-size: 96px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 15, 0.5, 0, 0);
+    -fx-translate-y: -100;
+}
+
+.codeplay-label .text {
+    -fx-effect: dropshadow(gaussian, rgba(106, 13, 173, 0.5), 20, 0.3, 2, 2);
+}
+
+/* Button styling - standing vertically on grid */
+.button-container {
+    -fx-padding: 20px;
+    -fx-spacing: 30px;
+    -fx-alignment: center;
+    -fx-translate-y: -50;
+}
+
+.button {
+    -fx-background-color: linear-gradient(to bottom, #4a4e69, #1a1a2e);
+    -fx-background-radius: 5px;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 2, 2),
+                dropshadow(gaussian, rgba(106, 13, 173, 0.3), 15, 0, -2, -2);
+    -fx-border-color: linear-gradient(to bottom, #6a0dad, #4a4e69);
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-rotation: 0;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(to bottom, #5a5e79, #2a2a3e);
+    -fx-effect: dropshadow(gaussian, rgba(106, 13, 173, 0.5), 20, 0, 2, 2);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.button:pressed {
+    -fx-background-color: linear-gradient(to bottom, #3a3e59, #0a0a1e);
+    -fx-translate-y: 2;
+}
+
+/* Bottom text styling */
+.bottom-text {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to bottom, #6a0dad, #9b4d96);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 0);
+    -fx-opacity: 0.8;
+    -fx-padding: 20px;
+}
+
+/* Grid lines styling */
+.grid-line {
+    -fx-stroke: linear-gradient(to bottom, rgba(106, 13, 173, 0.8), rgba(155, 77, 150, 0.4));
+    -fx-stroke-width: 1.5;
+}
+
+.grid-line-strong {
+    -fx-stroke: linear-gradient(to bottom, #6a0dad, #9b4d96);
+    -fx-stroke-width: 2.5;
+}
+
+/* Shadow effect for CodePlay letters */
+.letter-shadow {
+    -fx-effect: dropshadow(gaussian, rgba(106, 13, 173, 0.8), 15, 0.7, 3, 3);
+    -fx-opacity: 0.3;
+}

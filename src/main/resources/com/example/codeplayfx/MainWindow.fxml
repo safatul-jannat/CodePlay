@@ -16,28 +16,28 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
 
    <!-- Top: Logo and Tabs -->
    <top>
       <VBox>
-         <HBox fx:id="topNavigation" spacing="10" style="-fx-background-color: #2b2b2b; -fx-padding: 10;">
+         <HBox fx:id="topNavigation" spacing="10" style="-fx-padding: 10; -fx-background-color: linear-gradient(from 0% 0% to 100% 100%,                   #050a1a 0%, #0d0824 40%, #110a30 70%, #000408 100%);">
             <!-- Logo/Name -->
             <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" text="CodePlay" />
 
             <!-- Tabs -->
             <HBox prefHeight="35.0" prefWidth="498.0" spacing="5" HBox.hgrow="ALWAYS">
-               <ToggleButton fx:id="createButton" prefHeight="41.0" prefWidth="90.0" style="-fx-background-color: #3c3c3c; -fx-text-fill: white;" text="Create" />
-               <ToggleButton fx:id="galleryButton" prefHeight="40.0" prefWidth="90.0" style="-fx-background-color: #3c3c3c; -fx-text-fill: white;" text="Gallery" />
-               <ToggleButton fx:id="libraryButton" prefHeight="44.0" prefWidth="90.0" style="-fx-background-color: #3c3c3c; -fx-text-fill: white;" text="Library" />
-               <ToggleButton fx:id="aboutButton" prefHeight="38.0" prefWidth="90.0" style="-fx-background-color: #3c3c3c; -fx-text-fill: white;" text="About" />
-               <ToggleButton fx:id="home" prefHeight="38.0" prefWidth="90.0" style="-fx-background-color: #3c3c3c; -fx-text-fill: white;" text="Home" />
+               <ToggleButton fx:id="createButton" prefHeight="41.0" prefWidth="90.0" styleClass="transparent-button" text="CREATE" />
+               <ToggleButton fx:id="galleryButton" prefHeight="35.0" prefWidth="105.0" styleClass="transparent-button" text="PROJECTS" />
+               <ToggleButton fx:id="libraryButton" prefHeight="35.0" prefWidth="105.0" styleClass="transparent-button" text="LIBRARY" />
+               <ToggleButton fx:id="aboutButton" prefHeight="38.0" prefWidth="90.0" styleClass="transparent-button" text="ABOUT" />
+               <ToggleButton fx:id="home" prefHeight="38.0" prefWidth="90.0" styleClass="transparent-button" text="HOME" />
             </HBox>
          </HBox>
 
          <!-- Main Toolbar -->
-         <ToolBar prefHeight="35.0" prefWidth="458.0" VBox.vgrow="ALWAYS">
-            <Label prefHeight="25.0" prefWidth="128.0" style="-fx-text-fill: #aaaaaa; -fx-font-size: 14px; -fx-padding: 5 0 0 20;" text="Untitled.game" />
+         <ToolBar prefHeight="35.0" prefWidth="458.0" style="-fx-background-color: linear-gradient(from 0% 0% to 100% 100%,                   #050a1a 0%, #0d0824 40%, #110a30 70%, #000408 100%);" VBox.vgrow="ALWAYS">
+            <Label fx:id="projectTitleLabel" prefHeight="25.0" prefWidth="128.0" style="-fx-text-fill: #aaaaaa; -fx-font-size: 14px; -fx-padding: 5 0 0 20;" text="" />
          </ToolBar>
       </VBox>
    </top>
@@ -55,7 +55,7 @@
                <!-- Left: Code Editor -->
                <VBox fx:id="editorContainer" VBox.vgrow="ALWAYS">
                   <!-- Editor Toolbar -->
-                  <HBox spacing="5" style="-fx-background-color: #2d2d30; -fx-padding: 5;">
+                  <HBox spacing="5" style="-fx-padding: 5; -fx-background-color: linear-gradient(from 0% 0% to 100% 100%,                   #050a1a 0%, #0d0824 40%, #110a30 70%, #000408 100%);">
                      <Button fx:id="undoButton" prefHeight="26.0" prefWidth="40.0" text="⟲">
                         <tooltip>
                            <Tooltip text="Undo" />
@@ -69,8 +69,8 @@
                      <Button fx:id="clearButton" prefHeight="26.0" prefWidth="55.0" text="Clear" />
                      <Separator orientation="VERTICAL" />
                      <Label prefHeight="28.0" prefWidth="58.0" style="-fx-text-fill: white;" text="Font Size:" />
-                     <Button fx:id="fontUp" prefHeight="26.0" prefWidth="28.0" text="-" />
-                     <Button fx:id="fontDown" prefHeight="26.0" prefWidth="30.0" text="+" />
+                     <Button fx:id="fontUp" prefHeight="26.0" prefWidth="28.0" text="+" />
+                     <Button fx:id="fontDown" prefHeight="26.0" prefWidth="30.0" text="-" />
                      <VBox HBox.hgrow="ALWAYS" />
                   </HBox>
                   <TextArea fx:id="codeEditor" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
@@ -79,8 +79,8 @@
                <!-- Right: Canvas -->
                <VBox fx:id="canvasContainerWrapper">
                   <!-- Canvas Toolbar -->
-                  <HBox fx:id="controlToolbar" prefHeight="37.0" prefWidth="398.0" spacing="5" style="-fx-background-color: #323030; -fx-padding: 5;">
-                     <Button fx:id="runButton"  text="▶ Run" />
+                  <HBox fx:id="controlToolbar" prefHeight="37.0" prefWidth="398.0" spacing="5" style="-fx-padding: 5; -fx-background-color: linear-gradient(from 0% 0% to 100% 100%,                   #050a1a 0%, #0d0824 40%, #110a30 70%, #000408 100%);">
+                     <Button fx:id="runButton" text="▶ Run" />
                      <Button fx:id="pauseButton" text="⏸ Pause" />
                      <Button fx:id="stopButton" text="⏹ Stop" />
                      <VBox prefHeight="12.0" prefWidth="114.0" HBox.hgrow="ALWAYS" />
@@ -104,8 +104,8 @@
 
             <!-- Bottom: Console -->
             <VBox fx:id="consoleContainer">
-               <Label fx:id="consoleLabel"  text="Console" />
-               <TextArea fx:id="console" editable="false" prefHeight="164.0" prefWidth="1050.0"  wrapText="true" VBox.vgrow="ALWAYS">
+               <Label fx:id="consoleLabel" text="Console" />
+               <TextArea fx:id="console" editable="false" prefHeight="164.0" prefWidth="1050.0" wrapText="true" VBox.vgrow="ALWAYS">
                   <padding>
                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                   </padding>
@@ -118,16 +118,18 @@
 
    <!-- Bottom Status Bar -->
    <bottom>
-      <HBox spacing="10" style="-fx-background-color: #007acc; -fx-padding: 5;">
+      <HBox spacing="10" style="-fx-padding: 5; -fx-background-color: linear-gradient(from 0% 0% to 100% 100%,                   #050a1a 0%, #0d0824 40%, #110a30 70%, #000408 100%);">
          <Label fx:id="statusLabel" style="-fx-text-fill: white;" text="Ready" />
       </HBox>
    </bottom>
    <left>
-      <VBox fx:id="toolContainer" prefHeight="630.0" prefWidth="62.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="toolContainer" prefHeight="630.0" prefWidth="62.0" style="-fx-background-color: linear-gradient(from 0% 0% to 100% 100%,                   #050a1a 0%, #0d0824 40%, #110a30 70%, #000408 100%);" BorderPane.alignment="CENTER">
          <children>
             <ToggleButton fx:id="codeButton" mnemonicParsing="false" prefHeight="62.0" prefWidth="62.0" text="Code" />
             <Separator prefWidth="200.0" />
             <Button fx:id="saveButton" mnemonicParsing="false" prefHeight="62.0" prefWidth="62.0" text="Save" />
+            <Separator prefWidth="200.0" />
+            <Button fx:id="saveAsButton" mnemonicParsing="false" prefHeight="62.0" prefWidth="62.0" text="Save As" />
             <Separator prefWidth="200.0" />
             <Button fx:id="docButton" mnemonicParsing="false" prefHeight="62.0" prefWidth="62.0" text="Doc" />
             <Separator prefWidth="200.0" />
