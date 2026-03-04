@@ -1,6 +1,8 @@
 package com.example.codeplayfx.world;
 
 import com.example.codeplayfx.engine.system.PhysicsSystem;
+import com.example.codeplayfx.engine.system.SystemManager;
+import com.example.codeplayfx.engine.system.CollisionSystem;
 import com.example.codeplayfx.util.Logger;
 import com.example.codeplayfx.world.entity.Entity;
 import com.example.codeplayfx.world.physics.CoordinateSystem;
@@ -33,7 +35,11 @@ public class GameWorld {
     private boolean running;
     private float totalTime;  // Total time elapsed since game start
 
+    // Systems
     private PhysicsSystem physicsSystem;
+    private SystemManager systemManager;
+    private CollisionSystem collisionSystem;
+
     /**
      * Create a new game world with default coordinate system
      */
@@ -49,7 +55,11 @@ public class GameWorld {
         // Give all entities access to coordinate system
         Entity.setCoordinateSystem(coordinateSystem);
 
+        // Initialize systems
         this.physicsSystem = new PhysicsSystem(this);
+        this.systemManager = new SystemManager(this);
+        this.collisionSystem = systemManager.getCollisionSystem();
+
         this.running = false;
         this.totalTime = 0f;
 
@@ -149,9 +159,11 @@ public class GameWorld {
 
         totalTime += deltaTime;
 
-        if (physicsSystem != null) {
-            physicsSystem.update(deltaTime);
+        // Update all systems
+        if (systemManager != null) {
+            systemManager.update(deltaTime);
         }
+
         // Update all active entities
         for (Entity entity : entities) {
             if (entity.isActive()) {
@@ -301,8 +313,19 @@ public class GameWorld {
         coordinateSystem.setGridScale(gridScale);
         Logger.debug("Grid scale set to: " + gridScale);
     }
+
+    // ========== SYSTEM GETTERS ==========
+
     public PhysicsSystem getPhysicsSystem() {
         return physicsSystem;
+    }
+
+    public SystemManager getSystemManager() {
+        return systemManager;
+    }
+
+    public CollisionSystem getCollisionSystem() {
+        return collisionSystem;
     }
 
     // ========== GETTERS ==========

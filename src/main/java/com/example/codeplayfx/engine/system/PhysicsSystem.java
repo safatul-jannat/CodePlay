@@ -4,10 +4,11 @@ import com.example.codeplayfx.util.Logger;
 import com.example.codeplayfx.world.GameWorld;
 import com.example.codeplayfx.world.entity.Entity;
 import com.example.codeplayfx.world.entity.PhysicalEntity;
+import com.example.codeplayfx.world.entity.BlockPlayer;
 
 /**
  * PhysicsSystem handles physics simulation for all physical entities.
- * 
+ *
  * Features:
  * - Centralized physics updates
  * - Gravity application
@@ -49,8 +50,7 @@ public class PhysicsSystem extends GameSystem {
      * Update a single physical entity
      */
     private void updatePhysicalEntity(PhysicalEntity entity, float deltaTime) {
-        // Entity handles its own physics update
-        // (This is already done in PhysicalEntity.update())
+        // Entity handles its own physics update in PhysicalEntity.update()
         // But we can add global physics rules here
 
         // Apply world bounds
@@ -65,38 +65,35 @@ public class PhysicsSystem extends GameSystem {
     private void applyWorldBounds(PhysicalEntity entity) {
         float x = entity.getX();
         float y = entity.getY();
+        float width = entity.hasCollider() ? entity.getCollider().getWidth() : 1.0f;
+        float height = entity.hasCollider() ? entity.getCollider().getHeight() : 1.0f;
 
-        // ONLY apply bounds if gravity is enabled (prevents flying entities from being restricted)
-        if (!entity.isUsingGravity()) {
-            return; // Flying entities ignore world bounds
-        }
-
-        // Bottom bound (ground)
-        if (y >= worldMinY) {
-            entity.setPosition(x, worldMinY);
+        // Bottom bound (ground) - for ALL physical entities
+        if (y + height > worldMaxY) {
+            entity.setPosition(x, worldMaxY - height);
             entity.setVelocity(entity.getVelocity().x, 0);  // Stop falling
 
             // Set on ground for BlockPlayer
-            if (entity instanceof com.example.codeplayfx.world.entity.BlockPlayer) {
-                ((com.example.codeplayfx.world.entity.BlockPlayer) entity).setOnGround(true);
+            if (entity instanceof BlockPlayer) {
+                ((BlockPlayer) entity).setOnGround(true);
             }
         }
 
-        // Top bound (sky) - only for gravity entities
-        if (y <= worldMaxY - 1) {
-            entity.setPosition(x, worldMaxY - 1);
+        // Top bound
+        if (y < worldMinY) {
+            entity.setPosition(x, worldMinY);
             entity.setVelocity(entity.getVelocity().x, 0);  // Stop rising
         }
 
         // Left bound
-        if (x <= worldMinX) {
+        if (x < worldMinX) {
             entity.setPosition(worldMinX, y);
             entity.setVelocity(0, entity.getVelocity().y);  // Stop moving left
         }
 
         // Right bound
-        if (x >= worldMaxX - 1) {
-            entity.setPosition(worldMaxX - 1, y);
+        if (x + width > worldMaxX) {
+            entity.setPosition(worldMaxX - width, y);
             entity.setVelocity(0, entity.getVelocity().y);  // Stop moving right
         }
     }
@@ -162,11 +159,16 @@ public class PhysicsSystem extends GameSystem {
         this.worldMaxY = gridHeight;
     }
 
-
+    /**
+     * Check if a position is within world bounds
+     */
+    public boolean isInBounds(float x, float y) {
+        return x >= worldMinX && x <= worldMaxX &&
+                y >= worldMinY && y <= worldMaxY;
+    }
 
     public float getWorldMinX() { return worldMinX; }
     public float getWorldMinY() { return worldMinY; }
     public float getWorldMaxX() { return worldMaxX; }
     public float getWorldMaxY() { return worldMaxY; }
-
 }
