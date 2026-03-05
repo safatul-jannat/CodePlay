@@ -1,45 +1,43 @@
 package com.example.codeplayfx.scripting.runtime;
 
-import com.example.codeplayfx.world.entity.BlockPlayer;
-import com.example.codeplayfx.world.entity.Enemy;
+import com.example.codeplayfx.world.entity.Collectible;
 import com.example.codeplayfx.world.GameWorld;
 import com.example.codeplayfx.engine.system.InputSystem;
 import com.example.codeplayfx.engine.system.PhysicsSystem;
 import com.example.codeplayfx.world.entity.Entity;
 import com.example.codeplayfx.engine.core.GameEngine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * UserGame - Abstract base class for user-created games.
  *
- * Users extend this class and implement:
- *   start()   — called ONCE on startup   (create objects here)
- *   execute() — called EVERY FRAME       (input/movement/logic here)
+ * Also owns the collectible sequence — because UserGame lives in the
+ * engine classloader, not the dynamic user classloader. This avoids
+ * the two-classloader bug where static fields in Collectible would
+ * be split across two copies of the class.
  */
 public abstract class UserGame {
 
-    // Engine references (injected by runtime)
     protected GameWorld world;
     protected InputSystem input;
-    private GameEngine engine;                     // needed for setBackground()
+    private GameEngine engine;
     private static UserGame currentGame;
+
+    // ========== COLLECTIBLE SEQUENCE ==========
+    // Stored here (engine classloader) not in Collectible (potentially split)
+    private List<Collectible> collectibleSequence = new ArrayList<>();
+    private int collectibleIndex = 0;
+    private int collectibleScore = 0;
 
     // ========== LIFECYCLE ==========
 
-    /**
-     * Called ONCE when the game starts.
-     * Override this to create players, enemies, set background, etc.
-     */
-    public void start() {
-        // Default: do nothing. Users override this.
-    }
+    public void start() {}
 
-    /**
-     * Called EVERY FRAME.
-     * Users implement their per-frame game logic here.
-     */
     public abstract void execute();
 
-    // ========== ENGINE INJECTION (called by ScriptRuntime) ==========
+    // ========== ENGINE INJECTION ==========
 
     public void setWorld(GameWorld world) {
         this.world = world;
@@ -58,36 +56,71 @@ public abstract class UserGame {
         return currentGame;
     }
 
+    public GameWorld getWorld() {
+        return world;
+    }
+
     public void addEntity(Entity e) {
         if (world != null) {
             world.addEntity(e);
         }
     }
 
-    // ========== BACKGROUND ==========
+    // ========== COLLECTIBLE MANAGEMENT ==========
 
     /**
-     * Set a background image for the canvas.
-     * The image stretches to fill the canvas and sits behind all entities.
-     *
-     * Usage:  setBackground("sky.jpg");
-     *         setBackground("forest.png");
-     *
-     * Place your image in:  src/main/resources/assets/backgrounds/
+     * Called by Collectible.spawnSequence() — adds coins to sequence
+     * and shows the first one if none are active yet.
      */
-    protected void setBackground(String filename) {
-        if (engine != null) {
-            engine.setBackground(filename);
+    public void addToSequence(Collectible... collectibles) {
+        // Only add if sequence hasn't been populated yet this session
+        // Guard: if index is already 0 and sequence is empty, we're fresh
+        for (Collectible c : collectibles) {
+            collectibleSequence.add(c);
+        }
+        // Show first coin only when we first populate the sequence
+        if (collectibleIndex == 0 && collectibleSequence.size() == collectibles.length) {
+            showCurrentCollectible();
         }
     }
 
     /**
-     * Remove the background image.
+     * Called by Collectible.collect() when player touches a coin.
      */
-    protected void clearBackground() {
-        if (engine != null) {
-            engine.clearBackground();
+    public void onCollectibleCollected(Collectible c) {
+        collectibleScore += c.getPointValue();
+        collectibleIndex++;
+        showCurrentCollectible();
+    }
+
+    private void showCurrentCollectible() {
+        if (collectibleIndex >= collectibleSequence.size()) return; // all done
+        Collectible next = collectibleSequence.get(collectibleIndex);
+        if (!next.isCollected()) {
+            next.show();
         }
+    }
+
+    /**
+     * Called by ScriptRuntime before start() — resets sequence for clean run.
+     */
+    public void resetCollectibles() {
+        collectibleSequence = new ArrayList<>();
+        collectibleIndex = 0;
+        collectibleScore = 0;
+    }
+
+    public int getCollectibleScore()     { return collectibleScore; }
+    public int getCollectibleRemaining() { return collectibleSequence.size() - collectibleIndex; }
+
+    // ========== BACKGROUND ==========
+
+    protected void setBackground(String filename) {
+        if (engine != null) engine.setBackground(filename);
+    }
+
+    protected void clearBackground() {
+        if (engine != null) engine.clearBackground();
     }
 
     // ========== INPUT HELPERS ==========

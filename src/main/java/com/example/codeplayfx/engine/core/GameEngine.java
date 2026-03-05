@@ -266,7 +266,7 @@ public class GameEngine {
     public void loadUserGame(UserGame userGame) {
         Logger.info("Loading user game: " + userGame.getClass().getSimpleName());
         this.scriptRuntime = new ScriptRuntime(userGame, this);
-        this.scriptRuntime.initialize();
+
     }
 
     public ScriptRuntime getScriptRuntime() { return scriptRuntime; }

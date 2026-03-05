@@ -4,6 +4,9 @@ import com.example.codeplayfx.util.Logger;
 import com.example.codeplayfx.world.GameWorld;
 import com.example.codeplayfx.world.entity.Entity;
 import com.example.codeplayfx.world.entity.PhysicalEntity;
+import com.example.codeplayfx.world.entity.BlockPlayer;
+import com.example.codeplayfx.world.entity.Collectible;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -239,10 +242,23 @@ public class CollisionSystem extends GameSystem {
      * Called when collision is detected (override for custom behavior)
      */
     protected void onCollision(Entity entityA, Entity entityB) {
-        // Can be overridden for custom collision logic
-        // e.g., damage, pickup items, trigger events, etc.
+
+        // Player touches Collectible → collect it
+        if (entityA instanceof BlockPlayer && entityB instanceof Collectible) {
+            Collectible c = (Collectible) entityB;
+            if (!c.isCollected()) {
+                c.collect();
+            }
+            return;
+        }
+        if (entityB instanceof BlockPlayer && entityA instanceof Collectible) {
+            Collectible c = (Collectible) entityA;
+            if (!c.isCollected()) {
+                c.collect();
+            }
+            return;
+        }
     }
-    
     /**
      * Get all collisions detected this frame
      */
