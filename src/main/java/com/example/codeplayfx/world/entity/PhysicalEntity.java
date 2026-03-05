@@ -78,7 +78,6 @@ public abstract class PhysicalEntity extends Entity {
         }
 
         // Reset collision states
-        boolean wasOnGround = onGround;
         onGround = false;
         onCeiling = false;
         onWall = false;
@@ -89,12 +88,7 @@ public abstract class PhysicalEntity extends Entity {
             System.out.println("Moving horizontally: " + moveX);
             setPosition(oldX + moveX, oldY);
 
-            if (checkCollisionWithGround()) {
-                System.out.println("HORIZONTAL COLLISION! Reverting X");
-                setPosition(oldX, oldY);
-                velocity = new Vector2(0, velocity.y);
-                onWall = true;
-            }
+            // Check for horizontal collisions - will be handled by CollisionSystem
         }
 
         // Try vertical movement
@@ -103,31 +97,7 @@ public abstract class PhysicalEntity extends Entity {
             System.out.println("Moving vertically: " + moveY);
             setPosition(getX(), oldY + moveY);
 
-            if (checkCollisionWithGround()) {
-                System.out.println("VERTICAL COLLISION!");
-
-                if (moveY < 0) { // Moving down (falling)
-                    // Find the exact position where we JUST touch the ground
-                    float groundTop = findGroundTopBelow();
-                    if (groundTop > -Float.MAX_VALUE) {
-                        // Place player ON TOP of the ground
-                        // Player's bottom should be at ground's top
-                        setPosition(getX(), groundTop);
-                        System.out.println("LANDED ON GROUND! Final position: " + getY());
-                    } else {
-                        setPosition(getX(), oldY);
-                    }
-
-                    onGround = true;
-                    velocity = new Vector2(velocity.x, 0);
-                }
-                else if (moveY > 0) { // Moving up
-                    setPosition(getX(), oldY);
-                    onCeiling = true;
-                    velocity = new Vector2(velocity.x, 0);
-                    System.out.println("HIT CEILING!");
-                }
-            }
+            // Check for vertical collisions - will be handled by CollisionSystem
         }
 
         // Apply friction when on ground
@@ -149,61 +119,6 @@ public abstract class PhysicalEntity extends Entity {
     }
 
     /**
-     * Find the top Y coordinate of the highest ground below this entity
-     */
-    private float findGroundTopBelow() {
-        float highestGroundTop = -Float.MAX_VALUE;
-
-        UserGame currentGame = UserGame.getCurrentGame();
-        if (currentGame == null || currentGame.world == null) {
-            return highestGroundTop;
-        }
-
-        for (Entity entity : currentGame.world.getAllEntities()) {
-            if (entity instanceof Ground && entity != this && entity.isActive()) {
-                Ground ground = (Ground) entity;
-
-                // Check if player's X overlaps with ground's X range
-                boolean xOverlap = (getX() + getWidth() > ground.getX()) &&
-                        (getX() < ground.getX() + ground.getWidth());
-
-                if (xOverlap) {
-                    // Ground top is ground Y + ground height
-                    float groundTop = ground.getY() + ground.getHeight();
-
-                    // Check if this ground is below the player's old position
-                    if (groundTop < oldY && groundTop > highestGroundTop) {
-                        highestGroundTop = groundTop;
-                    }
-                }
-            }
-        }
-
-        return highestGroundTop;
-    }
-
-    /**
-     * Check collision with any ground entity
-     */
-    private boolean checkCollisionWithGround() {
-        UserGame currentGame = UserGame.getCurrentGame();
-        if (currentGame == null || currentGame.world == null) {
-            System.out.println("No game world reference!");
-            return false;
-        }
-
-        for (Entity entity : currentGame.world.getAllEntities()) {
-            if (entity instanceof Ground && entity != this && entity.isActive()) {
-                if (this.isColliding(entity)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Apply a force to this entity
      */
     public void applyForce(Vector2 force) {
@@ -220,7 +135,7 @@ public abstract class PhysicalEntity extends Entity {
      */
     protected void jump(float force) {
         if (onGround) {
-            velocity = new Vector2(velocity.x, force); // Positive for upward
+            velocity = new Vector2(velocity.x, force);
             onGround = false;
             System.out.println("JUMP! velocity.y=" + force);
         } else {

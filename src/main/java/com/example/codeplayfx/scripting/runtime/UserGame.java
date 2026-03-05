@@ -6,7 +6,7 @@ import com.example.codeplayfx.world.GameWorld;
 import com.example.codeplayfx.engine.system.InputSystem;
 import com.example.codeplayfx.world.entity.Entity;
 import com.example.codeplayfx.engine.system.PhysicsSystem;
-
+import com.example.codeplayfx.world.entity.KillZone;
 /**
  * UserGame - Abstract base class for user-created games.
  * 
@@ -127,5 +127,8 @@ public abstract class UserGame {
         if (world != null && world.getPhysicsSystem() != null) {
             world.getPhysicsSystem().setGlobalGravity(gravityValue);
         }
+    }
+    public GameWorld getWorld() {
+        return world;
     }
 }

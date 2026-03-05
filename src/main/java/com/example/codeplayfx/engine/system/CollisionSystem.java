@@ -2,9 +2,10 @@ package com.example.codeplayfx.engine.system;
 
 import com.example.codeplayfx.util.Logger;
 import com.example.codeplayfx.world.GameWorld;
+import com.example.codeplayfx.world.entity.BlockPlayer;
 import com.example.codeplayfx.world.entity.Entity;
 import com.example.codeplayfx.world.entity.PhysicalEntity;
-
+import com.example.codeplayfx.world.entity.KillZone;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +58,7 @@ public class CollisionSystem extends GameSystem {
         
         // Resolve collisions (physics response)
         resolveCollisions();
+        handleTriggerCollisions();
     }
     
     /**
@@ -261,5 +263,21 @@ public class CollisionSystem extends GameSystem {
             }
         }
         return false;
+    }
+    /**
+     * Handle trigger collisions (like KillZone)
+     */
+    private void handleTriggerCollisions() {
+        for (CollisionPair pair : collisions) {
+            Entity a = pair.entityA;
+            Entity b = pair.entityB;
+
+            // Check for KillZone + BlockPlayer
+            if (a instanceof KillZone && b instanceof BlockPlayer) {
+                ((KillZone) a).onTouch((BlockPlayer) b);
+            } else if (b instanceof KillZone && a instanceof BlockPlayer) {
+                ((KillZone) b).onTouch((BlockPlayer) a);
+            }
+        }
     }
 }

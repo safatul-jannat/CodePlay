@@ -7,12 +7,6 @@ import com.example.codeplayfx.world.entity.PhysicalEntity;
 
 /**
  * PhysicsSystem handles physics simulation for all physical entities.
- * 
- * Features:
- * - Centralized physics updates
- * - Gravity application
- * - Velocity/acceleration updates
- * - World bounds checking
  */
 public class PhysicsSystem extends GameSystem {
 
@@ -49,9 +43,7 @@ public class PhysicsSystem extends GameSystem {
      * Update a single physical entity
      */
     private void updatePhysicalEntity(PhysicalEntity entity, float deltaTime) {
-        // Entity handles its own physics update
-        // (This is already done in PhysicalEntity.update())
-        // But we can add global physics rules here
+        // Entity handles its own physics update in PhysicalEntity.update()
 
         // Apply world bounds
         if (useWorldBounds) {
@@ -66,7 +58,7 @@ public class PhysicsSystem extends GameSystem {
         float x = entity.getX();
         float y = entity.getY();
 
-        // ONLY apply bounds if gravity is enabled (prevents flying entities from being restricted)
+        // Only apply bounds if gravity is enabled
         if (!entity.isUsingGravity()) {
             return; // Flying entities ignore world bounds
         }
@@ -82,7 +74,7 @@ public class PhysicsSystem extends GameSystem {
             }
         }
 
-        // Top bound (sky) - only for gravity entities
+        // Top bound (sky)
         if (y >= worldMaxY - 1) {
             entity.setPosition(x, worldMaxY - 1);
             entity.setVelocity(entity.getVelocity().x, 0);  // Stop rising
@@ -103,9 +95,6 @@ public class PhysicsSystem extends GameSystem {
 
     // ========== CONFIGURATION ==========
 
-    /**
-     * Set global gravity strength
-     */
     public void setGravity(float gravity) {
         this.gravity = gravity;
     }
@@ -131,9 +120,6 @@ public class PhysicsSystem extends GameSystem {
         }
     }
 
-    /**
-     * Enable/disable world bounds
-     */
     public void setUseWorldBounds(boolean use) {
         this.useWorldBounds = use;
     }
@@ -142,9 +128,6 @@ public class PhysicsSystem extends GameSystem {
         return useWorldBounds;
     }
 
-    /**
-     * Set world bounds (in grid coordinates)
-     */
     public void setWorldBounds(float minX, float minY, float maxX, float maxY) {
         this.worldMinX = minX;
         this.worldMinY = minY;
@@ -152,9 +135,6 @@ public class PhysicsSystem extends GameSystem {
         this.worldMaxY = maxY;
     }
 
-    /**
-     * Set world bounds from grid size
-     */
     public void setWorldBoundsFromGrid(int gridWidth, int gridHeight) {
         this.worldMinX = 0;
         this.worldMinY = 0;
@@ -162,11 +142,8 @@ public class PhysicsSystem extends GameSystem {
         this.worldMaxY = gridHeight;
     }
 
-
-
     public float getWorldMinX() { return worldMinX; }
     public float getWorldMinY() { return worldMinY; }
     public float getWorldMaxX() { return worldMaxX; }
     public float getWorldMaxY() { return worldMaxY; }
-
 }

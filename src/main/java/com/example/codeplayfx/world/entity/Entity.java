@@ -15,12 +15,6 @@ import java.util.Map;
 
 /**
  * Base class for all game entities.
- * Provides core functionality: ID, transform, components, lifecycle.
- *
- * Design principles:
- * - Abstraction: Common behavior defined here
- * - Encapsulation: Internal state hidden from users
- * - Composition: Features added via components
  */
 public abstract class Entity {
 
@@ -57,14 +51,12 @@ public abstract class Entity {
 
     /**
      * Create entity at specific grid position
-     * @param x grid X coordinate (bottom-left origin)
-     * @param y grid Y coordinate (bottom-left origin)
      */
     public Entity(float x, float y) {
         this.id = IDGenerator.generateID();
         this.name = getClass().getSimpleName() + "_" + id;
         this.active = true;
-        this.visible = false; // Hidden until show() is called
+        this.visible = false;
 
         // Initialize transform
         this.transform = new TransformComponent(x, y);
@@ -88,12 +80,10 @@ public abstract class Entity {
 
     /**
      * Update this entity (called every frame by engine)
-     * Override this to add custom behavior
      */
     public void update(float deltaTime) {
         if (!active) return;
 
-        // Update all components
         for (Component component : components.values()) {
             if (component.isActive()) {
                 component.update(deltaTime);
@@ -103,7 +93,6 @@ public abstract class Entity {
 
     /**
      * Called when entity is destroyed
-     * Override to add cleanup logic
      */
     public void onDestroy() {
         Logger.debug("Destroying " + name);
@@ -139,148 +128,96 @@ public abstract class Entity {
 
     // ========== POSITION METHODS ==========
 
-    /**
-     * Get current X position (grid coordinates)
-     */
     public float getX() {
         return transform.getX();
     }
 
-    /**
-     * Get current Y position (grid coordinates)
-     */
     public float getY() {
         return transform.getY();
     }
 
-    /**
-     * Get position as Vector2
-     */
     public Vector2 getPosition() {
         return transform.getPosition();
     }
 
-    /**
-     * Set position in grid coordinates
-     */
     public void setPosition(float x, float y) {
         transform.setPosition(x, y);
     }
 
-    /**
-     * Set position using Vector2
-     */
     public void setPosition(Vector2 position) {
         transform.setPosition(position);
     }
 
-    /**
-     * Move entity by offset
-     */
     public void move(float dx, float dy) {
         transform.translate(dx, dy);
     }
 
-    /**
-     * Get screen position (for rendering)
-     * Converts grid coordinates to pixel coordinates
-     */
     public Vector2 getScreenPosition() {
         if (coordinateSystem != null) {
             return coordinateSystem.toScreen(getPosition());
         }
-        return getPosition(); // Fallback if no coordinate system
+        return getPosition();
     }
 
     // ========== COLLISION DETECTION ==========
 
-    /**
-     * Add a collider to this entity
-     */
     public void addCollider(float width, float height) {
         this.collider = new ColliderComponent(width, height);
         addComponent(collider);
     }
 
-    /**
-     * Add a collider with offset
-     */
     public void addCollider(float width, float height, Vector2 offset) {
         this.collider = new ColliderComponent(width, height, offset);
         addComponent(collider);
     }
 
-    /**
-     * Get collider component
-     */
     public ColliderComponent getCollider() {
         return collider;
     }
 
-    /**
-     * Check if this entity has a collider
-     */
     public boolean hasCollider() {
         return collider != null && collider.isActive();
     }
 
     /**
      * Check if this entity is colliding with another entity
-     * Uses rectangular AABB collision detection
+     * SINGLE VERSION - REMOVED DUPLICATE
      */
     public boolean isColliding(Entity other) {
         if (other == null || !other.isActive() || !this.isActive()) {
             return false;
         }
 
-        // Both entities must have colliders
         if (!this.hasCollider() || !other.hasCollider()) {
             return false;
         }
 
-        // Use collider components to check intersection
         return this.collider.intersects(
                 other.collider,
                 this.getPosition(),
                 other.getPosition()
         );
-
     }
 
-    /**
-     * Check if a point is inside this entity's collider
-     */
     public boolean containsPoint(Vector2 point) {
         if (!hasCollider()) return false;
         return collider.containsPoint(point, getPosition());
     }
 
-    /**
-     * Check if a point is inside this entity's collider
-     */
     public boolean containsPoint(float x, float y) {
         return containsPoint(new Vector2(x, y));
     }
 
     // ========== RENDERING ==========
 
-    /**
-     * Set custom renderer for this entity
-     */
     public void setRenderer(Renderer renderer) {
         this.renderer = renderer;
     }
 
-    /**
-     * Get the renderer for this entity
-     */
     public Renderer getRenderer() {
         return renderer;
     }
 
-    /**
-     * Add or get render component
-     */
     public RenderComponent getRenderComponent() {
         if (renderComponent == null) {
             renderComponent = new RenderComponent();
@@ -289,40 +226,25 @@ public abstract class Entity {
         return renderComponent;
     }
 
-    /**
-     * Check if entity has a render component
-     */
     public boolean hasRenderComponent() {
         return renderComponent != null && renderComponent.isActive();
     }
 
     // ========== COMPONENT SYSTEM ==========
 
-    /**
-     * Add a component to this entity
-     */
     public <T extends Component> void addComponent(T component) {
         components.put(component.getClass(), component);
     }
 
-    /**
-     * Get a component by type
-     */
     @SuppressWarnings("unchecked")
     public <T extends Component> T getComponent(Class<T> componentType) {
         return (T) components.get(componentType);
     }
 
-    /**
-     * Check if entity has a specific component
-     */
     public boolean hasComponent(Class<? extends Component> componentType) {
         return components.containsKey(componentType);
     }
 
-    /**
-     * Remove a component
-     */
     public void removeComponent(Class<? extends Component> componentType) {
         components.remove(componentType);
     }
@@ -361,23 +283,23 @@ public abstract class Entity {
         return transform;
     }
 
-    @Override
-    public String toString() {
-        return String.format("%s[id=%d, pos=(%.1f,%.1f), active=%b, visible=%b]",
-                name, id, getX(), getY(), active, visible);
-    }
-
     public float getWidth() {
         if (renderComponent != null) {
             return renderComponent.getWidth();
         }
-        return 1.0f; // Default
+        return 1.0f;
     }
 
     public float getHeight() {
         if (renderComponent != null) {
             return renderComponent.getHeight();
         }
-        return 1.0f; // Default
+        return 1.0f;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s[id=%d, pos=(%.1f,%.1f), active=%b, visible=%b]",
+                name, id, getX(), getY(), active, visible);
     }
 }
