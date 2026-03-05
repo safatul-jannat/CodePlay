@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="400.0" prefWidth="500.0" spacing="10"
+      style="-fx-background-color: #2a0c4a; -fx-border-color: #5905f5; -fx-border-width: 1.5; -fx-background-radius: 10; -fx-border-radius: 10;"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.codeplayfx.ui.popup.DocPopupController">
+    <padding>
+        <Insets bottom="15" left="15" right="15" top="15" />
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label style="-fx-text-fill: #ff6ec7; -fx-font-weight: bold; -fx-font-size: 18px;" text="📝 Project Documentation" />
+        <Label fx:id="projectNameLabel" style="-fx-text-fill: #00f7ff; -fx-font-size: 14px;" text="" />
+    </HBox>
+
+    <Label style="-fx-text-fill: #cccccc; -fx-font-size: 12px;"
+           text="Write notes about your game - how it works, what it does, etc." />
+
+    <TextArea fx:id="docTextArea"
+              prefHeight="250.0"
+              wrapText="true"
+              style="-fx-background-color: #1a0b2e; -fx-text-fill: white; -fx-control-inner-background: #1a0b2e; -fx-border-color: #5605b5; -fx-border-radius: 3;">
+        <padding>
+            <Insets bottom="5" left="5" right="5" top="5" />
+        </padding>
+    </TextArea>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="cancelButton"
+                onAction="#handleCancel"
+                text="Cancel"
+                style="-fx-background-color: #333; -fx-text-fill: white; -fx-padding: 8 20; -fx-cursor: hand;" />
+        <Button fx:id="saveButton"
+                onAction="#handleSave"
+                text="Save Documentation"
+                style="-fx-background-color: #ff6ec7; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20; -fx-cursor: hand;" />
+    </HBox>
+</VBox>

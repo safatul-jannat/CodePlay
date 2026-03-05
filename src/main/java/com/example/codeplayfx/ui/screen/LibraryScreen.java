@@ -20,9 +20,9 @@ public class LibraryScreen extends Screen {
             root = loader.load();
             controller = loader.getController();
             
-            System.out.println("✅ LibraryScreen created");
+            System.out.println(" LibraryScreen created");
         } catch (Exception e) {
-            System.err.println("❌ Failed to load LibraryScreen: " + e.getMessage());
+            System.err.println(" Failed to load LibraryScreen: " + e.getMessage());
             e.printStackTrace();
             // Fallback
             root = new javafx.scene.layout.StackPane(

@@ -20,9 +20,9 @@ public class AboutScreen extends Screen {
             root = loader.load();
             controller = loader.getController();
 
-            System.out.println("✅ AboutScreen created");
+            System.out.println(" AboutScreen created");
         } catch (Exception e) {
-            System.err.println("❌ Failed to load AboutScreen: " + e.getMessage());
+            System.err.println(" Failed to load AboutScreen: " + e.getMessage());
             e.printStackTrace();
             // Fallback
             root = new javafx.scene.layout.StackPane(

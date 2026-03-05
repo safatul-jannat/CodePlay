@@ -149,15 +149,17 @@ public class GameWorld {
 
         totalTime += deltaTime;
 
-        if (physicsSystem != null) {
-            physicsSystem.update(deltaTime);
-        }
-        // Update all active entities
         for (Entity entity : entities) {
             if (entity.isActive()) {
                 entity.update(deltaTime);
             }
         }
+
+        if (physicsSystem != null) {
+            physicsSystem.update(deltaTime);
+        }
+        // Update all active entities
+
 
         // Process additions/removals after all updates
         processPendingChanges();

@@ -41,6 +41,7 @@ public class GalleryController {
     @FXML private Button mainWindowButton;
     @FXML private Button libraryButton;
     @FXML private Button aboutButton;
+    @FXML private TextArea docPreviewArea;
 
     private GalleryManager gallery = GalleryManager.getInstance();
     private GalleryAnimator animator;
@@ -72,16 +73,16 @@ public class GalleryController {
             try {
                 if (rootPane.getScene() != null) {
                     stage = (Stage) rootPane.getScene().getWindow();
-                    System.out.println("✅ Stage obtained: " + stage);
+                    System.out.println(" Stage obtained: " + stage);
                 } else {
-                    System.err.println("⚠️ Scene still null in Platform.runLater");
+                    System.err.println("⚠ Scene still null in Platform.runLater");
                 }
             } catch (Exception e) {
-                System.err.println("❌ Error getting stage: " + e.getMessage());
+                System.err.println(" Error getting stage: " + e.getMessage());
             }
         });
 
-        System.out.println("✅ GalleryController initialized");
+        System.out.println(" GalleryController initialized");
     }
 
     private void setupGallery() {
@@ -106,7 +107,18 @@ public class GalleryController {
                 (obs, old, selected) -> {
                     if (selected != null) {
                         codePreviewArea.setText(selected.getCode());
-                        projectInfoLabel.setText("📌 " + selected.getName() + " | Modified: " + selected.getFormattedDate());
+
+                        // Show documentation in the doc preview area
+                        String doc = selected.getDocumentation();
+                        if (docPreviewArea != null) {
+                            if (doc != null && !doc.isEmpty()) {
+                                docPreviewArea.setText(doc);
+                            } else {
+                                docPreviewArea.setText("No documentation available for this project.");
+                            }
+                        }
+
+                        projectInfoLabel.setText(" " + selected.getName() + " | Modified: " + selected.getFormattedDate());
                         loadButton.setDisable(false);
                         deleteButton.setDisable(false);
                         exportButton.setDisable(false);
@@ -163,7 +175,7 @@ public class GalleryController {
             if (selected != null) {
                 // If stage is not yet available, use a fallback
                 if (stage == null) {
-                    System.err.println("⚠️ Stage not ready for export");
+                    System.err.println(" Stage not ready for export");
                     // Try to get it again
                     if (rootPane.getScene() != null) {
                         stage = (Stage) rootPane.getScene().getWindow();
@@ -191,7 +203,7 @@ public class GalleryController {
         importButton.setOnAction(e -> {
             // If stage is not yet available, use a fallback
             if (stage == null) {
-                System.err.println("⚠️ Stage not ready for import");
+                System.err.println(" Stage not ready for import");
                 if (rootPane.getScene() != null) {
                     stage = (Stage) rootPane.getScene().getWindow();
                 } else {

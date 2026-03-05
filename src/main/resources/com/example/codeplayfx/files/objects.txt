@@ -1,4 +1,4 @@
-[BlockPlayer 👤]
+[BlockPlayer ]
 new BlockPlayer(x,y)|Creates player at position|x: float, y: float|BlockPlayer|BlockPlayer player = new BlockPlayer(100, 100);|CONSTRUCTOR
 new BlockPlayer(x,y,color)|Creates player with color|x: float, y: float, color: String|BlockPlayer|BlockPlayer player = new BlockPlayer(100, 100, "RED");|CONSTRUCTOR
 

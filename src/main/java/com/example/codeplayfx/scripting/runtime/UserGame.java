@@ -6,6 +6,7 @@ import com.example.codeplayfx.engine.system.InputSystem;
 import com.example.codeplayfx.engine.system.PhysicsSystem;
 import com.example.codeplayfx.world.entity.Entity;
 import com.example.codeplayfx.engine.core.GameEngine;
+import com.example.codeplayfx.world.entity.KillZone;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,6 @@ public abstract class UserGame {
     private static UserGame currentGame;
 
     // ========== COLLECTIBLE SEQUENCE ==========
-    // Stored here (engine classloader) not in Collectible (potentially split)
     private List<Collectible> collectibleSequence = new ArrayList<>();
     private int collectibleIndex = 0;
     private int collectibleScore = 0;
@@ -68,25 +68,15 @@ public abstract class UserGame {
 
     // ========== COLLECTIBLE MANAGEMENT ==========
 
-    /**
-     * Called by Collectible.spawnSequence() — adds coins to sequence
-     * and shows the first one if none are active yet.
-     */
     public void addToSequence(Collectible... collectibles) {
-        // Only add if sequence hasn't been populated yet this session
-        // Guard: if index is already 0 and sequence is empty, we're fresh
         for (Collectible c : collectibles) {
             collectibleSequence.add(c);
         }
-        // Show first coin only when we first populate the sequence
         if (collectibleIndex == 0 && collectibleSequence.size() == collectibles.length) {
             showCurrentCollectible();
         }
     }
 
-    /**
-     * Called by Collectible.collect() when player touches a coin.
-     */
     public void onCollectibleCollected(Collectible c) {
         collectibleScore += c.getPointValue();
         collectibleIndex++;
@@ -94,16 +84,13 @@ public abstract class UserGame {
     }
 
     private void showCurrentCollectible() {
-        if (collectibleIndex >= collectibleSequence.size()) return; // all done
+        if (collectibleIndex >= collectibleSequence.size()) return;
         Collectible next = collectibleSequence.get(collectibleIndex);
         if (!next.isCollected()) {
             next.show();
         }
     }
 
-    /**
-     * Called by ScriptRuntime before start() — resets sequence for clean run.
-     */
     public void resetCollectibles() {
         collectibleSequence = new ArrayList<>();
         collectibleIndex = 0;

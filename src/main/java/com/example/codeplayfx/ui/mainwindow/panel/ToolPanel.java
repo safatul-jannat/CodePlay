@@ -11,6 +11,7 @@ public class ToolPanel extends UIPanel {
     private Button saveAsButton;
     private Button docButton;
     private Button helpButton;
+    private Button backButton;
     private MainWindowScreen mainWindow;
 
     public ToolPanel(FXMLLoader loader, MainWindowScreen mainWindow) {
@@ -20,6 +21,7 @@ public class ToolPanel extends UIPanel {
         saveAsButton = (Button) loader.getNamespace().get("saveAsButton");
         docButton = (Button) loader.getNamespace().get("docButton");
         helpButton = (Button) loader.getNamespace().get("helpButton");
+        backButton = (Button) loader.getNamespace().get("backButton");
     }
 
     @Override
@@ -43,13 +45,22 @@ public class ToolPanel extends UIPanel {
 
         if (docButton != null) {
             docButton.setOnAction(e -> {
-                System.out.println("Doc button clicked - you can add doc popup here");
+                System.out.println("Doc button clicked - showing documentation popup");
+                mainWindow.showDocDialog();
             });
         }
 
         if (helpButton != null) {
             helpButton.setOnAction(e -> {
-                System.out.println("Help button clicked - you can add help popup here");
+                System.out.println("Help button clicked - showing help popup");
+                mainWindow.showHelpDialog();
+            });
+        }
+
+        if (backButton != null) {
+            backButton.setOnAction(e -> {
+                System.out.println("Back button clicked");
+                mainWindow.onHomeTabClicked();
             });
         }
     }
@@ -60,4 +71,5 @@ public class ToolPanel extends UIPanel {
     }
     public Button getDocButton() { return docButton; }
     public Button getHelpButton() { return helpButton; }
+    public Button getBackButton() { return backButton; }
 }

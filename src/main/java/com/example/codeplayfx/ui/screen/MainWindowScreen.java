@@ -74,9 +74,9 @@ public class MainWindowScreen extends Screen {
             String cssPath = "/com/example/codeplayfx/css/synthwave-theme.css";
             String css = getClass().getResource(cssPath).toExternalForm();
             scene.getStylesheets().add(css);
-            System.out.println("✅ CSS loaded: " + cssPath);
+            System.out.println(" CSS loaded: " + cssPath);
         } catch (Exception e) {
-            System.err.println("❌ Failed to load CSS: " + e.getMessage());
+            System.err.println(" Failed to load CSS: " + e.getMessage());
         }
     }
 
@@ -97,7 +97,7 @@ public class MainWindowScreen extends Screen {
 
         if (!isFirstShow && !savedCodeContent.isEmpty()) {
             codePanel.setCodeContent(savedCodeContent);
-            System.out.println("✅ Restored saved code content (" + savedCodeContent.length() + " chars)");
+            System.out.println(" Restored saved code content (" + savedCodeContent.length() + " chars)");
         }
 
         isFirstShow = false;
@@ -116,9 +116,9 @@ public class MainWindowScreen extends Screen {
                         controlPanel.getStopButton(),
                         toolPanel.getSaveButton()
                 );
-                System.out.println("✅ Synthwave theme applied");
+                System.out.println("Synthwave theme applied");
             } catch (Exception e) {
-                System.err.println("❌ Failed to apply theme: " + e.getMessage());
+                System.err.println(" Failed to apply theme: " + e.getMessage());
                 e.printStackTrace();
             }
         });
@@ -133,7 +133,7 @@ public class MainWindowScreen extends Screen {
     public void onHide() {
         if (codePanel != null) {
             savedCodeContent = codePanel.getCodeContent();
-            System.out.println("💾 Saved code content before leaving (" + savedCodeContent.length() + " chars)");
+            System.out.println(" Saved code content before leaving (" + savedCodeContent.length() + " chars)");
         }
     }
 
@@ -158,8 +158,45 @@ public class MainWindowScreen extends Screen {
 //    }
 
     public void showSaveDialog() { focusCodeEditor(); }
-    public void showDocDialog() { focusCodeEditor(); }
-    public void showHelpDialog() { focusCodeEditor(); }
+    public void showDocDialog() {  System.out.println("Showing documentation popup");
+
+        String currentCode = codePanel.getCode();
+        String projectName = currentProjectName;
+
+        // Get existing documentation if any
+        String existingDoc = "";
+        Project existingProject = GalleryManager.getInstance().findProjectByName(projectName);
+        if (existingProject != null) {
+            existingDoc = existingProject.getDocumentation();
+        }
+
+        // Use the doc button as anchor
+        Button docButton = toolPanel.getDocButton();
+
+        PopupManager.showDocPopup(
+                docButton,
+                stage,
+                projectName,
+                currentCode,
+                existingDoc,
+                () -> {
+                    // Success callback - maybe show a temporary message
+                    System.out.println("Documentation saved successfully");
+                    showTemporaryMessage("Documentation saved");
+                }
+        );
+
+        focusCodeEditor();  }
+    public void showHelpDialog() { System.out.println("Showing help popup");
+
+        Button helpButton = toolPanel.getHelpButton();
+
+        PopupManager.showHelpPopup(
+                helpButton,
+                stage
+        );
+
+        focusCodeEditor();  }
     public void focusCodeEditor() { if (codePanel != null) codePanel.focusEditor(); }
     public void returnToCodeView() { focusCodeEditor(); }
 
@@ -252,7 +289,7 @@ public class MainWindowScreen extends Screen {
             // Already has a name - save directly
             String code = codePanel.getCode();
             GalleryManager.getInstance().saveProject(currentProjectName, code);
-            System.out.println("✅ Quick saved: " + currentProjectName);
+            System.out.println(" Quick saved: " + currentProjectName);
             showTemporaryMessage("Saved: " + currentProjectName);
         } else {
             // New/untitled project - show save popup
@@ -285,7 +322,9 @@ public class MainWindowScreen extends Screen {
 
     private void showTemporaryMessage(String message) {
         // You could show a toast or status message
-        System.out.println("ℹ️ " + message);
+        System.out.println("ℹ" + message);
         // TODO: Add a status bar or temporary popup
     }
+
+
 }

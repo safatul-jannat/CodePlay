@@ -1,46 +1,68 @@
 package com.example.codeplayfx.ui.popup;
 
-import com.example.codeplayfx.manager.GalleryManager;
-import com.example.codeplayfx.model.Project;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Popup;
+import javafx.stage.Stage;
 
 import java.util.function.Consumer;
 
 public class SavePopupController {
 
-    @FXML
-    private TextField projectNameField;
+    @FXML private TextField projectNameField;
+    @FXML private Label errorLabel;
+    @FXML private Button cancelButton;
+    @FXML private Button saveButton;
 
-    @FXML
-    private Button saveButton;
-
-    @FXML
-    private Button cancelButton;
-
-    @FXML
-    private Label errorLabel;
-
-    private Popup popup;
+    private Popup popup;  // আগে Popup ছিল
+    private Stage popupStage;  // এখন Stage ও রাখছি (দুটোই support)
     private String codeToSave;
     private Consumer<String> onSaveSuccess;
 
+    // Popup version (পুরনো)
+    public void setPopup(Popup popup) {
+        this.popup = popup;
+    }
+
+    // Stage version (নতুন)
+    public void setPopupStage(Stage stage) {
+        this.popupStage = stage;
+    }
+
+    public void setCodeToSave(String code) {
+        this.codeToSave = code;
+    }
+
+    public void setOnSaveSuccess(Consumer<String> callback) {
+        this.onSaveSuccess = callback;
+    }
+
     @FXML
     public void initialize() {
-        errorLabel.setVisible(false);
-        errorLabel.setStyle("-fx-text-fill: #ff6b6b;");
+        // Focus on text field
+        if (projectNameField != null) {
+            projectNameField.requestFocus();
 
-        // Enable/disable save button based on input
-        projectNameField.textProperty().addListener((obs, old, newVal) -> {
-            saveButton.setDisable(newVal.trim().isEmpty());
-            errorLabel.setVisible(false);
-        });
+            // Enter key to save
+            projectNameField.setOnKeyPressed(e -> {
+                if (e.getCode() == KeyCode.ENTER) {
+                    handleSave();
+                }
+            });
+        }
 
-        // Enter key triggers save
-        projectNameField.setOnAction(e -> handleSave());
+        // Button actions
+        if (saveButton != null) {
+            saveButton.setOnAction(e -> handleSave());
+        }
+
+        if (cancelButton != null) {
+            cancelButton.setOnAction(e -> handleCancel());
+        }
     }
 
     @FXML
@@ -48,48 +70,28 @@ public class SavePopupController {
         String projectName = projectNameField.getText().trim();
 
         if (projectName.isEmpty()) {
-            errorLabel.setText("Please enter a project name");
-            errorLabel.setVisible(true);
+            errorLabel.setText("Project name cannot be empty!");
             return;
         }
 
-        // Check if project already exists
-        GalleryManager gallery = GalleryManager.getInstance();
-        Project existing = gallery.findProjectByName(projectName);
-
-        if (existing != null) {
-            // Simple confirmation - in real app you'd show a dialog
-            errorLabel.setText("Project exists! Will overwrite.");
-            errorLabel.setStyle("-fx-text-fill: #ffaa00;");
-            errorLabel.setVisible(true);
-        }
-
-        // Save project
-        gallery.saveProject(projectName, codeToSave);
-
-        // Call success callback
         if (onSaveSuccess != null) {
             onSaveSuccess.accept(projectName);
         }
 
-        // Close popup
-        popup.hide();
+        closePopup();
     }
 
     @FXML
     private void handleCancel() {
-        popup.hide();
+        closePopup();
     }
 
-    public void setPopup(Popup popup) {
-        this.popup = popup;
-    }
-
-    public void setCodeToSave(String code) {
-        this.codeToSave = code;
-    }
-
-    public void setOnSaveSuccess(Consumer<String>  callback) {
-        this.onSaveSuccess = callback;
+    private void closePopup() {
+        if (popup != null) {
+            popup.hide();
+        }
+        if (popupStage != null) {
+            popupStage.close();
+        }
     }
 }

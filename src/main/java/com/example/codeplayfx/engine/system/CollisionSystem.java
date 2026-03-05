@@ -2,11 +2,9 @@ package com.example.codeplayfx.engine.system;
 
 import com.example.codeplayfx.util.Logger;
 import com.example.codeplayfx.world.GameWorld;
+import com.example.codeplayfx.world.entity.BlockPlayer;
 import com.example.codeplayfx.world.entity.Entity;
 import com.example.codeplayfx.world.entity.PhysicalEntity;
-import com.example.codeplayfx.world.entity.BlockPlayer;
-import com.example.codeplayfx.world.entity.Collectible;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -243,22 +241,16 @@ public class CollisionSystem extends GameSystem {
      */
     protected void onCollision(Entity entityA, Entity entityB) {
 
-        // Player touches Collectible → collect it
-        if (entityA instanceof BlockPlayer && entityB instanceof Collectible) {
-            Collectible c = (Collectible) entityB;
-            if (!c.isCollected()) {
-                c.collect();
-            }
+        if (entityA instanceof BlockPlayer && entityB.isCollectible()) {
+            entityB.collect();
             return;
         }
-        if (entityB instanceof BlockPlayer && entityA instanceof Collectible) {
-            Collectible c = (Collectible) entityA;
-            if (!c.isCollected()) {
-                c.collect();
-            }
+        if (entityB instanceof BlockPlayer && entityA.isCollectible()) {
+            entityA.collect();
             return;
         }
     }
+    
     /**
      * Get all collisions detected this frame
      */
@@ -278,4 +270,6 @@ public class CollisionSystem extends GameSystem {
         }
         return false;
     }
+
+
 }

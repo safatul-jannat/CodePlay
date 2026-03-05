@@ -15,7 +15,7 @@ public class BlockPlayer extends LivingEntity {
     private float moveSpeed = 0.3f;           // Base movement speed (backward compatibility)
     private float jumpPower = 8.0f;            // Jump force
     private float flyJumpDistance = 2.0f;      // Auto-jump height
-    private boolean onGround = false;
+    //private boolean onGround = false;
     private boolean isAutoJumping = false;
     private float jumpStartY;
     private float jumpTargetY;
@@ -165,11 +165,8 @@ public class BlockPlayer extends LivingEntity {
                     jumpGoingUp = true;
                 }
             } else {
-                // VELOCITY: Parabolic jump
-                if (onGround) {
-                    setVelocity(velocity.x, -jumpPower);
-                    onGround = false;
-                }
+                // VELOCITY: Use the physics jump
+                jump(jumpPower);  // Call the PhysicalEntity.jump() method
             }
         } else {
             // FLYING MODE
@@ -213,20 +210,20 @@ public class BlockPlayer extends LivingEntity {
         // Update physics
         super.update(deltaTime);
 
-        // Ground detection
-        if (useGravity) {
-            if (getY() <= 0) {
-                setPosition(getX(), 0);
-                setOnGround(true);
-                if (velocity.y > 0) {
-                    setVelocity(velocity.x, 0);
-                }
-            } else {
-                setOnGround(false);
-            }
-        } else {
-            setOnGround(false);
-        }
+//        // Ground detection
+//        if (useGravity) {
+//            if (getY() <= 0) {
+//                setPosition(getX(), 0);
+//                setOnGround(true);
+//                if (velocity.y > 0) {
+//                    setVelocity(velocity.x, 0);
+//                }
+//            } else {
+//                setOnGround(false);
+//            }
+//        } else {
+//            setOnGround(false);
+//        }
     }
 
     private void handleAutoJump() {
@@ -249,8 +246,14 @@ public class BlockPlayer extends LivingEntity {
 
     // ========== STATE CHECKS ==========
 
-    public boolean isOnGround() { return onGround; }
-    public void setOnGround(boolean onGround) { this.onGround = onGround; }
+    @Override
+    public boolean isOnGround() {
+        return super.isOnGround();  // Calls PhysicalEntity.isOnGround()
+    }
+
+    public void setOnGround(boolean onGround) {
+        super.setOnGround(onGround);  // Calls PhysicalEntity.setOnGround()
+    }
 
     public boolean isMovingHorizontally() {
         return Math.abs(velocity.x) > 0.1f;

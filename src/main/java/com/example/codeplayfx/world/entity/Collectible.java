@@ -193,4 +193,6 @@ public class Collectible extends Entity {
     public int getPointValue()   { return pointValue; }
     public Type getType()        { return type; }
     public boolean isCollected() { return collected; }
+    @Override
+    public boolean isCollectible() { return true; }
 }
