@@ -38,9 +38,11 @@ public class PhysicsSystem extends GameSystem {
         if (!enabled) return;
 
         // Update physics for all physical entities
-        for (Entity entity : gameWorld.getAllEntities()) {
-            if (entity instanceof PhysicalEntity && entity.isActive()) {
-                updatePhysicalEntity((PhysicalEntity) entity, deltaTime);
+        if (useWorldBounds) {
+            for (Entity entity : gameWorld.getAllEntities()) {
+                if (entity instanceof PhysicalEntity && entity.isActive()) {
+                    applyWorldBounds((PhysicalEntity) entity);
+                }
             }
         }
     }

@@ -80,8 +80,7 @@ public class GameEngine {
         time.update();
         float deltaTime = time.getDeltaTime();
 
-        // Update all systems (input, physics, collision)
-        systemManager.update(deltaTime);
+        systemManager.getInputSystem().update(deltaTime);
 
         // Update game world (entities)
         gameWorld.update(deltaTime);
@@ -90,6 +89,7 @@ public class GameEngine {
         if (scriptRuntime != null) {
             scriptRuntime.update();
         }
+        gameWorld.update(deltaTime);
 
         // Render
         render();
