@@ -72,13 +72,13 @@ public class LibraryController implements Initializable {
             if (is != null) {
                 String content = new String(is.readAllBytes(), StandardCharsets.UTF_8);
                 parseObjectsData(content);
-                System.out.println("✅ Objects loaded from objects.txt");
+                System.out.println(" Objects loaded from objects.txt");
             } else {
-                System.out.println("⚠️ objects.txt not found, using defaults");
+                System.out.println(" objects.txt not found, using defaults");
                 loadDefaultObjects();
             }
         } catch (Exception e) {
-            System.err.println("❌ Error loading objects: " + e.getMessage());
+            System.err.println(" Error loading objects: " + e.getMessage());
             loadDefaultObjects();
         }
     }

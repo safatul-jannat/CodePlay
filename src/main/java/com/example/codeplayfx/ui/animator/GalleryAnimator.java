@@ -90,9 +90,9 @@ public class GalleryAnimator extends BackgroundAnimator {
         String cssPath = "/com/example/codeplayfx/css/screen-styles.css";
         try {
             rootPane.getStylesheets().add(getClass().getResource(cssPath).toExternalForm());
-            System.out.println("✅ Gallery CSS loaded");
+            System.out.println(" Gallery CSS loaded");
         } catch (Exception e) {
-            System.err.println("❌ Could not load CSS: " + cssPath);
+            System.err.println(" Could not load CSS: " + cssPath);
         }
     }
 

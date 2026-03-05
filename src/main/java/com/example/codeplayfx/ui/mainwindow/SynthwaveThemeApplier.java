@@ -89,9 +89,9 @@ public class SynthwaveThemeApplier {
             var url = SynthwaveThemeApplier.class.getResource(THEME_CSS);
             if (url != null) {
                 scene.getStylesheets().add(url.toExternalForm());
-                System.out.println("✅ Synthwave theme loaded");
+                System.out.println(" Synthwave theme loaded");
             } else {
-                System.err.println("❌ CSS not found: " + THEME_CSS);
+                System.err.println(" CSS not found: " + THEME_CSS);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

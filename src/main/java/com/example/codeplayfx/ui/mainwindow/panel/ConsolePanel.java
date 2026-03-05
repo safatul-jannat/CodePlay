@@ -139,7 +139,7 @@ public class ConsolePanel extends UIPanel {
             if (console != null) {
                 console.appendText("\n");
                 console.appendText("═══════════════════════════════════════\n");
-                console.appendText("  🔒 SECURITY VIOLATION\n");
+                console.appendText("   SECURITY VIOLATION\n");
                 console.appendText("═══════════════════════════════════════\n");
                 console.appendText(message);
                 console.appendText("\n═══════════════════════════════════════\n\n");
@@ -172,7 +172,7 @@ public class ConsolePanel extends UIPanel {
     public void logInfo(String message) {
         Platform.runLater(() -> {
             if (console != null) {
-                console.appendText("ℹ️ " + message + "\n");
+                console.appendText("ℹ " + message + "\n");
                 console.positionCaret(console.getText().length());
             }
         });
@@ -181,7 +181,7 @@ public class ConsolePanel extends UIPanel {
     public void logSuccess(String message) {
         Platform.runLater(() -> {
             if (console != null) {
-                console.appendText("✅ " + message + "\n");
+                console.appendText(" " + message + "\n");
                 console.positionCaret(console.getText().length());
             }
         });
@@ -190,7 +190,7 @@ public class ConsolePanel extends UIPanel {
     public void logWarning(String message) {
         Platform.runLater(() -> {
             if (console != null) {
-                console.appendText("⚠️ " + message + "\n");
+                console.appendText("⚠ " + message + "\n");
                 console.positionCaret(console.getText().length());
             }
         });
@@ -199,7 +199,7 @@ public class ConsolePanel extends UIPanel {
     public void logError(String message) {
         Platform.runLater(() -> {
             if (console != null) {
-                console.appendText("❌ " + message + "\n");
+                console.appendText(" " + message + "\n");
                 console.positionCaret(console.getText().length());
             }
         });

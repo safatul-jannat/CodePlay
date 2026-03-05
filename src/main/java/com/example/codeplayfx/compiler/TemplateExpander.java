@@ -40,6 +40,8 @@ public class TemplateExpander {
         template.append("import com.example.codeplayfx.scripting.runtime.UserGame;\n");
         template.append("import com.example.codeplayfx.world.entity.BlockPlayer;\n");
         template.append("import com.example.codeplayfx.world.entity.Enemy;\n");
+        template.append("import com.example.codeplayfx.world.entity.Ground;\n");
+        template.append("import com.example.codeplayfx.world.render.GroundRenderer;\n");
         template.append("import javafx.scene.paint.Color;\n");
         template.append("import com.example.codeplayfx.world.render.ShapeType;\n");
         template.append("\n");

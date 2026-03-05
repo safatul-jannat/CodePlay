@@ -72,7 +72,7 @@ public class PhysicsSystem extends GameSystem {
         }
 
         // Bottom bound (ground)
-        if (y >= worldMinY) {
+        if (y <= worldMinY) {
             entity.setPosition(x, worldMinY);
             entity.setVelocity(entity.getVelocity().x, 0);  // Stop falling
 
@@ -83,7 +83,7 @@ public class PhysicsSystem extends GameSystem {
         }
 
         // Top bound (sky) - only for gravity entities
-        if (y <= worldMaxY - 1) {
+        if (y >= worldMaxY - 1) {
             entity.setPosition(x, worldMaxY - 1);
             entity.setVelocity(entity.getVelocity().x, 0);  // Stop rising
         }

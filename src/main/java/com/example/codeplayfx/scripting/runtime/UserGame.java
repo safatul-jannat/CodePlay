@@ -36,7 +36,7 @@ import com.example.codeplayfx.engine.system.PhysicsSystem;
 public abstract class UserGame {
     
     // Engine references (injected by runtime)
-    protected GameWorld world;
+    public GameWorld world;
     protected InputSystem input;
     private static UserGame currentGame;
 

@@ -17,7 +17,7 @@ public class GalleryManager {
 
     private GalleryManager() {
         createDirectory();
-        loadProjects(); // load existing projects when app starts
+        loadProjects();
     }
 
     public static GalleryManager getInstance() {
@@ -36,7 +36,7 @@ public class GalleryManager {
     }
 
     /**
-     * load all saved projects from disk when app starts
+     * Load all projects from disk on startup
      */
     private void loadProjects() {
         projects.clear();
@@ -49,15 +49,23 @@ public class GalleryManager {
                     String code = new String(Files.readAllBytes(file.toPath()));
                     String name = file.getName().replace(".java", "");
 
-                    // create project object from file
-                    Project project = new Project(name, code);
+                    // Try to load documentation from separate .doc file
+                    String documentation = loadDocumentation(name);
 
-                    // set last modified time from file
+                    Project project = new Project(name, code, documentation);
+
+                    // Also try to load last modified time from file
+                    File docFile = new File(GALLERY_PATH + name + ".doc");
+                    long lastModified = Math.max(
+                            file.lastModified(),
+                            docFile.exists() ? docFile.lastModified() : 0
+                    );
+
                     project.setLastModified(LocalDateTime.ofEpochSecond(
-                            file.lastModified() / 1000, 0, java.time.ZoneOffset.UTC));
+                            lastModified / 1000, 0, java.time.ZoneOffset.UTC));
 
                     projects.add(project);
-                    System.out.println("Loaded project: " + name);
+                    System.out.println("Loaded project: " + name + " (doc: " + (documentation.isEmpty() ? "empty" : "has content") + ")");
                 } catch (IOException e) {
                     System.err.println("Failed to load project: " + file.getName());
                 }
@@ -67,61 +75,120 @@ public class GalleryManager {
     }
 
     /**
-     * save project to disk
+     * Load documentation for a project from .doc file
      */
-    public void saveProject(String name, String code) {
+    private String loadDocumentation(String projectName) {
         try {
-            // remove invalid characters from filename
-            String safeName = name.replaceAll("[^a-zA-Z0-9.-]", "_");
-            Path filePath = Paths.get(GALLERY_PATH + safeName + ".java");
+            // Sanitize filename to be safe
+            String safeName = projectName.replaceAll("[^a-zA-Z0-9.-]", "_");
+            Path docPath = Paths.get(GALLERY_PATH + safeName + ".doc");
 
-            // check if file already exists
-            boolean exists = Files.exists(filePath);
-
-            // write code to file
-            Files.write(filePath, code.getBytes());
-
-            // update or add to projects list
-            Project existing = findProjectByName(name);
-            if (existing != null) {
-                existing.setCode(code);
-                existing.setLastModified(LocalDateTime.now());
-                System.out.println("Project updated: " + name);
-            } else {
-                Project newProject = new Project(name, code);
-                projects.add(newProject);
-                System.out.println("New project saved: " + name);
+            if (Files.exists(docPath)) {
+                String content = new String(Files.readAllBytes(docPath));
+                System.out.println(" Loaded documentation for: " + projectName + " (" + content.length() + " chars)");
+                return content;
             }
-
-            // show message if overwritten
-            if (exists) {
-                System.out.println("Overwrote existing file: " + name + ".java");
-            }
-
         } catch (IOException e) {
-            System.err.println("Failed to save project: " + name);
+            System.err.println("Failed to load documentation for: " + projectName);
+        }
+        return "";
+    }
+
+    /**
+     * Save documentation for a project to .doc file
+     */
+    private void saveDocumentation(String projectName, String documentation) {
+        try {
+            // Sanitize filename to be safe
+            String safeName = projectName.replaceAll("[^a-zA-Z0-9.-]", "_");
+            Path docPath = Paths.get(GALLERY_PATH + safeName + ".doc");
+
+            if (documentation == null) {
+                documentation = "";
+            }
+
+            Files.write(docPath, documentation.getBytes());
+            System.out.println(" Saved documentation for: " + projectName + " (" + documentation.length() + " chars) to: " + docPath);
+        } catch (IOException e) {
+            System.err.println("Failed to save documentation for: " + projectName);
             e.printStackTrace();
         }
     }
 
     /**
-     * delete project from disk
+     * Save project to disk (including documentation)
+     */
+    public void saveProject(String name, String code, String documentation) {
+        try {
+            // Sanitize filename to be safe
+            String safeName = name.replaceAll("[^a-zA-Z0-9.-]", "_");
+            Path filePath = Paths.get(GALLERY_PATH + safeName + ".java");
+
+            // Save code
+            Files.write(filePath, code.getBytes());
+            System.out.println(" Saved code for: " + name + " to: " + filePath);
+
+            // Save documentation (even if empty, to ensure consistency)
+            saveDocumentation(name, documentation);
+
+            // Update or create project in memory
+            Project existing = findProjectByName(name);
+            if (existing != null) {
+                existing.setCode(code);
+                existing.setDocumentation(documentation);
+                existing.setLastModified(LocalDateTime.now());
+                System.out.println(" Updated existing project: " + name);
+            } else {
+                Project newProject = new Project(name, code, documentation);
+                projects.add(newProject);
+                System.out.println(" Created new project: " + name);
+            }
+
+        } catch (IOException e) {
+            System.err.println(" Failed to save project: " + name);
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Overloaded method for backward compatibility
+     */
+    public void saveProject(String name, String code) {
+        Project existing = findProjectByName(name);
+        String documentation = (existing != null) ? existing.getDocumentation() : "";
+        saveProject(name, code, documentation);
+    }
+
+    /**
+     * Get documentation for a specific project
+     */
+    public String getProjectDocumentation(String projectName) {
+        Project project = findProjectByName(projectName);
+        if (project != null) {
+            return project.getDocumentation();
+        }
+        return loadDocumentation(projectName); // Try to load from disk directly
+    }
+
+    /**
+     * Delete project from disk (including documentation)
      */
     public void deleteProject(Project project) {
         try {
             String safeName = project.getName().replaceAll("[^a-zA-Z0-9.-]", "_");
             Path filePath = Paths.get(GALLERY_PATH + safeName + ".java");
+            Path docPath = Paths.get(GALLERY_PATH + safeName + ".doc");
 
-            // delete file
             boolean deleted = Files.deleteIfExists(filePath);
+            boolean docDeleted = Files.deleteIfExists(docPath);
 
-            // remove from list
             projects.remove(project);
 
             if (deleted) {
-                System.out.println("Deleted project: " + project.getName());
-            } else {
-                System.out.println("Project file not found: " + project.getName());
+                System.out.println("🗑 Deleted project file: " + project.getName() + ".java");
+            }
+            if (docDeleted) {
+                System.out.println("🗑 Deleted documentation file: " + project.getName() + ".doc");
             }
 
         } catch (IOException e) {
@@ -131,13 +198,17 @@ public class GalleryManager {
     }
 
     /**
-     * import project from external file
+     * Import project from external file
      */
     public void importProject(File file) {
         try {
             String code = new String(Files.readAllBytes(file.toPath()));
             String name = file.getName().replace(".java", "").replace(".cpg", "");
-            saveProject(name, code);
+
+            // When importing, documentation starts empty
+            saveProject(name, code, "");
+
+            System.out.println(" Imported project: " + name);
         } catch (IOException e) {
             System.err.println("Failed to import project: " + file.getName());
             e.printStackTrace();
@@ -145,12 +216,21 @@ public class GalleryManager {
     }
 
     /**
-     * export project to external location
+     * Export project to external location
      */
     public void exportProject(Project project, File destination) {
         try {
+            // Export just the code (not documentation)
             Files.write(destination.toPath(), project.getCode().getBytes());
-            System.out.println("Exported project to: " + destination.getAbsolutePath());
+            System.out.println(" Exported project to: " + destination.getAbsolutePath());
+
+            // Optionally, also export documentation as a separate .txt file
+            if (project.getDocumentation() != null && !project.getDocumentation().isEmpty()) {
+                File docDest = new File(destination.getParent(),
+                        destination.getName().replace(".java", "_doc.txt"));
+                Files.write(docDest.toPath(), project.getDocumentation().getBytes());
+                System.out.println(" Exported documentation to: " + docDest.getAbsolutePath());
+            }
         } catch (IOException e) {
             System.err.println("Failed to export project: " + project.getName());
             e.printStackTrace();

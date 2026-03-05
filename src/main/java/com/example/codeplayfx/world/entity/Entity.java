@@ -244,6 +244,7 @@ public abstract class Entity {
                 this.getPosition(),
                 other.getPosition()
         );
+
     }
 
     /**
@@ -364,5 +365,19 @@ public abstract class Entity {
     public String toString() {
         return String.format("%s[id=%d, pos=(%.1f,%.1f), active=%b, visible=%b]",
                 name, id, getX(), getY(), active, visible);
+    }
+
+    public float getWidth() {
+        if (renderComponent != null) {
+            return renderComponent.getWidth();
+        }
+        return 1.0f; // Default
+    }
+
+    public float getHeight() {
+        if (renderComponent != null) {
+            return renderComponent.getHeight();
+        }
+        return 1.0f; // Default
     }
 }
