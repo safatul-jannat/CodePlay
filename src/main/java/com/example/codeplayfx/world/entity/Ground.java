@@ -8,7 +8,7 @@ import com.example.codeplayfx.world.render.GroundRenderer;
  *
  * Extends StaticEntity (which handles collider, show(), onCollision(), etc.)
  *
- * Usage:
+ * Usage:```````````````````````````````````````````````````````````````````````````````
  *   Ground floor = new Ground(0, 0, 20, 1);
  *   floor.setColor(Color.DARKGRAY);
  *   floor.onCollision(player, () -> player.stop());  // ← works now!

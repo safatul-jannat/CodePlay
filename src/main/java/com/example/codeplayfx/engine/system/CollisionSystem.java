@@ -2,6 +2,7 @@ package com.example.codeplayfx.engine.system;
 
 import com.example.codeplayfx.util.Logger;
 import com.example.codeplayfx.world.GameWorld;
+import com.example.codeplayfx.world.entity.BlockPlayer;
 import com.example.codeplayfx.world.entity.Entity;
 import com.example.codeplayfx.world.entity.PhysicalEntity;
 
@@ -239,8 +240,15 @@ public class CollisionSystem extends GameSystem {
      * Called when collision is detected (override for custom behavior)
      */
     protected void onCollision(Entity entityA, Entity entityB) {
-        // Can be overridden for custom collision logic
-        // e.g., damage, pickup items, trigger events, etc.
+
+        if (entityA instanceof BlockPlayer && entityB.isCollectible()) {
+            entityB.collect();
+            return;
+        }
+        if (entityB instanceof BlockPlayer && entityA.isCollectible()) {
+            entityA.collect();
+            return;
+        }
     }
     
     /**
@@ -262,4 +270,6 @@ public class CollisionSystem extends GameSystem {
         }
         return false;
     }
+
+
 }

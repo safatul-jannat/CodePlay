@@ -1,62 +1,63 @@
 package com.example.codeplayfx.scripting.runtime;
 
-import com.example.codeplayfx.world.entity.BlockPlayer;
-import com.example.codeplayfx.world.entity.Enemy;
+import com.example.codeplayfx.world.entity.Collectible;
 import com.example.codeplayfx.world.GameWorld;
 import com.example.codeplayfx.engine.system.InputSystem;
-import com.example.codeplayfx.world.entity.Entity;
 import com.example.codeplayfx.engine.system.PhysicsSystem;
+import com.example.codeplayfx.world.entity.Entity;
+import com.example.codeplayfx.engine.core.GameEngine;
+import com.example.codeplayfx.world.entity.KillZone;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * UserGame - Abstract base class for user-created games.
- * 
- * Users extend this class and implement execute() method.
- * 
- * Example user code:
- * <pre>
- * public class MyGame extends UserGame {
- *     
- *     BlockPlayer player;
- *     
- *     public void execute() {
- *         // Called once on startup
- *         if (player == null) {
- *             player = new BlockPlayer(5, 5);
- *             player.show();
- *         }
- *         
- *         // Called every frame
- *         if (isKeyPressed("RIGHT")) {
- *             player.moveRight();
- *         }
- *     }
- * }
- * </pre>
+ *
+ * Also owns the collectible sequence — because UserGame lives in the
+ * engine classloader, not the dynamic user classloader. This avoids
+ * the two-classloader bug where static fields in Collectible would
+ * be split across two copies of the class.
  */
 public abstract class UserGame {
-    
-    // Engine references (injected by runtime)
-    public GameWorld world;
+
+    protected GameWorld world;
     protected InputSystem input;
+    private GameEngine engine;
     private static UserGame currentGame;
 
+    // ========== COLLECTIBLE SEQUENCE ==========
+    private List<Collectible> collectibleSequence = new ArrayList<>();
+    private int collectibleIndex = 0;
+    private int collectibleScore = 0;
 
-    /**
-     * Execute method - called every frame
-     * Users implement their game logic here
-     */
+    // ========== LIFECYCLE ==========
+
+    public void start() {}
+
     public abstract void execute();
-    
-    /**
-     * Set world reference (called by engine)
-     */
-    public void setWorld(GameWorld world) {
 
+    // ========== ENGINE INJECTION ==========
+
+    public void setWorld(GameWorld world) {
         this.world = world;
         currentGame = this;
     }
+
+    public void setInputSystem(InputSystem input) {
+        this.input = input;
+    }
+
+    public void setEngine(GameEngine engine) {
+        this.engine = engine;
+    }
+
     public static UserGame getCurrentGame() {
         return currentGame;
+    }
+
+    public GameWorld getWorld() {
+        return world;
     }
 
     public void addEntity(Entity e) {
@@ -65,57 +66,77 @@ public abstract class UserGame {
         }
     }
 
+    // ========== COLLECTIBLE MANAGEMENT ==========
 
-    /**
-     * Set input system reference (called by engine)
-     */
-    public void setInputSystem(InputSystem input) {
-        this.input = input;
+    public void addToSequence(Collectible... collectibles) {
+        for (Collectible c : collectibles) {
+            collectibleSequence.add(c);
+        }
+        if (collectibleIndex == 0 && collectibleSequence.size() == collectibles.length) {
+            showCurrentCollectible();
+        }
     }
-    
-    // ========== HELPER METHODS (for user convenience) ==========
-    
-    /**
-     * Check if a key is pressed (shortcut)
-     */
+
+    public void onCollectibleCollected(Collectible c) {
+        collectibleScore += c.getPointValue();
+        collectibleIndex++;
+        showCurrentCollectible();
+    }
+
+    private void showCurrentCollectible() {
+        if (collectibleIndex >= collectibleSequence.size()) return;
+        Collectible next = collectibleSequence.get(collectibleIndex);
+        if (!next.isCollected()) {
+            next.show();
+        }
+    }
+
+    public void resetCollectibles() {
+        collectibleSequence = new ArrayList<>();
+        collectibleIndex = 0;
+        collectibleScore = 0;
+    }
+
+    public int getCollectibleScore()     { return collectibleScore; }
+    public int getCollectibleRemaining() { return collectibleSequence.size() - collectibleIndex; }
+
+    // ========== BACKGROUND ==========
+
+    protected void setBackground(String filename) {
+        if (engine != null) engine.setBackground(filename);
+    }
+
+    protected void clearBackground() {
+        if (engine != null) engine.clearBackground();
+    }
+
+    // ========== INPUT HELPERS ==========
+
     protected boolean isKeyPressed(String key) {
         return input != null && input.isKeyPressed(key);
     }
-    
-    /**
-     * Check if a key was just pressed (shortcut)
-     */
+
     protected boolean isKeyJustPressed(String key) {
         return input != null && input.isKeyJustPressed(key);
     }
-    
-    /**
-     * Get mouse world X position (shortcut)
-     */
+
     protected float getMouseX() {
         return input != null ? input.getMouseWorldX() : 0;
     }
-    
-    /**
-     * Get mouse world Y position (shortcut)
-     */
+
     protected float getMouseY() {
         return input != null ? input.getMouseWorldY() : 0;
     }
-    
-    /**
-     * Check if mouse left button is pressed (shortcut)
-     */
+
     protected boolean isMousePressed() {
         return input != null && input.isMouseLeftPressed();
     }
-    
-    /**
-     * Check if mouse left button was just clicked (shortcut)
-     */
+
     protected boolean isMouseClicked() {
         return input != null && input.isMouseLeftJustPressed();
     }
+
+    // ========== GRAVITY HELPERS ==========
 
     protected void setGravity(boolean enabled) {
         if (world != null && world.getPhysicsSystem() != null) {

@@ -3,6 +3,7 @@ package com.example.codeplayfx.engine.core;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import com.example.codeplayfx.util.Logger;
 import com.example.codeplayfx.world.GameWorld;
 import com.example.codeplayfx.world.entity.Entity;
@@ -12,14 +13,6 @@ import com.example.codeplayfx.scripting.runtime.UserGame;
 
 /**
  * GameEngine - The heart of CodePlay.
- *
- * Manages the game loop that:
- * 1. Updates all game entities
- * 2. Renders them to the screen
- * 3. Maintains consistent frame rate
- *
- * The user never sees this - they just write game logic.
- * The engine handles everything internally.
  */
 public class GameEngine {
 
@@ -29,15 +22,15 @@ public class GameEngine {
     private EngineConfig config;
     private Time time;
     private SystemManager systemManager;
-    private ScriptRuntime scriptRuntime;  // User game runtime
+    private ScriptRuntime scriptRuntime;
+
+    // Background image
+    private Image backgroundImage = null;
 
     // Engine state
     private EngineState state;
     private AnimationTimer gameLoop;
 
-    /**
-     * Create game engine with a game world and graphics context
-     */
     public GameEngine(GameWorld gameWorld, GraphicsContext graphicsContext) {
         this.gameWorld = gameWorld;
         this.graphicsContext = graphicsContext;
@@ -48,17 +41,12 @@ public class GameEngine {
         initialize();
     }
 
-    /**
-     * Initialize the engine
-     */
     private void initialize() {
         state = EngineState.INITIALIZING;
         Logger.info("Initializing GameEngine...");
 
-        // Initialize system manager
         this.systemManager = new SystemManager(gameWorld);
 
-        // Create the game loop using JavaFX AnimationTimer
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -72,65 +60,53 @@ public class GameEngine {
         Logger.info("GameEngine initialized: " + config);
     }
 
-    /**
-     * Main game loop tick (called every frame)
-     */
     private void tick() {
-        // Update time
         time.update();
         float deltaTime = time.getDeltaTime();
 
-        systemManager.getInputSystem().update(deltaTime);
-
-        // Update game world (entities)
+        systemManager.update(deltaTime);
         gameWorld.update(deltaTime);
 
-        // Execute user game logic
         if (scriptRuntime != null) {
             scriptRuntime.update();
         }
-        gameWorld.update(deltaTime);
 
-        // Render
         render();
     }
 
-    /**
-     * Render all visible entities
-     */
     private void render() {
         if (graphicsContext == null) return;
 
-        // Clear canvas
-        double width = graphicsContext.getCanvas().getWidth();
+        double width  = graphicsContext.getCanvas().getWidth();
         double height = graphicsContext.getCanvas().getHeight();
+
+        // 1. Clear canvas
         graphicsContext.clearRect(0, 0, width, height);
 
-        // Render all visible entities using their renderers
+        // 2. Draw background image (stretches to fill canvas, sits behind everything)
+        if (backgroundImage != null) {
+            graphicsContext.drawImage(backgroundImage, 0, 0, width, height);
+        }
+
+        // 3. Draw entities on top
         for (Entity entity : gameWorld.getVisibleEntities()) {
             if (entity.getRenderer() != null) {
-                // Use entity's custom renderer
                 entity.getRenderer().render(entity, graphicsContext, gameWorld.getCoordinateSystem());
             } else {
-                // Fallback to simple rendering
                 renderEntityFallback(entity);
             }
         }
 
-        // Show FPS if enabled
+        // 4. FPS overlay (always on top)
         if (config.isShowFPS()) {
             renderFPS();
         }
     }
 
-    /**
-     * Fallback rendering for entities without custom renderer
-     */
     private void renderEntityFallback(Entity entity) {
         var screenPos = entity.getScreenPosition();
         double gridScale = gameWorld.getCoordinateSystem().getGridScale();
 
-        // Simple gray square
         graphicsContext.setFill(javafx.scene.paint.Color.GRAY);
         graphicsContext.fillRect(screenPos.x, screenPos.y, gridScale, gridScale);
 
@@ -139,19 +115,65 @@ public class GameEngine {
         graphicsContext.strokeRect(screenPos.x, screenPos.y, gridScale, gridScale);
     }
 
-    /**
-     * Render FPS counter
-     */
     private void renderFPS() {
         graphicsContext.setFill(javafx.scene.paint.Color.YELLOW);
         graphicsContext.fillText("FPS: " + time.getFPS(), 10, 20);
     }
 
-    // ========== ENGINE CONTROL ==========
+    // ========== BACKGROUND ==========
 
     /**
-     * Start the game engine
+     * Set background image by filename.
+     * Looks in /assets/backgrounds/ and /assets/ folders.
+     * Called by UserGame.setBackground(filename).
      */
+    public void setBackground(String filename) {
+        if (filename == null || filename.trim().isEmpty()) {
+            this.backgroundImage = null;
+            Logger.info("Background cleared");
+            return;
+        }
+
+        // Try multiple resource paths so users don't need to specify full path
+        String[] paths = {
+                "/com/example/codeplayfx/resources/" + filename,  // This will work
+                "/resources/" + filename,                          // Keep as fallback
+                "/" + filename
+
+        };
+
+        for (String path : paths) {
+            try {
+                var stream = getClass().getResourceAsStream(path);
+                if (stream != null) {
+                    this.backgroundImage = new Image(stream);
+                    Logger.info("Background loaded: " + path);
+                    return;
+                }
+            } catch (Exception e) {
+                // try next path
+            }
+        }
+
+        // Last resort: try as a direct URL/file path
+        try {
+            this.backgroundImage = new Image(filename);
+            Logger.info("Background loaded from path: " + filename);
+        } catch (Exception e) {
+            Logger.warning("Could not load background image: " + filename);
+            this.backgroundImage = null;
+        }
+    }
+
+    /**
+     * Clear the background image.
+     */
+    public void clearBackground() {
+        this.backgroundImage = null;
+    }
+
+    // ========== ENGINE CONTROL ==========
+
     public void start() {
         if (!state.canStart()) {
             Logger.warning("Cannot start engine in state: " + state);
@@ -166,9 +188,6 @@ public class GameEngine {
         Logger.info("GameEngine started");
     }
 
-    /**
-     * Pause the game engine
-     */
     public void pause() {
         if (!state.canPause()) {
             Logger.warning("Cannot pause engine in state: " + state);
@@ -181,9 +200,6 @@ public class GameEngine {
         Logger.info("GameEngine paused");
     }
 
-    /**
-     * Resume the game engine
-     */
     public void resume() {
         if (state != EngineState.PAUSED) {
             Logger.warning("Cannot resume engine in state: " + state);
@@ -193,13 +209,10 @@ public class GameEngine {
         Logger.info("Resuming GameEngine...");
         state = EngineState.RUNNING;
         gameWorld.resume();
-        time.update(); // Reset delta time to avoid jump
+        time.update();
         Logger.info("GameEngine resumed");
     }
 
-    /**
-     * Stop the game engine
-     */
     public void stop() {
         if (!state.canStop()) {
             Logger.warning("Cannot stop engine in state: " + state);
@@ -214,9 +227,6 @@ public class GameEngine {
         Logger.info("GameEngine stopped");
     }
 
-    /**
-     * Reset the game (clear world and restart)
-     */
     public void reset() {
         Logger.info("Resetting GameEngine...");
         boolean wasRunning = state == EngineState.RUNNING;
@@ -227,6 +237,7 @@ public class GameEngine {
 
         gameWorld.clear();
         time.reset();
+        this.backgroundImage = null; // clear background on reset
 
         if (wasRunning) {
             start();
@@ -237,72 +248,34 @@ public class GameEngine {
 
     // ========== GETTERS/SETTERS ==========
 
-    public GameWorld getGameWorld() {
-        return gameWorld;
-    }
-
-    public EngineConfig getConfig() {
-        return config;
-    }
-
-    public Time getTime() {
-        return time;
-    }
-
-    public EngineState getState() {
-        return state;
-    }
-
-    public boolean isRunning() {
-        return state == EngineState.RUNNING;
-    }
-
-    public boolean isPaused() {
-        return state == EngineState.PAUSED;
-    }
+    public GameWorld getGameWorld() { return gameWorld; }
+    public EngineConfig getConfig() { return config; }
+    public Time getTime() { return time; }
+    public EngineState getState() { return state; }
+    public boolean isRunning() { return state == EngineState.RUNNING; }
+    public boolean isPaused() { return state == EngineState.PAUSED; }
 
     public void setGraphicsContext(GraphicsContext gc) {
         this.graphicsContext = gc;
     }
 
-    /**
-     * Attach input system to JavaFX scene
-     */
     public void attachInputToScene(Scene scene) {
         systemManager.getInputSystem().attachToScene(scene);
     }
 
-    /**
-     * Load and run a user game
-     */
     public void loadUserGame(UserGame userGame) {
         Logger.info("Loading user game: " + userGame.getClass().getSimpleName());
         this.scriptRuntime = new ScriptRuntime(userGame, this);
-        this.scriptRuntime.initialize();
+
     }
 
-    /**
-     * Get script runtime
-     */
-    public ScriptRuntime getScriptRuntime() {
-        return scriptRuntime;
-    }
+    public ScriptRuntime getScriptRuntime() { return scriptRuntime; }
+    public SystemManager getSystemManager() { return systemManager; }
 
-    /**
-     * Get system manager
-     */
-    public SystemManager getSystemManager() {
-        return systemManager;
-    }
-
-    /**
-     * Update canvas size (called when window resizes)
-     */
     public void updateCanvasSize(double width, double height) {
         gameWorld.updateCanvasSize(width, height);
 
-        // Update physics bounds to match canvas
-        int gridWidth = gameWorld.getCoordinateSystem().getGridWidth();
+        int gridWidth  = gameWorld.getCoordinateSystem().getGridWidth();
         int gridHeight = gameWorld.getCoordinateSystem().getGridHeight();
         systemManager.getPhysicsSystem().setWorldBoundsFromGrid(gridWidth, gridHeight);
     }
