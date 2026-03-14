@@ -1,34 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
+<StackPane fx:id="rootPane" prefHeight="600" prefWidth="900" style="-fx-background-color: #050a1a;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.codeplayfx.ui.controller.LibraryController">
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.codeplayfx.ui.SimpleBackController">
-    <center>
-        <StackPane prefHeight="150.0" prefWidth="150.0" BorderPane.alignment="CENTER">
-            <children>
-                <Label text="New" />
-            </children>
-        </StackPane>
-    </center>
-    <top>
-        <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER_LEFT">
-            <padding>
-                <Insets bottom="10.0" left="10.0" top="10.0" />
-            </padding>
-            <children>
-                <Button mnemonicParsing="false" onAction="#goBack" prefWidth="50.0" text="&lt;-">
-                    <font>
-                        <Font name="System Bold" size="14.0" />
-                    </font>
-                </Button>
-            </children>
-        </HBox>
-    </top>
-</BorderPane>
+    <!-- BACKGROUND LAYERS -->
+    <Pane fx:id="bgPane" prefHeight="600" prefWidth="900" style="-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #050a1a 0%, #0d0824 40%, #110a30 70%, #000408 100%);" />
+    <Pane fx:id="gridPane" mouseTransparent="true" opacity="0.045" prefHeight="600" prefWidth="900" />
+    <Canvas fx:id="particleCanvas" height="600" mouseTransparent="true" width="900" />
+    <Pane fx:id="orbPane" mouseTransparent="true" prefHeight="600" prefWidth="900" />
+
+    <!-- MAIN CONTENT -->
+    <BorderPane fx:id="contentBorderPane" prefHeight="600" prefWidth="900" style="-fx-background-color: transparent;">
+
+        <!-- TOP BAR -->
+        <top>
+            <HBox alignment="CENTER_LEFT" prefHeight="81.0" prefWidth="900.0" spacing="10" style="-fx-padding: 15 20;">
+                <Text style="-fx-font-family: 'Arial Black'; -fx-font-size: 29px; -fx-fill: rgba(220,230,255,0.9);" text="OBJECT LIBRARY" />
+
+                <Button fx:id="backButton" onAction="#goBack" prefHeight="45.0" prefWidth="95.0" styleClass="transparent-button" text="← BACK" />
+                <Button fx:id="homeButton" onAction="#goHome" prefHeight="45.0" prefWidth="95.0" styleClass="transparent-button" text="HOME" />
+                <Button fx:id="mainWindowButton" onAction="#goMainWindow" prefHeight="45.0" prefWidth="95.0" styleClass="transparent-button" text="EDITOR" />
+                <Button fx:id="galleryButton" onAction="#goGallery" prefHeight="45.0" prefWidth="95.0" styleClass="transparent-button" text="PROJECTS" />
+                <Button fx:id="aboutButton" onAction="#goAbout" prefHeight="45.0" prefWidth="95.0" styleClass="transparent-button" text="ABOUT" />
+            </HBox>
+        </top>
+
+        <!-- LEFT SPACER -->
+        <left>
+            <VBox prefWidth="20.0" />
+        </left>
+
+        <!-- RIGHT SPACER -->
+        <right>
+            <VBox prefWidth="20.0" />
+        </right>
+
+        <!-- BOTTOM SPACER -->
+        <bottom>
+            <HBox prefHeight="20.0" />
+        </bottom>
+
+        <!-- CENTER - Main Library Content -->
+        <center>
+            <HBox spacing="20" style="-fx-padding: 0 10 10 10;">
+
+                <!-- LEFT PANEL - Objects List -->
+                <VBox prefWidth="220" spacing="10" style="-fx-background-color: rgba(20,15,30,0.6); -fx-background-radius: 15; -fx-padding: 15;">
+                    <Label style="-fx-text-fill: #ffb3ff; -fx-font-weight: bold; -fx-font-size: 16px;" text="📦 OBJECTS" />
+                    <ListView fx:id="objectsListView" prefWidth="200" styleClass="library-objects-list" VBox.vgrow="ALWAYS" />
+                </VBox>
+
+                <!-- RIGHT PANEL - Method Cards -->
+                <VBox spacing="15" style="-fx-background-color: rgba(30,20,40,0.5); -fx-background-radius: 15; -fx-padding: 15;" HBox.hgrow="ALWAYS">
+
+                    <!-- Selected Object Title -->
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label fx:id="selectedObjectLabel" style="-fx-text-fill: #88aaff; -fx-font-size: 24px; -fx-font-weight: bold;" text="Select an object" />
+                    </HBox>
+
+                    <!-- Categories and Cards (populated dynamically) -->
+                    <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+                        <VBox fx:id="cardsContainer" spacing="25" style="-fx-padding: 5;">
+                            <!-- Categories will be added here dynamically -->
+                            <!-- Example structure:
+                            <VBox spacing="10">
+                                <Label style="-fx-text-fill: #ff6ec7; -fx-font-size: 18px; -fx-font-weight: bold;" text="MOVEMENT" />
+                                <FlowPane hgap="15" vgap="15">
+                                    <Button styleClass="method-card" text="jump()" />
+                                    <Button styleClass="method-card" text="moveLeft()" />
+                                    <Button styleClass="method-card" text="moveRight()" />
+                                </FlowPane>
+                            </VBox>
+                            -->
+                        </VBox>
+                    </ScrollPane>
+
+                    <!-- Hint -->
+                    <Label style="-fx-text-fill: #888; -fx-font-size: 12px; -fx-padding: 5 0 0 0;" text="💡 Click any method card for details" />
+                </VBox>
+            </HBox>
+        </center>
+
+    </BorderPane>
+</StackPane>

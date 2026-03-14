@@ -1,0 +1,34 @@
+[APP_DESCRIPTION]
+CodePlay is an OOP-based gaming platform where users interact with high-level objects like Player, Ground, Enemy, and Game. Physics and input handling are encapsulated within objects - users just call methods on these objects to create amazing games!
+
+Key Features:
+• Object-oriented game development
+• Pre-built game objects (Player, Enemy, Ground, etc.)
+• Encapsulated physics and input systems
+• Real-time object interaction
+• Visual feedback for all object actions
+• Simple method calls for complex behaviors
+
+This is a longer description that will definitely exceed the box height so we can test the truncation and read more functionality. We want to make sure that when the text is too long, users can click to see the full content in a beautiful popup window that maintains the same aesthetic as the main application.
+
+
+aaaaaaaaaaaaaaaaaaaaaaa
+a
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaa
+a
+aaaaaaaaaaaaaaaaaaaaa
+a
+aaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaa
+a
+a
+a
+a
+a
+aa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+a
+aaaa

@@ -1,0 +1,353 @@
+/* synthwave-theme.css - Complete Synthwave Theme */
+
+.root {
+    -fx-background-color: #0c0e14;
+    -fx-font-family: "Fira Code", "Consolas", monospace;
+}
+
+/* ===== TOP NAVIGATION ===== */
+#topNavigation {
+    /*-fx-background-color: #0c0e14; */
+    -fx-padding: 8 15;
+    -fx-border-color: #5605b5;
+    -fx-border-width: 0 0 2 0;
+}
+
+/*#topNavigation .label {*/
+/*    -fx-font-size: 26px;*/
+/*    -fx-font-weight: bold;*/
+/*    -fx-font-family: "Tourney", cursive;*/
+/*}*/
+
+/* ===== TOGGLE BUTTONS (TABS) ===== */
+.toggle-button,.transparent-button {
+     -fx-background-color: transparent;
+        -fx-text-fill: rgba(220, 230, 255, 0.8);
+        -fx-font-size: 14px;
+        -fx-font-weight: bold;
+        -fx-border-color: transparent;  /* No border by default */
+        -fx-cursor: hand;
+        -fx-padding: 8 16;
+        -fx-focus-color: transparent;
+        -fx-faint-focus-color: transparent;
+}
+
+.toggle-button:hover, .transparent-button:hover {
+    -fx-background-color: #160e1e;
+        -fx-text-fill: #03edf9;
+        -fx-border-color: #03edf9;
+        -fx-border-width: 1;
+        -fx-border-radius: 2;
+        -fx-effect: dropshadow(gaussian, #03edf9, 12, 0.4, 0, 0);
+}
+
+.toggle-button:selected {
+    -fx-background-color: linear-gradient(to bottom, #1c0a28, #0c0e14);
+    -fx-text-fill: #fc28a8;
+    -fx-border-color: #fc28a8;
+    -fx-border-width: 3 1 1 1;
+    -fx-effect: dropshadow(gaussian, #fc28a8, 15, 0.5, 0, 0);
+}
+
+/* ===== TOOLBAR ===== */
+.tool-bar {
+    -fx-background-color: #1e1f2c;
+    -fx-border-color: #5605b5;
+    -fx-border-width: 0 0 1 0;
+}
+
+.tool-bar .label {
+    -fx-text-fill: #ffb86b;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+/* ===== LEFT TOOLBAR ===== */
+#toolContainer {
+    -fx-background-color: #0c0e14;
+    -fx-border-color: #5605b5;
+    -fx-border-width: 0 2 0 0;
+}
+
+#toolContainer .button,
+#toolContainer .toggle-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #9963ff;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 5;
+    -fx-cursor: hand;
+    -fx-content-display: top;
+    -fx-min-width: 62;
+    -fx-min-height: 62;
+}
+
+#toolContainer .button:hover {
+    -fx-background-color: #8a2dc022;
+    -fx-text-fill: #03edf9;
+    -fx-border-color: #03edf9;
+    -fx-border-width: 0 0 0 3;
+    -fx-effect: dropshadow(gaussian, #03edf9, 12, 0.4, 0, 0);
+}
+
+#toolContainer .toggle-button:selected {
+    -fx-background-color: #fc28a820;
+    -fx-text-fill: #fc28a8;
+    -fx-border-color: #fc28a8;
+    -fx-border-width: 0 0 0 4;
+    -fx-effect: dropshadow(gaussian, #fc28a8, 15, 0.5, 0, 0);
+}
+
+/* ===== EDITOR CONTAINER ===== */
+#editorContainer {
+    -fx-background-color: #131330;
+}
+
+#editorContainer .hbox {
+    -fx-background-color: #1e1f2c;
+    -fx-padding: 5;
+    -fx-border-color: #5605b5;
+    -fx-border-width: 0 0 1 0;
+}
+
+#editorContainer .button {
+    -fx-background-color: #26273b;
+    -fx-text-fill: #e0e0e0;
+    -fx-font-size: 12px;
+    -fx-padding: 4 8;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+#editorContainer .button:hover {
+    -fx-background-color: #363855;
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, #fc28a8, 8, 0.3, 0, 0);
+}
+
+/* ===== CODE EDITOR ===== */
+.code-area {
+    -fx-background-color: transparent;
+    -fx-font-family: "Fira Code", "Consolas", monospace;
+    -fx-font-size: 14px;
+}
+
+.code-area .text {
+    -fx-fill: #d4d4d4;;
+}
+
+/* Line numbers */
+.lineno {
+     -fx-background-color: transparent;
+        -fx-text-fill: #8a2dc0;
+        -fx-font-family: "Fira Code", "Consolas", monospace;
+        -fx-font-size: 12px;
+        -fx-padding: 0 8px 0 5px;
+        -fx-border-width: 0 1px 0 0;
+        -fx-border-color: #3d3e5a;
+        -fx-min-width: 45px;  /* Force minimum width for all line numbers */
+        -fx-pref-width: 45px; /* Preferred width */
+        -fx-alignment: center-right;
+}
+
+.lineno .text {  /* Target the actual text node inside */
+    -fx-text-alignment: right;
+}
+
+.lineno .text {
+    -fx-text-origin: top;
+}
+
+
+/* Selection */
+.code-area .selection {
+    -fx-fill: rgba(89, 4, 224, 0.5);
+}
+
+/* Caret */
+.code-area .caret {
+    -fx-stroke: #fc28a8;
+    -fx-stroke-width: 2;
+}
+
+/* ===== CANVAS TOOLBAR ===== */
+#controlToolbar {
+    -fx-background-color: #1e1f2c;
+    -fx-padding: 5;
+    -fx-border-color: #5605b5;
+    -fx-border-width: 0 0 1 0;
+}
+
+#controlToolbar .button {
+    -fx-background-color: #26273b;
+    -fx-text-fill: #e0e0e0;
+    -fx-font-size: 12px;
+    -fx-padding: 4 10;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+#runButton {
+    -fx-background-color: linear-gradient(to bottom, #003820, #001810);
+    -fx-text-fill: #03edf9;
+    -fx-font-weight: bold;
+    -fx-border-color: #03edf9;
+    -fx-border-width: 1;
+}
+
+#runButton:hover {
+    -fx-background-color: linear-gradient(to bottom, #005a30, #003820);
+    -fx-text-fill: #ffffff;
+}
+
+#pauseButton {
+    -fx-background-color: linear-gradient(to bottom, #2a1c00, #140e00);
+    -fx-text-fill: #ffcc00;
+    -fx-border-color: #ffcc00;
+}
+
+#pauseButton:hover {
+    -fx-background-color: linear-gradient(to bottom, #443000, #2a1c00);
+    -fx-text-fill: #ffffff;
+}
+
+#stopButton {
+    -fx-background-color: linear-gradient(to bottom, #280018, #140008);
+    -fx-text-fill: #fc199a;
+    -fx-border-color: #fc199a;
+}
+
+#stopButton:hover {
+    -fx-background-color: linear-gradient(to bottom, #420028, #280018);
+    -fx-text-fill: #ffffff;
+}
+
+#coordLabel {
+    -fx-text-fill: #ffb86b;
+    -fx-font-family: monospace;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+#canvasLabel {
+    -fx-text-fill: #9963ff;
+    -fx-font-size: 12px;
+}
+
+/* ===== CANVAS CONTAINER ===== */
+#canvasContainer {
+    -fx-background-color: #0c0e14;
+    -fx-border-color: #5605b5;
+    -fx-border-width: 2;
+}
+
+/* ===== CONSOLE ===== */
+#consoleContainer {
+    -fx-background-color:  linear-gradient(from 0% 0% to 100% 100%,                   #050a1a 0%, #0d0824 40%, #110a30 70%, #000408 100%);
+    -fx-border-color:#5605b5;
+    -fx-border-width: 2 0 0 0;
+}
+
+#consoleContainer .label {
+    -fx-background-color: linear-gradient(to right, rgba(33, 3, 79, 1) 32%, rgba(14, 1, 66, 1) 71%);
+    -fx-text-fill: #ad7df5;
+    -fx-padding: 5 10;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+#console {
+    -fx-control-inner-background: #202042;
+    -fx-background-color: #202042;
+    -fx-text-fill: #61e2ff;
+    -fx-font-family: "Fira Code", "Consolas", monospace;
+    -fx-font-size: 12px;
+}
+
+#console .content {
+    -fx-background-color:#202042;
+}
+
+/* ===== STATUS BAR ===== */
+.bottom .hbox {
+    -fx-background-color: linear-gradient(to right, #fc28a8, #03edf9, #ffb86b);
+    -fx-padding: 4 10;
+}
+
+#statusLabel {
+    -fx-text-fill: #0c0e14;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+/* ===== SPLIT PANES ===== */
+.split-pane {
+    -fx-background-color: #0c0e14;
+}
+
+.split-pane > .split-pane-divider {
+    -fx-background-color: #5605b5;
+    -fx-pref-width: 2;
+}
+
+/* ===== SCROLL BARS ===== */
+.scroll-bar {
+    -fx-background-color: #0c0e14;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: rgba(153, 99, 255, 0.5);
+    -fx-background-radius: 3;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: rgba(153, 99, 255, 0.8);
+}
+
+/* ===== SEPARATORS ===== */
+.separator .line {
+    -fx-border-color: #1c003d;
+    -fx-border-width: 1;
+}
+/* Logo styling */
+.logo-label, #topNavigation .label {
+    -fx-text-fill: #03edf9;     /* Starting color - cyan */
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+}
+
+.code-area .keyword {
+    -fx-fill: #05b7f2 !important;  /* Blue for keywords */
+    -fx-font-weight: bold !important;
+}
+
+.code-area .string {
+    -fx-fill: #f76b34 !important;  /* Orange/brown for strings */
+}
+
+.code-area .comment {
+    -fx-fill: #6a9955 !important;  /* Green for comments */
+    -fx-font-style: italic !important;
+}
+
+.code-area .number {
+    -fx-fill: #abfa82 !important;  /* Light green for numbers */
+}
+
+.code-area .method {
+    -fx-fill: #f2cb05 !important;  /* Yellow for methods */
+}
+
+.code-area .class {
+    -fx-fill:#e798f5 !important;  /* Teal for classes */
+}
+
+.code-area .annotation {
+    -fx-fill: #a15bfc !important;  /* Purple for annotations */
+}
+
+/* Punctuation like {} ; . etc */
+.code-area .text {
+    -fx-fill: #d4d4d4;
+    /* This covers braces, semicolons, etc. */
+}

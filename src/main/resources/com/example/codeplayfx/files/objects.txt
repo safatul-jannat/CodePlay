@@ -1,0 +1,81 @@
+[BlockPlayer ]
+new BlockPlayer(x,y)|Creates player at position|x: float, y: float|BlockPlayer|BlockPlayer player = new BlockPlayer(100, 100);|CONSTRUCTOR
+new BlockPlayer(x,y,color)|Creates player with color|x: float, y: float, color: String|BlockPlayer|BlockPlayer player = new BlockPlayer(100, 100, "RED");|CONSTRUCTOR
+
+moveRight()|Move right based on current mode|none|void|player.moveRight();|MOVEMENT
+moveLeft()|Move left based on current mode|none|void|player.moveLeft();|MOVEMENT
+moveUp()|Move up (only when gravity OFF)|none|void|player.moveUp();|MOVEMENT
+moveDown()|Move down (only when gravity OFF)|none|void|player.moveDown();|MOVEMENT
+jump()|Jump based on current mode|none|void|player.jump();|MOVEMENT
+stop()|Stop all movement immediately|none|void|player.stop();|MOVEMENT
+stopHorizontal()|Stop left/right movement|none|void|player.stopHorizontal();|MOVEMENT
+stopVertical()|Stop up/down movement|none|void|player.stopVertical();|MOVEMENT
+
+setMovementStyle(style)|Switch between DIRECT and VELOCITY modes|style: MovementStyle|void|player.setMovementStyle(MovementStyle.VELOCITY);|CONFIG
+getMovementStyle()|Check current mode|none|MovementStyle|MovementStyle style = player.getMovementStyle();|CONFIG
+
+setSpeed(value)|DIRECT mode: pixels per frame (60fps = value×60 per sec)|speed: float|void|player.setSpeed(0.5); // 30 pixels/sec|SPEED
+getCurrentSpeed()|Get current effective speed|none|float|float speed = player.getCurrentSpeed();|SPEED
+setWalkSpeed(value)|VELOCITY mode: max speed when gravity ON|speed: float|void|player.setWalkSpeed(3.0);|SPEED
+setFlySpeed(value)|VELOCITY mode: max speed when gravity OFF|speed: float|void|player.setFlySpeed(4.0);|SPEED
+setAcceleration(value)|How fast player reaches max speed|accel: float|void|player.setAcceleration(10.0);|SPEED
+setJumpPower(value)|Jump strength for VELOCITY mode|power: float|void|player.setJumpPower(12.0);|SPEED
+setFlyJumpHeight(value)|Jump height for flying mode|height: float|void|player.setFlyJumpHeight(3.0);|SPEED
+getWalkSpeed()|Get gravity mode speed|none|float|player.getWalkSpeed();|SPEED
+getFlySpeed()|Get flying mode speed|none|float|player.getFlySpeed();|SPEED
+
+setGravity(enabled)|Turn gravity on/off|enabled: boolean|void|player.setGravity(true);|PHYSICS
+setGravity(value)|Set gravity strength (auto-enables)|value: float|void|player.setGravity(0.8);|PHYSICS
+isGravityEnabled()|Check if gravity is on|none|boolean|if(player.isGravityEnabled())|PHYSICS
+applyForce(fx,fy)|Push player with force|fx: float, fy: float|void|player.applyForce(0, -10);|PHYSICS
+setVelocity(vx,vy)|Set velocity directly|vx: float, vy: float|void|player.setVelocity(5, 0);|PHYSICS
+addVelocity(dvx,dvy)|Add to current velocity|dvx: float, dvy: float|void|player.addVelocity(2, 0);|PHYSICS
+getVelocity()|Get current velocity vector|none|Vector2|Vector2 vel = player.getVelocity();|PHYSICS
+getSpeed()|Get current speed magnitude|none|float|float speed = player.getSpeed();|PHYSICS
+
+setColor(color)|Set player color (Color object)|color: Color|void|player.setColor(Color.RED);|APPEARANCE
+setColor(name)|Set color by name (RED,BLUE,GREEN,etc)|name: String|void|player.setColor("GOLD");|APPEARANCE
+setColor(r,g,b)|Set RGB color|r,g,b: int|void|player.setColor(255, 0, 0);|APPEARANCE
+setSize(width,height)|Set player dimensions|width: float, height: float|void|player.setSize(2.0, 2.0);|APPEARANCE
+setRoundness(value)|Make corners rounded (0-1)|roundness: float|void|player.setRoundness(0.3);|APPEARANCE
+loadSprite(path)|Use image instead of color|path: String|void|player.loadSprite("hero.png");|APPEARANCE
+
+setPosition(x,y)|Teleport to coordinates|x: float, y: float|void|player.setPosition(200, 150);|POSITION
+move(dx,dy)|Move by offset|dx: float, dy: float|void|player.move(10, 0);|POSITION
+getX()|Get X position|none|float|float x = player.getX();|POSITION
+getY()|Get Y position|none|float|float y = player.getY();|POSITION
+getPosition()|Get position as vector|none|Vector2|Vector2 pos = player.getPosition();|POSITION
+
+isOnGround()|Check if player is on ground|none|boolean|if(player.isOnGround()) player.jump();|STATE
+isMoving()|Check if player is moving|none|boolean|if(player.isMoving())|STATE
+isMovingHorizontally()|Check horizontal movement|none|boolean|player.isMovingHorizontally();|STATE
+isMovingVertically()|Check vertical movement|none|boolean|player.isMovingVertically();|STATE
+isFalling()|Check if falling|none|boolean|if(player.isFalling())|STATE
+isRising()|Check if rising|none|boolean|if(player.isRising())|STATE
+isAutoJumping()|Check if auto-jump active|none|boolean|player.isAutoJumping();|STATE
+isAt(x,y)|Check if at specific position|x: float, y: float|boolean|if(player.isAt(100, 200))|STATE
+
+takeDamage(amount)|Damage player|amount: float|void|player.takeDamage(10);|HEALTH
+heal(amount)|Heal player|amount: float|void|player.heal(5);|HEALTH
+setHealth(value)|Set health directly|value: float|void|player.setHealth(80);|HEALTH
+revive()|Revive with full health|none|void|player.revive();|HEALTH
+revive(health)|Revive with specific health|health: float|void|player.revive(50);|HEALTH
+getHealth()|Get current health|none|float|int hp = player.getHealth();|HEALTH
+getMaxHealth()|Get max health|none|float|player.getMaxHealth();|HEALTH
+getHealthPercent()|Get health as 0-1|none|float|float pct = player.getHealthPercent();|HEALTH
+isAlive()|Check if alive|none|boolean|if(player.isAlive())|HEALTH
+isDead()|Check if dead|none|boolean|if(player.isDead())|HEALTH
+isFullHealth()|Check if health full|none|boolean|player.isFullHealth();|HEALTH
+isLowHealth()|Check if health low|none|boolean|player.isLowHealth();|HEALTH
+
+addCollider(w,h)|Add collision box|width: float, height: float|void|player.addCollider(1.0, 1.0);|COLLISION
+addCollider(w,h,offset)|Add collider with offset|w: float, h: float, offset: Vector2|void|player.addCollider(0.8, 0.8, new Vector2(0,0));|COLLISION
+hasCollider()|Check if has collider|none|boolean|if(player.hasCollider())|COLLISION
+isColliding(entity)|Check collision with another entity|entity: Entity|boolean|if(player.isColliding(enemy))|COLLISION
+containsPoint(x,y)|Check if point is inside player|x: float, y: float|boolean|if(player.containsPoint(mouseX, mouseY))|COLLISION
+
+show()|Make player visible|none|void|player.show();|LIFECYCLE
+hide()|Hide player|none|void|player.hide();|LIFECYCLE
+destroy()|Remove from game|none|void|player.destroy();|LIFECYCLE
+setName(name)|Set entity name|name: String|void|player.setName("Hero");|LIFECYCLE
+getName()|Get entity name|none|String|player.getName();|LIFECYCLE
