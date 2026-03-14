@@ -9,16 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * GameWorld manages all game entities and the game state.
- *
- * Responsibilities:
- * - Store and manage all entities
- * - Update all entities each frame
- * - Add/remove entities safely
- * - Provide coordinate system to entities
- * - Track game state
- */
 public class GameWorld {
 
     // All entities in the world
@@ -34,9 +24,7 @@ public class GameWorld {
     private float totalTime;  // Total time elapsed since game start
 
     private PhysicsSystem physicsSystem;
-    /**
-     * Create a new game world with default coordinate system
-     */
+
     public GameWorld() {
         // Use thread-safe list to prevent concurrent modification
         this.entities = new CopyOnWriteArrayList<>();
@@ -56,9 +44,7 @@ public class GameWorld {
         Logger.info("GameWorld created");
     }
 
-    /**
-     * Create game world with custom grid size
-     */
+
     public GameWorld(double gridSize) {
         this();
         this.coordinateSystem = new CoordinateSystem(gridSize);
@@ -67,10 +53,7 @@ public class GameWorld {
 
     // ========== ENTITY MANAGEMENT ==========
 
-    /**
-     * Add an entity to the world
-     * Safe to call during update loop
-     */
+
     public void addEntity(Entity entity) {
         if (entity == null) {
             Logger.warning("Attempted to add null entity");
@@ -81,10 +64,7 @@ public class GameWorld {
         Logger.debug("Queued entity for addition: " + entity.getName());
     }
 
-    /**
-     * Remove an entity from the world
-     * Safe to call during update loop
-     */
+
     public void removeEntity(Entity entity) {
         if (entity == null) return;
 

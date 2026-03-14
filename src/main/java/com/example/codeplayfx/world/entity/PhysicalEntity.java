@@ -117,11 +117,11 @@ public abstract class PhysicalEntity extends Entity {
     // THE KEY FIX: instanceof StaticEntity instead of instanceof Ground
     private boolean checkCollisionWithSolid() {
         UserGame currentGame = UserGame.getCurrentGame();
-        if (currentGame == null || currentGame.world == null) return false;
+        if (currentGame == null || currentGame.getWorld() == null) return false;
 
-        for (Entity entity : currentGame.world.getAllEntities()) {
+        for (Entity entity : currentGame.getWorld().getAllEntities()) {
             if (!(entity instanceof StaticEntity)) continue;
-            if (entity == this || !entity.isActive()) continue;
+            if (!entity.isActive()) continue;
             StaticEntity se = (StaticEntity) entity;
             if (se.hasCollider() && se.getCollider().isTrigger()) continue;
             if (this.isColliding(se)) return true;
@@ -131,10 +131,10 @@ public abstract class PhysicalEntity extends Entity {
 
     private float getVerticalOverlapWithAnySolid() {
         UserGame currentGame = UserGame.getCurrentGame();
-        if (currentGame == null || currentGame.world == null) return 0f;
+        if (currentGame == null || currentGame.getWorld() == null) return 0f;
 
         float maxOverlap = 0f;
-        for (Entity entity : currentGame.world.getAllEntities()) {
+        for (Entity entity : currentGame.getWorld().getAllEntities()) {
             if (!(entity instanceof StaticEntity)) continue;
             if (entity == this || !entity.isActive()) continue;
             StaticEntity se = (StaticEntity) entity;
@@ -152,9 +152,9 @@ public abstract class PhysicalEntity extends Entity {
         float highest = -Float.MAX_VALUE;
 
         UserGame currentGame = UserGame.getCurrentGame();
-        if (currentGame == null || currentGame.world == null) return highest;
+        if (currentGame == null || currentGame.getWorld() == null) return highest;
 
-        for (Entity entity : currentGame.world.getAllEntities()) {
+        for (Entity entity : currentGame.getWorld().getAllEntities()) {
             if (!(entity instanceof StaticEntity)) continue;
             if (entity == this || !entity.isActive()) continue;
 
