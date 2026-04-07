@@ -9,6 +9,7 @@ import com.example.codeplayfx.world.component.RenderComponent;
 import com.example.codeplayfx.world.physics.CoordinateSystem;
 import com.example.codeplayfx.world.physics.Vector2;
 import com.example.codeplayfx.world.render.Renderer;
+import javafx.geometry.Rectangle2D;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -154,7 +155,12 @@ public abstract class Entity {
 
     public Vector2 getScreenPosition() {
         if (coordinateSystem != null) {
-            return coordinateSystem.toScreen(getPosition());
+            // For rendering, convert top-left to screen coordinates
+            float worldX = getX();
+            float worldY = getY();  // This is top-left Y
+            float worldBottomY = worldY - getHeight();  // Convert to bottom-left for coordinate system
+            Vector2 bottomLeftPos = new Vector2(worldX, worldBottomY);
+            return coordinateSystem.toScreen(bottomLeftPos);
         }
         return getPosition();
     }
@@ -192,11 +198,8 @@ public abstract class Entity {
             return false;
         }
 
-        return this.collider.intersects(
-                other.collider,
-                this.getPosition(),
-                other.getPosition()
-        );
+        return this.getAdjustedBounds().intersects(other.getAdjustedBounds());
+
     }
 
     public boolean containsPoint(Vector2 point) {
@@ -297,6 +300,15 @@ public abstract class Entity {
         return 1.0f;
     }
 
+    /**
+     * Get bounds adjusted for collision detection
+     * Converts from rendering coordinate (top-left) to collision coordinate (bottom-left)
+     */
+    public Rectangle2D getAdjustedBounds() {
+        float x = getX();
+        float y = getY() - getHeight();  // Convert top-left to bottom-left
+        return new Rectangle2D(x, y, getWidth(), getHeight());
+    }
     @Override
     public String toString() {
         return String.format("%s[id=%d, pos=(%.1f,%.1f), active=%b, visible=%b]",

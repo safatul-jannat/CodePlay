@@ -51,6 +51,13 @@ public class TopNavigationPanel extends UIPanel {
     }
 
     private void setupButtonActions() {
+
+        createButton.setFocusTraversable(false);
+        galleryButton.setFocusTraversable(false);
+        libraryButton.setFocusTraversable(false);
+        aboutButton.setFocusTraversable(false);
+        homeButton.setFocusTraversable(false);
+
         createButton.setOnAction(e -> mainWindow.onCreateTabClicked());
         galleryButton.setOnAction(e -> mainWindow.onGalleryTabClicked());
         libraryButton.setOnAction(e -> mainWindow.onLibraryTabClicked());

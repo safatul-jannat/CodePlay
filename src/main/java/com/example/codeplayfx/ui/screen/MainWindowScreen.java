@@ -94,6 +94,8 @@ public class MainWindowScreen extends Screen {
         toolPanel.initialize();
         topNavPanel.initialize();
         consolePanel.initialize();
+        codePanel.focusEditor();
+
 
         if (!isFirstShow && !savedCodeContent.isEmpty()) {
             codePanel.setCodeContent(savedCodeContent);
@@ -126,6 +128,10 @@ public class MainWindowScreen extends Screen {
         Platform.runLater(() -> {
             if (codePanel != null) {
                 codePanel.setupKeyboardShortcuts();
+            }
+
+            if (gamePanel != null && gamePanel.getGameEngine() != null) {
+                gamePanel.getGameEngine().attachInputToScene(getScene());
             }
         });
     }
@@ -200,8 +206,20 @@ public class MainWindowScreen extends Screen {
     public void focusCodeEditor() { if (codePanel != null) codePanel.focusEditor(); }
     public void returnToCodeView() { focusCodeEditor(); }
 
-    public void onCreateTabClicked() { focusCodeEditor(); }
+    public void onCreateTabClicked() {
+        // If game is running, don't switch focus to editor
+        if (controlPanel != null && controlPanel.isRunning()) {
+            focusGame();
+        } else {
+            focusCodeEditor();
+        }
+    }
 
+    private void focusGame() {
+        if (gamePanel != null) {
+            gamePanel.getGameCanvas().requestFocus();
+        }
+    }
     public void onGalleryTabClicked() {
         System.out.println("MainWindow: Gallery button clicked");
         onHide();
@@ -266,14 +284,17 @@ public class MainWindowScreen extends Screen {
         updateProjectTitle();
     }
 
-    public void setupKeyboardShortcuts() {
-        // Add Ctrl+S shortcut
+    private void setupKeyboardShortcuts() {
         Scene scene = getScene();
         if (scene != null) {
             scene.getAccelerators().put(
                     new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN),
                     this::quickSave
             );
+
+            // DON'T add accelerator for SPACE - let game handle it
+            // Remove any existing space accelerators
+            scene.getAccelerators().remove(new KeyCodeCombination(KeyCode.SPACE));
         }
     }
 

@@ -109,17 +109,15 @@ public class InputSystem extends GameSystem {
      */
     public void attachToScene(Scene scene) {
         this.scene = scene;
-        
-        // Keyboard listeners
+
         scene.setOnKeyPressed(this::handleKeyPressed);
         scene.setOnKeyReleased(this::handleKeyReleased);
-        
-        // Mouse listeners
+
         scene.setOnMousePressed(this::handleMousePressed);
         scene.setOnMouseReleased(this::handleMouseReleased);
         scene.setOnMouseMoved(this::handleMouseMoved);
         scene.setOnMouseDragged(this::handleMouseDragged);
-        
+
         Logger.info("InputSystem attached to scene");
     }
     
@@ -132,19 +130,28 @@ public class InputSystem extends GameSystem {
         justReleasedKeys.clear();
         mouseLeftJustPressed = false;
         mouseRightJustPressed = false;
+        if (scene != null && !scene.getWindow().isFocused()) {
+            // Window lost focus - clear all keys
+            pressedKeys.clear();
+        }
     }
     
     // ========== KEYBOARD INPUT HANDLERS ==========
     
     private void handleKeyPressed(KeyEvent event) {
         KeyCode key = event.getCode();
-        
+        System.out.println(" InputSystem received key: " + key);
+
         // Track if this is a new press (wasn't already pressed)
         if (!pressedKeys.contains(key)) {
             justPressedKeys.add(key);
+            System.out.println("   Added to justPressedKeys: " + key);
+
         }
         
         pressedKeys.add(key);
+        System.out.println("   pressedKeys now contains: " + pressedKeys);
+
     }
     
     private void handleKeyReleased(KeyEvent event) {

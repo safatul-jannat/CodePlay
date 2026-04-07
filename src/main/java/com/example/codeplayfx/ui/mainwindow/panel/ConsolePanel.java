@@ -27,6 +27,8 @@ public class ConsolePanel extends UIPanel {
     public void initialize() {
         console.setEditable(false);
         console.setWrapText(true);
+        console.setFocusTraversable(false);
+       // console.setMouseTransparent(true);
         console.setStyle(
                 "-fx-control-inner-background: #1e1e1e; " +
                         "-fx-text-fill: #d4d4d4; " +

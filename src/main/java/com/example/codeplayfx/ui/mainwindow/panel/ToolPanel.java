@@ -26,6 +26,10 @@ public class ToolPanel extends UIPanel {
 
     @Override
     public void initialize() {
+        if (saveButton != null) saveButton.setFocusTraversable(false);
+        if (saveAsButton != null) saveAsButton.setFocusTraversable(false);
+        if (docButton != null) docButton.setFocusTraversable(false);
+        if (helpButton != null) helpButton.setFocusTraversable(false);
         setupButtonActions();
     }
 

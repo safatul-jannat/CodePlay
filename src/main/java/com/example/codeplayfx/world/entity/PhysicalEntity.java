@@ -2,6 +2,7 @@ package com.example.codeplayfx.world.entity;
 
 import com.example.codeplayfx.world.physics.Vector2;
 import com.example.codeplayfx.scripting.runtime.UserGame;
+import javafx.geometry.Rectangle2D;
 
 public abstract class PhysicalEntity extends Entity {
 
@@ -62,7 +63,7 @@ public abstract class PhysicalEntity extends Entity {
         onWall = false;
 
         // Horizontal movement
-        float moveX = velocity.x;
+        float moveX = velocity.x*deltaTime;
         if (Math.abs(moveX) > 0.001f) {
             setPosition(oldX + moveX, oldY);
 
@@ -77,7 +78,7 @@ public abstract class PhysicalEntity extends Entity {
         }
 
         // Vertical movement with sub-stepping
-        float moveY = velocity.y;
+        float moveY = velocity.y*deltaTime;
         if (Math.abs(moveY) > 0.001f) {
             int steps = Math.max(1, (int)(Math.abs(moveY) / (getHeight() * 0.5f)));
             float stepY = moveY / steps;
@@ -119,12 +120,19 @@ public abstract class PhysicalEntity extends Entity {
         UserGame currentGame = UserGame.getCurrentGame();
         if (currentGame == null || currentGame.getWorld() == null) return false;
 
+        Rectangle2D myBounds = getAdjustedBounds();  // Use adjusted bounds
+
         for (Entity entity : currentGame.getWorld().getAllEntities()) {
             if (!(entity instanceof StaticEntity)) continue;
+            if (entity == this) continue;
             if (!entity.isActive()) continue;
+
             StaticEntity se = (StaticEntity) entity;
             if (se.hasCollider() && se.getCollider().isTrigger()) continue;
-            if (this.isColliding(se)) return true;
+
+            if (myBounds.intersects(se.getAdjustedBounds())) {  // Use adjusted bounds
+                return true;
+            }
         }
         return false;
     }
