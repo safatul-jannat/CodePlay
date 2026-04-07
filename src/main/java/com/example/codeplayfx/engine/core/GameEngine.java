@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import com.example.codeplayfx.util.Logger;
 import com.example.codeplayfx.world.GameWorld;
 import com.example.codeplayfx.world.entity.Entity;
+import com.example.codeplayfx.world.render.HUDRenderer;
 import com.example.codeplayfx.engine.system.SystemManager;
 import com.example.codeplayfx.scripting.runtime.ScriptRuntime;
 import com.example.codeplayfx.scripting.runtime.UserGame;
@@ -97,6 +98,7 @@ public class GameEngine {
             }
         }
 
+        gameWorld.getHUDRenderer().render(gameWorld, graphicsContext);
         // 4. FPS overlay (always on top)
         if (config.isShowFPS()) {
             renderFPS();

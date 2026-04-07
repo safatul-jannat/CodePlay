@@ -105,6 +105,11 @@ public class CollisionSystem extends GameSystem {
                 continue;
             }
 
+            if (entityA instanceof Enemy || entityB instanceof Enemy) {
+                continue;
+            }
+
+
             // Handle Ground collision (full solid block resolution)
             if (entityA instanceof Ground && entityB instanceof PhysicalEntity) {
                 ((Ground) entityA).resolveCollision((PhysicalEntity) entityB);
@@ -271,6 +276,28 @@ public class CollisionSystem extends GameSystem {
             }
             return;
         }
+
+        Enemy enemy = null;
+        BlockPlayer player = null;
+
+        if (entityA instanceof Enemy && entityB instanceof BlockPlayer) {
+            enemy = (Enemy) entityA;
+            player = (BlockPlayer) entityB;
+        } else if (entityB instanceof Enemy && entityA instanceof BlockPlayer) {
+            enemy = (Enemy) entityB;
+            player = (BlockPlayer) entityA;
+        }
+
+        if (enemy != null && player != null) {
+            // Only deal damage if the enemy's cooldown has expired
+            if (enemy.canDamage()) {
+                player.takeDamage(enemy.getDamage());
+                enemy.resetDamageCooldown();
+                System.out.println("Enemy damaged player! Health: " + player.getHealth());
+            }
+            return; // Important: don't continue to KillZone check
+        }
+
         if (entityA instanceof KillZone && entityB instanceof LivingEntity) {
             ((KillZone) entityA).onTouch((LivingEntity) entityB);
             return;

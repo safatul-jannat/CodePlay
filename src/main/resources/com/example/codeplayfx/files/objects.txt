@@ -79,3 +79,119 @@ hide()|Hide player|none|void|player.hide();|LIFECYCLE
 destroy()|Remove from game|none|void|player.destroy();|LIFECYCLE
 setName(name)|Set entity name|name: String|void|player.setName("Hero");|LIFECYCLE
 getName()|Get entity name|none|String|player.getName();|LIFECYCLE
+
+[Enemy ]
+new Enemy(x,y)|Creates enemy at position|x: float, y: float|Enemy|Enemy enemy = new Enemy(5, 5);|CONSTRUCTOR
+
+setPattern(pattern)|Set movement pattern (STRAIGHT or ANGULAR)|pattern: Enemy.Pattern|void|enemy.setPattern(Enemy.Pattern.STRAIGHT);|MOVEMENT
+setBounds(minX,maxX)|Set left/right bounds for STRAIGHT pattern|minX: float, maxX: float|void|enemy.setBounds(2, 8);|MOVEMENT
+setOrbit(centerX,radius)|Set orbit center and radius for ANGULAR pattern|centerX: float, radius: float|void|enemy.setOrbit(5, 3);|MOVEMENT
+setSpeed(speed)|Set movement speed|speed: float|void|enemy.setSpeed(1.5);|MOVEMENT
+
+setDamage(amount)|Set damage dealt on collision with player|amount: int|void|enemy.setDamage(20);|HEALTH
+getDamage()|Get current damage value|none|int|int dmg = enemy.getDamage();|HEALTH
+takeDamage(amount)|Deal damage to this enemy|amount: float|void|enemy.takeDamage(25);|HEALTH
+heal(amount)|Heal this enemy|amount: float|void|enemy.heal(10);|HEALTH
+setHealth(value)|Set health directly|value: float|void|enemy.setHealth(50);|HEALTH
+getHealth()|Get current health|none|float|float hp = enemy.getHealth();|HEALTH
+getMaxHealth()|Get maximum health|none|float|float max = enemy.getMaxHealth();|HEALTH
+getHealthPercent()|Get health as 0.0 to 1.0|none|float|float pct = enemy.getHealthPercent();|HEALTH
+isAlive()|Check if enemy is alive|none|boolean|if(enemy.isAlive())|HEALTH
+isDead()|Check if enemy is dead|none|boolean|if(enemy.isDead())|HEALTH
+isLowHealth()|Check if health is below 25 percent|none|boolean|if(enemy.isLowHealth())|HEALTH
+
+show(world)|Add enemy to the game world|world: GameWorld|void|enemy.show(world);|LIFECYCLE
+hide()|Hide enemy (still exists)|none|void|enemy.hide();|LIFECYCLE
+destroy()|Remove enemy from game|none|void|enemy.destroy();|LIFECYCLE
+setName(name)|Set enemy name|name: String|void|enemy.setName("Boss");|LIFECYCLE
+getName()|Get enemy name|none|String|String n = enemy.getName();|LIFECYCLE
+
+setPosition(x,y)|Teleport enemy to coordinates|x: float, y: float|void|enemy.setPosition(10, 5);|POSITION
+move(dx,dy)|Move enemy by offset|dx: float, dy: float|void|enemy.move(1, 0);|POSITION
+getX()|Get X position|none|float|float x = enemy.getX();|POSITION
+getY()|Get Y position|none|float|float y = enemy.getY();|POSITION
+getPosition()|Get position as Vector2|none|Vector2|Vector2 pos = enemy.getPosition();|POSITION
+
+isColliding(entity)|Check if colliding with another entity|entity: Entity|boolean|if(enemy.isColliding(player))|COLLISION
+hasCollider()|Check if enemy has a collider|none|boolean|if(enemy.hasCollider())|COLLISION
+containsPoint(x,y)|Check if point is inside enemy|x: float, y: float|boolean|if(enemy.containsPoint(5, 3))|COLLISION
+
+[Collectible 🪙]
+new Collectible(x,y)|Creates a COIN collectible at position|x: float, y: float|Collectible|Collectible coin = new Collectible(3, 5);|CONSTRUCTOR
+new Collectible(x,y,type)|Creates collectible with type: COIN, GEM, or POWERUP|x: float, y: float, type: Type|Collectible|Collectible gem = new Collectible(3, 5, Type.GEM);|CONSTRUCTOR
+
+spawnRandom(count)|Spawn random COIN collectibles|count: int|void|Collectible.spawnRandom(5);|SPAWN
+spawnRandom(count,type)|Spawn random collectibles (type: COIN, GEM, POWERUP)|count: int, type: Type|void|Collectible.spawnRandom(5, Type.GEM);|SPAWN
+spawnSequence(collectibles)|Spawn collectibles in sequence|collectibles: Collectible...|void|Collectible.spawnSequence(coin1, coin2, coin3);|SPAWN
+spawnMultiple(count,type,min,max)|Spawn multiple collectibles in area (type: COIN, GEM, POWERUP)|count: int, type: Type, min: Vector2, max: Vector2|List&lt;Collectible&gt;|Collectible.spawnMultiple(10, Type.COIN, new Vector2(0,0), new Vector2(10,10));|SPAWN
+spawnWave(count,interval,type,min,max)|Spawn wave of collectibles (type: COIN, GEM, POWERUP)|count: int, interval: float, type: Type, min: Vector2, max: Vector2|void|Collectible.spawnWave(5, 1.0f, Type.GEM, min, max);|SPAWN
+
+getScore()|Get current collected score|none|int|int score = Collectible.getScore();|INFO
+getRemainingCount()|Get number of uncollected collectibles|none|int|int left = Collectible.getRemainingCount();|INFO
+getPointValue()|Get point value of this collectible|none|int|int pts = coin.getPointValue();|INFO
+getType()|Get type (COIN, GEM, or POWERUP)|none|Type|Type t = coin.getType();|INFO
+getPowerupType()|Get powerup type if POWERUP (HEALTH, SPEED, INVINCIBILITY, DOUBLE_JUMP)|none|PowerupType|PowerupType pt = coin.getPowerupType();|INFO
+isCollected()|Check if already collected|none|boolean|if(coin.isCollected())|INFO
+
+setValue(amount)|Set point value|amount: int|Collectible|coin.setValue(100);|VALUE
+setScale(multiplier)|Set score multiplier|multiplier: float|Collectible|coin.setScale(2.0f);|VALUE
+setRandomValue(min,max)|Set random value between min and max|min: int, max: int|Collectible|coin.setRandomValue(5, 25);|VALUE
+
+setAsCoin()|Set as standard coin|none|Collectible|coin.setAsCoin();|TYPE
+setAsPowerup(type)|Set as powerup (HEALTH, SPEED, INVINCIBILITY, DOUBLE_JUMP)|type: PowerupType|Collectible|coin.setAsPowerup(PowerupType.HEALTH);|TYPE
+setAsKey(doorId)|Set as key for a specific door|doorId: String|Collectible|coin.setAsKey("mainDoor");|TYPE
+
+setColor(fill,stroke)|Set fill and stroke colors|fill: Color, stroke: Color|void|coin.setColor(Color.RED, Color.DARKRED);|APPEARANCE
+setColor(hex)|Set color by hex string|hex: String|void|coin.setColor("#FF5733");|APPEARANCE
+setSize(size)|Set collectible size|size: float|void|coin.setSize(0.8f);|APPEARANCE
+setPointValue(points)|Set point value|points: int|void|coin.setPointValue(100);|APPEARANCE
+
+setFloatAnimation(enabled)|Enable floating up/down animation|enabled: boolean|Collectible|coin.setFloatAnimation(true);|ANIMATION
+setRotateAnimation(enabled)|Enable spinning animation|enabled: boolean|Collectible|coin.setRotateAnimation(true);|ANIMATION
+setPulseAnimation(enabled)|Enable size pulsing animation|enabled: boolean|Collectible|coin.setPulseAnimation(true);|ANIMATION
+setPulse(minScale,maxScale,speed)|Configure pulse animation|minScale: float, maxScale: float, speed: float|Collectible|coin.setPulse(0.8f, 1.2f, 2.0f);|ANIMATION
+
+showBeam(show)|Show/hide light beam|show: boolean|Collectible|coin.showBeam(true);|EFFECTS
+showParticles(show)|Show/hide particles|show: boolean|Collectible|coin.showParticles(true);|EFFECTS
+setGlowColor(color)|Set glow color|color: Color|Collectible|coin.setGlowColor(Color.GOLD);|EFFECTS
+
+attractToPlayer(radius,speed)|Make collectible attract to player|radius: float, speed: float|Collectible|coin.attractToPlayer(3.0f, 5.0f);|MOVEMENT
+
+collectibleByPlayers()|Only players can collect|none|Collectible|coin.collectibleByPlayers();|ACCESS
+collectibleByEnemies()|Only enemies can collect|none|Collectible|coin.collectibleByEnemies();|ACCESS
+collectibleByAll()|Anyone can collect|none|Collectible|coin.collectibleByAll();|ACCESS
+collectibleByTag(tag)|Only entities with specific tag can collect|tag: String|Collectible|coin.collectibleByTag("hero");|ACCESS
+ignoreCollector(collector)|Ignore specific collector|collector: Entity|Collectible|coin.ignoreCollector(someEnemy);|ACCESS
+requireCondition(condition)|Set custom condition for collection|condition: BooleanSupplier|Collectible|coin.requireCondition(() -> player.hasKey());|ACCESS
+
+destroyOnCollect(destroy)|Set whether to destroy or respawn on collect|destroy: boolean|Collectible|coin.destroyOnCollect(false);|BEHAVIOR
+respawnAfter(seconds)|Set respawn time after collection|seconds: float|Collectible|coin.respawnAfter(3.0f);|BEHAVIOR
+setAvailable(available)|Set available state|available: boolean|Collectible|coin.setAvailable(true);|BEHAVIOR
+despawn()|Make disappear|none|Collectible|coin.despawn();|BEHAVIOR
+appearAfter(seconds)|Appear after delay|seconds: float|Collectible|coin.appearAfter(2.0f);|BEHAVIOR
+disappearAfter(seconds)|Disappear after delay|seconds: float|Collectible|coin.disappearAfter(5.0f);|BEHAVIOR
+
+onCollected(callback)|Callback when collected|callback: Consumer&lt;Entity&gt;|Collectible|coin.onCollected(e -> System.out.println("Got it!"));|EVENTS
+onCollectedByPlayer(callback)|Callback when collected by player|callback: Consumer&lt;BlockPlayer&gt;|Collectible|coin.onCollectedByPlayer(p -> p.heal(10));|EVENTS
+onExpired(callback)|Callback when expired|callback: Runnable|Collectible|coin.onExpired(() -> System.out.println("Coin gone!"));|EVENTS
+onRespawned(callback)|Callback when respawned|callback: Runnable|Collectible|coin.onRespawned(() -> System.out.println("Coin back!"));|EVENTS
+
+chainCollectible(collectibleId)|Spawn another collectible when collected|collectibleId: String|Collectible|coin.chainCollectible("specialCoin");|CHAIN
+unlockDoor(doorId)|Unlock door when collected|doorId: String|Collectible|coin.unlockDoor("treasureDoor");|CHAIN
+triggerEvent(eventName)|Trigger custom event when collected|eventName: String|Collectible|coin.triggerEvent("quest_complete");|CHAIN
+
+spawnAtRandomPosition(min,max)|Spawn at random position within rectangle|min: Vector2, max: Vector2|Collectible|coin.spawnAtRandomPosition(new Vector2(0,0), new Vector2(10,10));|SPAWN
+spawnAtRandomPosition(center,radius)|Spawn at random position within circle|center: Vector2, radius: float|Collectible|coin.spawnAtRandomPosition(new Vector2(5,5), 3.0f);|SPAWN
+spawnNearPlayer(minDistance,maxDistance)|Spawn near player|minDistance: float, maxDistance: float|Collectible|coin.spawnNearPlayer(1.0f, 3.0f);|SPAWN
+spawnAtRandomPositionAvoidPlayer(minDistance)|Spawn avoiding player|minDistance: float|Collectible|coin.spawnAtRandomPositionAvoidPlayer(2.0f);|SPAWN
+
+setSpawnArea(min,max)|Set spawn area rectangle|min: Vector2, max: Vector2|Collectible|coin.setSpawnArea(new Vector2(0,0), new Vector2(15,10));|SPAWN_AREA
+setSpawnArea(center,radius)|Set spawn area circle|center: Vector2, radius: float|Collectible|coin.setSpawnArea(new Vector2(5,5), 4.0f);|SPAWN_AREA
+setGroundCheck(enabled)|Must spawn on ground|enabled: boolean|Collectible|coin.setGroundCheck(true);|SPAWN_AREA
+setAvoidWalls(enabled)|Avoid spawning inside walls|enabled: boolean|Collectible|coin.setAvoidWalls(true);|SPAWN_AREA
+setMinDistanceFromOthers(distance)|Minimum distance from other collectibles|distance: float|Collectible|coin.setMinDistanceFromOthers(1.0f);|SPAWN_AREA
+setMaxSpawnAttempts(attempts)|Max spawn attempts before giving up|attempts: int|Collectible|coin.setMaxSpawnAttempts(20);|SPAWN_AREA
+
+show()|Make collectible visible in game|none|void|coin.show();|LIFECYCLE
+hide()|Hide collectible|none|void|coin.hide();|LIFECYCLE
+destroy()|Remove from game|none|void|coin.destroy();|LIFECYCLE

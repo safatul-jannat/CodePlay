@@ -5,6 +5,7 @@ import com.example.codeplayfx.engine.system.PhysicsSystem;
 import com.example.codeplayfx.util.Logger;
 import com.example.codeplayfx.world.entity.Entity;
 import com.example.codeplayfx.world.physics.CoordinateSystem;
+import com.example.codeplayfx.world.render.HUDRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public class GameWorld {
     private List<Entity> entities;
     private List<Entity> entitiesToAdd;    // Entities to add next frame
     private List<Entity> entitiesToRemove; // Entities to remove next frame
+    private HUDRenderer hudRenderer;
 
     // Coordinate system
     private CoordinateSystem coordinateSystem;
@@ -33,6 +35,8 @@ public class GameWorld {
         this.entities = new CopyOnWriteArrayList<>();
         this.entitiesToAdd = new ArrayList<>();
         this.entitiesToRemove = new ArrayList<>();
+        this.hudRenderer = new HUDRenderer();
+        this.hudRenderer.setEnabled(false); // OFF by default
 
         // Create coordinate system (50px grid by default)
         this.coordinateSystem = new CoordinateSystem(50.0);
@@ -264,6 +268,9 @@ public class GameWorld {
             if (entity.isActive()) count++;
         }
         return count;
+    }
+    public HUDRenderer getHUDRenderer() {
+        return hudRenderer;
     }
 
     // ========== COORDINATE SYSTEM ==========
