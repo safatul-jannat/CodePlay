@@ -149,4 +149,9 @@ public abstract class UserGame {
             world.getPhysicsSystem().setGlobalGravity(gravityValue);
         }
     }
+    protected void showHealthHUD(boolean enabled) {
+        if (world != null && world.getHUDRenderer() != null) {
+            world.getHUDRenderer().setEnabled(enabled);
+        }
+    }
 }

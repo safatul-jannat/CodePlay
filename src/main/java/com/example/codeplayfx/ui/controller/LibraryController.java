@@ -228,7 +228,9 @@ public class LibraryController implements Initializable {
         VBox cardContent = new VBox(2);
         cardContent.setAlignment(javafx.geometry.Pos.CENTER);
 
-        Label nameLabel = new Label(baseName + "()");
+        Label nameLabel = new Label(
+                baseName.startsWith("new ") ? baseName : baseName + "()"
+        );
         nameLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
 
         cardContent.getChildren().add(nameLabel);

@@ -1,5 +1,6 @@
 package com.example.codeplayfx.engine.core;
 
+import com.example.codeplayfx.world.render.HUDRenderer;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.Scene;
@@ -24,6 +25,7 @@ public class GameEngine {
     private SystemManager systemManager;
     private ScriptRuntime scriptRuntime;
 
+
     // Background image
     private Image backgroundImage = null;
 
@@ -46,6 +48,7 @@ public class GameEngine {
         Logger.info("Initializing GameEngine...");
 
         this.systemManager = new SystemManager(gameWorld);
+
 
         gameLoop = new AnimationTimer() {
             @Override
@@ -96,6 +99,7 @@ public class GameEngine {
                 renderEntityFallback(entity);
             }
         }
+        gameWorld.getHUDRenderer().render(gameWorld, graphicsContext);
 
         // 4. FPS overlay (always on top)
         if (config.isShowFPS()) {
