@@ -1,197 +1,91 @@
-[BlockPlayer ]
-new BlockPlayer(x,y)|Creates player at position|x: float, y: float|BlockPlayer|BlockPlayer player = new BlockPlayer(100, 100);|CONSTRUCTOR
-new BlockPlayer(x,y,color)|Creates player with color|x: float, y: float, color: String|BlockPlayer|BlockPlayer player = new BlockPlayer(100, 100, "RED");|CONSTRUCTOR
-
-moveRight()|Move right based on current mode|none|void|player.moveRight();|MOVEMENT
-moveLeft()|Move left based on current mode|none|void|player.moveLeft();|MOVEMENT
-moveUp()|Move up (only when gravity OFF)|none|void|player.moveUp();|MOVEMENT
-moveDown()|Move down (only when gravity OFF)|none|void|player.moveDown();|MOVEMENT
-jump()|Jump based on current mode|none|void|player.jump();|MOVEMENT
-stop()|Stop all movement immediately|none|void|player.stop();|MOVEMENT
-stopHorizontal()|Stop left/right movement|none|void|player.stopHorizontal();|MOVEMENT
-stopVertical()|Stop up/down movement|none|void|player.stopVertical();|MOVEMENT
-
-setMovementStyle(style)|Switch between DIRECT and VELOCITY modes|style: MovementStyle|void|player.setMovementStyle(MovementStyle.VELOCITY);|CONFIG
-getMovementStyle()|Check current mode|none|MovementStyle|MovementStyle style = player.getMovementStyle();|CONFIG
-
-setSpeed(value)|DIRECT mode: pixels per frame (60fps = value×60 per sec)|speed: float|void|player.setSpeed(0.5); // 30 pixels/sec|SPEED
-getCurrentSpeed()|Get current effective speed|none|float|float speed = player.getCurrentSpeed();|SPEED
-setWalkSpeed(value)|VELOCITY mode: max speed when gravity ON|speed: float|void|player.setWalkSpeed(3.0);|SPEED
-setFlySpeed(value)|VELOCITY mode: max speed when gravity OFF|speed: float|void|player.setFlySpeed(4.0);|SPEED
-setAcceleration(value)|How fast player reaches max speed|accel: float|void|player.setAcceleration(10.0);|SPEED
-setJumpPower(value)|Jump strength for VELOCITY mode|power: float|void|player.setJumpPower(12.0);|SPEED
-setFlyJumpHeight(value)|Jump height for flying mode|height: float|void|player.setFlyJumpHeight(3.0);|SPEED
-getWalkSpeed()|Get gravity mode speed|none|float|player.getWalkSpeed();|SPEED
-getFlySpeed()|Get flying mode speed|none|float|player.getFlySpeed();|SPEED
-
-setGravity(enabled)|Turn gravity on/off|enabled: boolean|void|player.setGravity(true);|PHYSICS
-setGravity(value)|Set gravity strength (auto-enables)|value: float|void|player.setGravity(0.8);|PHYSICS
-isGravityEnabled()|Check if gravity is on|none|boolean|if(player.isGravityEnabled())|PHYSICS
-applyForce(fx,fy)|Push player with force|fx: float, fy: float|void|player.applyForce(0, -10);|PHYSICS
-setVelocity(vx,vy)|Set velocity directly|vx: float, vy: float|void|player.setVelocity(5, 0);|PHYSICS
-addVelocity(dvx,dvy)|Add to current velocity|dvx: float, dvy: float|void|player.addVelocity(2, 0);|PHYSICS
+[BlockPlayer]
+[TYPES]
+TYPE | MovementStyle.DIRECT | Instant position changes, grid-based movement, auto up-down jump | #ff6ec7
+TYPE | MovementStyle.VELOCITY | Physics-based with acceleration, momentum, and parabolic jump | #03edf9
+TYPE | ShapeType.RECTANGLE | Renders as a standard rectangle shape | #88aaff
+TYPE | ShapeType.CIRCLE | Renders as a circle/oval shape | #88aaff
+TYPE | ShapeType.ROUNDED_RECTANGLE | Renders with rounded corners | #88aaff
+TYPE | ShapeType.TRIANGLE | Renders as a triangle shape | #88aaff
+TYPE | ShapeType.IMAGE | Renders using a sprite/image file | #88aaff
+[METHODS]
+moveRight()|Move player to the right|none|void|player.moveRight();|MOVEMENT
+moveLeft()|Move player to the left|none|void|player.moveLeft();|MOVEMENT
+moveUp()|Move player upward|none|void|player.moveUp();|MOVEMENT
+moveDown()|Move player downward|none|void|player.moveDown();|MOVEMENT
+jump()|Make player jump|none|void|player.jump();|MOVEMENT
+stop()|Stop all player movement|none|void|player.stop();|MOVEMENT
+stopHorizontal()|Stop horizontal movement only|none|void|player.stopHorizontal();|MOVEMENT
+stopVertical()|Stop vertical movement only|none|void|player.stopVertical();|MOVEMENT
+setMovementStyle(style)|Set movement behavior;Use MovementStyle.DIRECT or MovementStyle.VELOCITY|style: MovementStyle|void|player.setMovementStyle(MovementStyle.VELOCITY);|MOVEMENT
+getMovementStyle()|Get current movement style|none|MovementStyle|MovementStyle style = player.getMovementStyle();|MOVEMENT
+canJump()|Check if player can currently jump|none|boolean|if(player.canJump()) player.jump();|MOVEMENT
+isAutoJumping()|Check if DIRECT mode auto-jump is active|none|boolean|boolean jumping = player.isAutoJumping();|MOVEMENT
+setSpeed(speed)|Set movement speed for current gravity mode|speed: float|void|player.setSpeed(5.0f);|MOVEMENT
+getCurrentSpeed()|Get current effective speed|none|float|float speed = player.getCurrentSpeed();|MOVEMENT
+setWalkSpeed(speed)|Set walking speed for gravity ON mode|speed: float|void|player.setWalkSpeed(4.0f);|MOVEMENT
+getWalkSpeed()|Get walking speed for gravity mode|none|float|float speed = player.getWalkSpeed();|MOVEMENT
+setFlySpeed(speed)|Set flying speed for gravity OFF mode|speed: float|void|player.setFlySpeed(6.0f);|MOVEMENT
+getFlySpeed()|Get flying speed for no-gravity mode|none|float|float speed = player.getFlySpeed();|MOVEMENT
+setAcceleration(accel)|Set acceleration rate for VELOCITY mode|accel: float|void|player.setAcceleration(20.0f);|MOVEMENT
+getAcceleration()|Get acceleration rate|none|float|float accel = player.getAcceleration();|MOVEMENT
+setJumpPower(power)|Set jump force for VELOCITY mode|power: float|void|player.setJumpPower(12.0f);|MOVEMENT
+getJumpPower()|Get jump power value|none|float|float power = player.getJumpPower();|MOVEMENT
+setFlyJumpHeight(height)|Set auto-jump height for DIRECT mode|height: float|void|player.setFlyJumpHeight(3.0f);|MOVEMENT
+getFlyJumpHeight()|Get DIRECT mode auto-jump height|none|float|float height = player.getFlyJumpHeight();|MOVEMENT
+setGravity(enabled)|Enable or disable gravity;False = fly mode|enabled: boolean|void|player.setGravity(true);|PHYSICS
+setGravity(value)|Set custom gravity strength|value: float|void|player.setGravity(0.8f);|PHYSICS
+isGravityEnabled()|Check if gravity is enabled|none|boolean|boolean hasGravity = player.isGravityEnabled();|PHYSICS
+isOnGround()|Check if player is touching ground|none|boolean|if(player.isOnGround()) player.jump();|PHYSICS
+isOnCeiling()|Check if player is touching ceiling|none|boolean|boolean hitHead = player.isOnCeiling();|PHYSICS
+isOnWall()|Check if player is touching wall|none|boolean|boolean onWall = player.isOnWall();|PHYSICS
+isFalling()|Check if player is falling downward|none|boolean|if(player.isFalling()) playFallSound();|PHYSICS
+isRising()|Check if player is rising upward|none|boolean|if(player.isRising()) playJumpSound();|PHYSICS
+isMovingHorizontally()|Check if moving left or right|none|boolean|boolean moving = player.isMovingHorizontally();|PHYSICS
+isMovingVertically()|Check if moving up or down|none|boolean|boolean moving = player.isMovingVertically();|PHYSICS
 getVelocity()|Get current velocity vector|none|Vector2|Vector2 vel = player.getVelocity();|PHYSICS
-getSpeed()|Get current speed magnitude|none|float|float speed = player.getSpeed();|PHYSICS
-
-setColor(color)|Set player color (Color object)|color: Color|void|player.setColor(Color.RED);|APPEARANCE
-setColor(name)|Set color by name (RED,BLUE,GREEN,etc)|name: String|void|player.setColor("GOLD");|APPEARANCE
-setColor(r,g,b)|Set RGB color|r,g,b: int|void|player.setColor(255, 0, 0);|APPEARANCE
-setSize(width,height)|Set player dimensions|width: float, height: float|void|player.setSize(2.0, 2.0);|APPEARANCE
-setRoundness(value)|Make corners rounded (0-1)|roundness: float|void|player.setRoundness(0.3);|APPEARANCE
-loadSprite(path)|Use image instead of color|path: String|void|player.loadSprite("hero.png");|APPEARANCE
-
-setPosition(x,y)|Teleport to coordinates|x: float, y: float|void|player.setPosition(200, 150);|POSITION
-move(dx,dy)|Move by offset|dx: float, dy: float|void|player.move(10, 0);|POSITION
-getX()|Get X position|none|float|float x = player.getX();|POSITION
-getY()|Get Y position|none|float|float y = player.getY();|POSITION
-getPosition()|Get position as vector|none|Vector2|Vector2 pos = player.getPosition();|POSITION
-
-isOnGround()|Check if player is on ground|none|boolean|if(player.isOnGround()) player.jump();|STATE
-isMoving()|Check if player is moving|none|boolean|if(player.isMoving())|STATE
-isMovingHorizontally()|Check horizontal movement|none|boolean|player.isMovingHorizontally();|STATE
-isMovingVertically()|Check vertical movement|none|boolean|player.isMovingVertically();|STATE
-isFalling()|Check if falling|none|boolean|if(player.isFalling())|STATE
-isRising()|Check if rising|none|boolean|if(player.isRising())|STATE
-isAutoJumping()|Check if auto-jump active|none|boolean|player.isAutoJumping();|STATE
-isAt(x,y)|Check if at specific position|x: float, y: float|boolean|if(player.isAt(100, 200))|STATE
-
-takeDamage(amount)|Damage player|amount: float|void|player.takeDamage(10);|HEALTH
-heal(amount)|Heal player|amount: float|void|player.heal(5);|HEALTH
-setHealth(value)|Set health directly|value: float|void|player.setHealth(80);|HEALTH
-revive()|Revive with full health|none|void|player.revive();|HEALTH
-revive(health)|Revive with specific health|health: float|void|player.revive(50);|HEALTH
-getHealth()|Get current health|none|float|int hp = player.getHealth();|HEALTH
-getMaxHealth()|Get max health|none|float|player.getMaxHealth();|HEALTH
-getHealthPercent()|Get health as 0-1|none|float|float pct = player.getHealthPercent();|HEALTH
-isAlive()|Check if alive|none|boolean|if(player.isAlive())|HEALTH
-isDead()|Check if dead|none|boolean|if(player.isDead())|HEALTH
-isFullHealth()|Check if health full|none|boolean|player.isFullHealth();|HEALTH
-isLowHealth()|Check if health low|none|boolean|player.isLowHealth();|HEALTH
-
-addCollider(w,h)|Add collision box|width: float, height: float|void|player.addCollider(1.0, 1.0);|COLLISION
-addCollider(w,h,offset)|Add collider with offset|w: float, h: float, offset: Vector2|void|player.addCollider(0.8, 0.8, new Vector2(0,0));|COLLISION
-hasCollider()|Check if has collider|none|boolean|if(player.hasCollider())|COLLISION
-isColliding(entity)|Check collision with another entity|entity: Entity|boolean|if(player.isColliding(enemy))|COLLISION
-containsPoint(x,y)|Check if point is inside player|x: float, y: float|boolean|if(player.containsPoint(mouseX, mouseY))|COLLISION
-
-show()|Make player visible|none|void|player.show();|LIFECYCLE
-hide()|Hide player|none|void|player.hide();|LIFECYCLE
-destroy()|Remove from game|none|void|player.destroy();|LIFECYCLE
-setName(name)|Set entity name|name: String|void|player.setName("Hero");|LIFECYCLE
-getName()|Get entity name|none|String|player.getName();|LIFECYCLE
-
-[Enemy ]
-new Enemy(x,y)|Creates enemy at position|x: float, y: float|Enemy|Enemy enemy = new Enemy(5, 5);|CONSTRUCTOR
-
-setPattern(pattern)|Set movement pattern (STRAIGHT or ANGULAR)|pattern: Enemy.Pattern|void|enemy.setPattern(Enemy.Pattern.STRAIGHT);|MOVEMENT
-setBounds(minX,maxX)|Set left/right bounds for STRAIGHT pattern|minX: float, maxX: float|void|enemy.setBounds(2, 8);|MOVEMENT
-setOrbit(centerX,radius)|Set orbit center and radius for ANGULAR pattern|centerX: float, radius: float|void|enemy.setOrbit(5, 3);|MOVEMENT
-setSpeed(speed)|Set movement speed|speed: float|void|enemy.setSpeed(1.5);|MOVEMENT
-
-setDamage(amount)|Set damage dealt on collision with player|amount: int|void|enemy.setDamage(20);|HEALTH
-getDamage()|Get current damage value|none|int|int dmg = enemy.getDamage();|HEALTH
-takeDamage(amount)|Deal damage to this enemy|amount: float|void|enemy.takeDamage(25);|HEALTH
-heal(amount)|Heal this enemy|amount: float|void|enemy.heal(10);|HEALTH
-setHealth(value)|Set health directly|value: float|void|enemy.setHealth(50);|HEALTH
-getHealth()|Get current health|none|float|float hp = enemy.getHealth();|HEALTH
-getMaxHealth()|Get maximum health|none|float|float max = enemy.getMaxHealth();|HEALTH
-getHealthPercent()|Get health as 0.0 to 1.0|none|float|float pct = enemy.getHealthPercent();|HEALTH
-isAlive()|Check if enemy is alive|none|boolean|if(enemy.isAlive())|HEALTH
-isDead()|Check if enemy is dead|none|boolean|if(enemy.isDead())|HEALTH
-isLowHealth()|Check if health is below 25 percent|none|boolean|if(enemy.isLowHealth())|HEALTH
-
-show(world)|Add enemy to the game world|world: GameWorld|void|enemy.show(world);|LIFECYCLE
-hide()|Hide enemy (still exists)|none|void|enemy.hide();|LIFECYCLE
-destroy()|Remove enemy from game|none|void|enemy.destroy();|LIFECYCLE
-setName(name)|Set enemy name|name: String|void|enemy.setName("Boss");|LIFECYCLE
-getName()|Get enemy name|none|String|String n = enemy.getName();|LIFECYCLE
-
-setPosition(x,y)|Teleport enemy to coordinates|x: float, y: float|void|enemy.setPosition(10, 5);|POSITION
-move(dx,dy)|Move enemy by offset|dx: float, dy: float|void|enemy.move(1, 0);|POSITION
-getX()|Get X position|none|float|float x = enemy.getX();|POSITION
-getY()|Get Y position|none|float|float y = enemy.getY();|POSITION
-getPosition()|Get position as Vector2|none|Vector2|Vector2 pos = enemy.getPosition();|POSITION
-
-isColliding(entity)|Check if colliding with another entity|entity: Entity|boolean|if(enemy.isColliding(player))|COLLISION
-hasCollider()|Check if enemy has a collider|none|boolean|if(enemy.hasCollider())|COLLISION
-containsPoint(x,y)|Check if point is inside enemy|x: float, y: float|boolean|if(enemy.containsPoint(5, 3))|COLLISION
-
-[Collectible 🪙]
-new Collectible(x,y)|Creates a COIN collectible at position|x: float, y: float|Collectible|Collectible coin = new Collectible(3, 5);|CONSTRUCTOR
-new Collectible(x,y,type)|Creates collectible with type: COIN, GEM, or POWERUP|x: float, y: float, type: Type|Collectible|Collectible gem = new Collectible(3, 5, Type.GEM);|CONSTRUCTOR
-
-spawnRandom(count)|Spawn random COIN collectibles|count: int|void|Collectible.spawnRandom(5);|SPAWN
-spawnRandom(count,type)|Spawn random collectibles (type: COIN, GEM, POWERUP)|count: int, type: Type|void|Collectible.spawnRandom(5, Type.GEM);|SPAWN
-spawnSequence(collectibles)|Spawn collectibles in sequence|collectibles: Collectible...|void|Collectible.spawnSequence(coin1, coin2, coin3);|SPAWN
-spawnMultiple(count,type,min,max)|Spawn multiple collectibles in area (type: COIN, GEM, POWERUP)|count: int, type: Type, min: Vector2, max: Vector2|List&lt;Collectible&gt;|Collectible.spawnMultiple(10, Type.COIN, new Vector2(0,0), new Vector2(10,10));|SPAWN
-spawnWave(count,interval,type,min,max)|Spawn wave of collectibles (type: COIN, GEM, POWERUP)|count: int, interval: float, type: Type, min: Vector2, max: Vector2|void|Collectible.spawnWave(5, 1.0f, Type.GEM, min, max);|SPAWN
-
-getScore()|Get current collected score|none|int|int score = Collectible.getScore();|INFO
-getRemainingCount()|Get number of uncollected collectibles|none|int|int left = Collectible.getRemainingCount();|INFO
-getPointValue()|Get point value of this collectible|none|int|int pts = coin.getPointValue();|INFO
-getType()|Get type (COIN, GEM, or POWERUP)|none|Type|Type t = coin.getType();|INFO
-getPowerupType()|Get powerup type if POWERUP (HEALTH, SPEED, INVINCIBILITY, DOUBLE_JUMP)|none|PowerupType|PowerupType pt = coin.getPowerupType();|INFO
-isCollected()|Check if already collected|none|boolean|if(coin.isCollected())|INFO
-
-setValue(amount)|Set point value|amount: int|Collectible|coin.setValue(100);|VALUE
-setScale(multiplier)|Set score multiplier|multiplier: float|Collectible|coin.setScale(2.0f);|VALUE
-setRandomValue(min,max)|Set random value between min and max|min: int, max: int|Collectible|coin.setRandomValue(5, 25);|VALUE
-
-setAsCoin()|Set as standard coin|none|Collectible|coin.setAsCoin();|TYPE
-setAsPowerup(type)|Set as powerup (HEALTH, SPEED, INVINCIBILITY, DOUBLE_JUMP)|type: PowerupType|Collectible|coin.setAsPowerup(PowerupType.HEALTH);|TYPE
-setAsKey(doorId)|Set as key for a specific door|doorId: String|Collectible|coin.setAsKey("mainDoor");|TYPE
-
-setColor(fill,stroke)|Set fill and stroke colors|fill: Color, stroke: Color|void|coin.setColor(Color.RED, Color.DARKRED);|APPEARANCE
-setColor(hex)|Set color by hex string|hex: String|void|coin.setColor("#FF5733");|APPEARANCE
-setSize(size)|Set collectible size|size: float|void|coin.setSize(0.8f);|APPEARANCE
-setPointValue(points)|Set point value|points: int|void|coin.setPointValue(100);|APPEARANCE
-
-setFloatAnimation(enabled)|Enable floating up/down animation|enabled: boolean|Collectible|coin.setFloatAnimation(true);|ANIMATION
-setRotateAnimation(enabled)|Enable spinning animation|enabled: boolean|Collectible|coin.setRotateAnimation(true);|ANIMATION
-setPulseAnimation(enabled)|Enable size pulsing animation|enabled: boolean|Collectible|coin.setPulseAnimation(true);|ANIMATION
-setPulse(minScale,maxScale,speed)|Configure pulse animation|minScale: float, maxScale: float, speed: float|Collectible|coin.setPulse(0.8f, 1.2f, 2.0f);|ANIMATION
-
-showBeam(show)|Show/hide light beam|show: boolean|Collectible|coin.showBeam(true);|EFFECTS
-showParticles(show)|Show/hide particles|show: boolean|Collectible|coin.showParticles(true);|EFFECTS
-setGlowColor(color)|Set glow color|color: Color|Collectible|coin.setGlowColor(Color.GOLD);|EFFECTS
-
-attractToPlayer(radius,speed)|Make collectible attract to player|radius: float, speed: float|Collectible|coin.attractToPlayer(3.0f, 5.0f);|MOVEMENT
-
-collectibleByPlayers()|Only players can collect|none|Collectible|coin.collectibleByPlayers();|ACCESS
-collectibleByEnemies()|Only enemies can collect|none|Collectible|coin.collectibleByEnemies();|ACCESS
-collectibleByAll()|Anyone can collect|none|Collectible|coin.collectibleByAll();|ACCESS
-collectibleByTag(tag)|Only entities with specific tag can collect|tag: String|Collectible|coin.collectibleByTag("hero");|ACCESS
-ignoreCollector(collector)|Ignore specific collector|collector: Entity|Collectible|coin.ignoreCollector(someEnemy);|ACCESS
-requireCondition(condition)|Set custom condition for collection|condition: BooleanSupplier|Collectible|coin.requireCondition(() -> player.hasKey());|ACCESS
-
-destroyOnCollect(destroy)|Set whether to destroy or respawn on collect|destroy: boolean|Collectible|coin.destroyOnCollect(false);|BEHAVIOR
-respawnAfter(seconds)|Set respawn time after collection|seconds: float|Collectible|coin.respawnAfter(3.0f);|BEHAVIOR
-setAvailable(available)|Set available state|available: boolean|Collectible|coin.setAvailable(true);|BEHAVIOR
-despawn()|Make disappear|none|Collectible|coin.despawn();|BEHAVIOR
-appearAfter(seconds)|Appear after delay|seconds: float|Collectible|coin.appearAfter(2.0f);|BEHAVIOR
-disappearAfter(seconds)|Disappear after delay|seconds: float|Collectible|coin.disappearAfter(5.0f);|BEHAVIOR
-
-onCollected(callback)|Callback when collected|callback: Consumer&lt;Entity&gt;|Collectible|coin.onCollected(e -> System.out.println("Got it!"));|EVENTS
-onCollectedByPlayer(callback)|Callback when collected by player|callback: Consumer&lt;BlockPlayer&gt;|Collectible|coin.onCollectedByPlayer(p -> p.heal(10));|EVENTS
-onExpired(callback)|Callback when expired|callback: Runnable|Collectible|coin.onExpired(() -> System.out.println("Coin gone!"));|EVENTS
-onRespawned(callback)|Callback when respawned|callback: Runnable|Collectible|coin.onRespawned(() -> System.out.println("Coin back!"));|EVENTS
-
-chainCollectible(collectibleId)|Spawn another collectible when collected|collectibleId: String|Collectible|coin.chainCollectible("specialCoin");|CHAIN
-unlockDoor(doorId)|Unlock door when collected|doorId: String|Collectible|coin.unlockDoor("treasureDoor");|CHAIN
-triggerEvent(eventName)|Trigger custom event when collected|eventName: String|Collectible|coin.triggerEvent("quest_complete");|CHAIN
-
-spawnAtRandomPosition(min,max)|Spawn at random position within rectangle|min: Vector2, max: Vector2|Collectible|coin.spawnAtRandomPosition(new Vector2(0,0), new Vector2(10,10));|SPAWN
-spawnAtRandomPosition(center,radius)|Spawn at random position within circle|center: Vector2, radius: float|Collectible|coin.spawnAtRandomPosition(new Vector2(5,5), 3.0f);|SPAWN
-spawnNearPlayer(minDistance,maxDistance)|Spawn near player|minDistance: float, maxDistance: float|Collectible|coin.spawnNearPlayer(1.0f, 3.0f);|SPAWN
-spawnAtRandomPositionAvoidPlayer(minDistance)|Spawn avoiding player|minDistance: float|Collectible|coin.spawnAtRandomPositionAvoidPlayer(2.0f);|SPAWN
-
-setSpawnArea(min,max)|Set spawn area rectangle|min: Vector2, max: Vector2|Collectible|coin.setSpawnArea(new Vector2(0,0), new Vector2(15,10));|SPAWN_AREA
-setSpawnArea(center,radius)|Set spawn area circle|center: Vector2, radius: float|Collectible|coin.setSpawnArea(new Vector2(5,5), 4.0f);|SPAWN_AREA
-setGroundCheck(enabled)|Must spawn on ground|enabled: boolean|Collectible|coin.setGroundCheck(true);|SPAWN_AREA
-setAvoidWalls(enabled)|Avoid spawning inside walls|enabled: boolean|Collectible|coin.setAvoidWalls(true);|SPAWN_AREA
-setMinDistanceFromOthers(distance)|Minimum distance from other collectibles|distance: float|Collectible|coin.setMinDistanceFromOthers(1.0f);|SPAWN_AREA
-setMaxSpawnAttempts(attempts)|Max spawn attempts before giving up|attempts: int|Collectible|coin.setMaxSpawnAttempts(20);|SPAWN_AREA
-
-show()|Make collectible visible in game|none|void|coin.show();|LIFECYCLE
-hide()|Hide collectible|none|void|coin.hide();|LIFECYCLE
-destroy()|Remove from game|none|void|coin.destroy();|LIFECYCLE
+setVelocity(vx,vy)|Set velocity directly|vx:float:Horizontal velocity, vy:float:Vertical velocity|void|player.setVelocity(5.0f,0);|PHYSICS
+getSpeed()|Get current movement speed magnitude|none|float|float speed = player.getSpeed();|PHYSICS
+applyForce(fx,fy)|Apply force to player|fx: float, fy: float|void|player.applyForce(10.0f,0);|PHYSICS
+setMass(mass)|Set player mass|mass: float|void|player.setMass(2.0f);|PHYSICS
+getMass()|Get player mass|none|float|float mass = player.getMass();|PHYSICS
+setFriction(friction)|Set ground friction|friction: float|void|player.setFriction(0.95f);|PHYSICS
+takeDamage(amount)|Reduce player health|amount: float|void|player.takeDamage(25.0f);|COMBAT
+heal(amount)|Restore player health|amount: float|void|player.heal(15.0f);|COMBAT
+setHealth(health)|Set health directly|health: float|void|player.setHealth(75.0f);|COMBAT
+getHealth()|Get current health|none|float|float hp = player.getHealth();|COMBAT
+getMaxHealth()|Get maximum health|none|float|float maxHp = player.getMaxHealth();|COMBAT
+setMaxHealth(maxHealth)|Set maximum health|maxHealth: float|void|player.setMaxHealth(150.0f);|COMBAT
+getHealthPercent()|Get health as percentage (0.0 to 1.0)|none|float|float percent = player.getHealthPercent();|COMBAT
+isAlive()|Check if player is alive|none|boolean|if(player.isAlive()) player.moveRight();|COMBAT
+isDead()|Check if player is dead|none|boolean|if(player.isDead()) showGameOver();|COMBAT
+isFullHealth()|Check if health is at maximum|none|boolean|if(player.isFullHealth()) healDisabled = true;|COMBAT
+isLowHealth()|Check if health is below 25%|none|boolean|if(player.isLowHealth()) playWarning();|COMBAT
+revive()|Revive player with full health|none|void|player.revive();|COMBAT
+revive(health)|Revive player with specified health|health: float|void|player.revive(50.0f);|COMBAT
+setColor(color)|Set player color using Color object|color: Color|void|player.setColor(Color.RED);|APPEARANCE
+setColor(r,g,b)|Set player color using RGB values|r: int, g: int, b: int|void|player.setColor(255,100,50);|APPEARANCE
+setColor(colorName)|Set player color using name or hex|colorName: String|void|player.setColor("gold");|APPEARANCE
+setSize(width,height)|Set player size in world units|width: float, height: float|void|player.setSize(1.5f,1.5f);|APPEARANCE
+setRoundness(roundness)|Make player corners rounded|roundness: float|void|player.setRoundness(0.3f);|APPEARANCE
+loadSprite(imagePath)|Load sprite image for player|imagePath: String|void|player.loadSprite("/player.png");|APPEARANCE
+show()|Make player visible and active in game|none|void|player.show();|LIFECYCLE
+hide()|Hide player (still exists but not rendered)|none|void|player.hide();|LIFECYCLE
+destroy()|Destroy and remove player from game|none|void|player.destroy();|LIFECYCLE
+setName(name)|Set custom player name|name: String|void|player.setName("Hero");|LIFECYCLE
+getName()|Get player name|none|String|String name = player.getName();|LIFECYCLE
+setPosition(x,y)|Teleport player to coordinates|x: float, y: float|void|player.setPosition(10.0f,5.0f);|POSITION
+getX()|Get X coordinate|none|float|float x = player.getX();|POSITION
+getY()|Get Y coordinate|none|float|float y = player.getY();|POSITION
+move(dx,dy)|Move player by delta amount|dx: float, dy: float|void|player.move(2.0f,0);|POSITION
+isAt(x,y)|Check if player is at specific position|x: float, y: float|boolean|if(player.isAt(0,0)) reachedGoal();|POSITION
+addCollider(width,height)|Add collision box to player|width: float, height: float|void|player.addCollider(0.9f,0.9f);|COLLISION
+hasCollider()|Check if player has collision component|none|boolean|if(player.hasCollider()) enableCollision();|COLLISION
+isColliding(other)|Check collision with another entity|other: Entity|boolean|if(player.isColliding(enemy)) takeDamage(10);|COLLISION
+containsPoint(x,y)|Check if point is inside player bounds|x: float, y: float|boolean|if(player.containsPoint(mouseX,mouseY)) select();|COLLISION
+getId()|Get unique player ID|none|long|long id = player.getId();|UTILITY
+isActive()|Check if player is active in game world|none|boolean|if(player.isActive()) updateGame();|UTILITY
+setActive(active)|Activate or deactivate player|active: boolean|void|player.setActive(false);|UTILITY
+isVisible()|Check if player is visible on screen|none|boolean|if(player.isVisible()) renderPlayer();|UTILITY
+setVisible(visible)|Show or hide player rendering|visible: boolean|void|player.setVisible(false);|UTILITY
+getWidth()|Get player width in world units|none|float|float width = player.getWidth();|UTILITY
+getHeight()|Get player height in world units|none|float|float height = player.getHeight();|UTILITY

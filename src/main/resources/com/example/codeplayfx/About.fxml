@@ -80,7 +80,7 @@
                     <!-- App Description Section -->
                     <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: rgba(20,30,50,0.5); -fx-background-radius: 15;">
                         <Text style="-fx-font-family: 'Arial Black'; -fx-font-size: 20px; -fx-fill: #88aaff;" text="📱 About CodePlay" />
-                        <TextArea fx:id="appDescriptionArea" editable="false" prefHeight="120" styleClass="about-text-area" text="CodePlay is a gaming...." wrapText="true" />
+                        <TextArea fx:id="appDescriptionArea" editable="false" prefHeight="180.0" prefWidth="730.0" styleClass="about-text-area" text="CodePlay is a gaming...." wrapText="true" />
                     </VBox>
 
                     <!-- Developers Section -->

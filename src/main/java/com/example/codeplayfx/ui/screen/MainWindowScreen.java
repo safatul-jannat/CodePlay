@@ -299,6 +299,25 @@ public class MainWindowScreen extends Screen {
     }
 
     /**
+     * Create a new project - clears editor and resets to untitled
+     */
+    public void newProject() {
+        // Clear code editor with default template
+        String defaultCode = "// Welcome to CodePlayFX!\n// Start coding here...\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello World!\");\n    }\n}";
+        codePanel.setCodeContent(defaultCode);
+
+        // Clear documentation with default text
+        String defaultDoc = "// Project Documentation\n// Describe your project here...\n\n## Overview\n## Features\n## Usage";
+
+        // Update project name to untitled
+        currentProjectName = "untitled";
+        isNewProject = true;
+        updateProjectTitle();
+
+        showTemporaryMessage("New project created - 'untitled'");
+        System.out.println("📄 New project created, editor cleared, name reset to 'untitled'");
+    }
+    /**
      * Quick save - if project has a name, save directly without popup
      * If it's untitled, show save popup
      */
@@ -319,14 +338,19 @@ public class MainWindowScreen extends Screen {
     }
     public void showSavePopup(boolean isSaveAs) {
         String currentCode = codePanel.getCode();
+        String currentDoc = ""; // Get documentation if you have it
         Button anchorButton = isSaveAs ? toolPanel.getSaveAsButton() : toolPanel.getSaveButton();
 
-        // Use the 4-parameter version
         PopupManager.showSavePopup(
                 anchorButton,
                 stage,
                 currentCode,
+                currentDoc,
+                isSaveAs ? currentProjectName : null,  // Pass current name for Save As
                 (savedProjectName) -> {
+                    // ACTUALLY SAVE the project here
+                    GalleryManager.getInstance().saveProject(savedProjectName, currentCode, currentDoc);
+
                     this.currentProjectName = savedProjectName;
                     this.isNewProject = false;
                     updateProjectTitle();
