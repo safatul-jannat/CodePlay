@@ -54,7 +54,7 @@ public class DatabaseManager {
 
             try (Statement stmt = connection.createStatement()) {
                 stmt.execute(createTableSQL);
-                System.out.println("✅ Database initialized at: " + DB_PATH);
+                System.out.println(" Database initialized at: " + DB_PATH);
             }
 
         } catch (SQLException e) {
@@ -126,7 +126,7 @@ public class DatabaseManager {
             Files.write(Paths.get(filePath), project.getCode().getBytes());
             Files.write(Paths.get(docPath), project.getDocumentation().getBytes());
 
-            System.out.println("💾 Files saved to:");
+            System.out.println(" Files saved to:");
             System.out.println("   Code: " + filePath);
             System.out.println("   Doc:  " + docPath);
 
@@ -162,7 +162,7 @@ public class DatabaseManager {
             pstmt.setInt(7, 1);
 
             pstmt.executeUpdate();
-            System.out.println("✅ Database record created for: " + project.getName());
+            System.out.println(" Database record created for: " + project.getName());
 
         } catch (SQLException e) {
             System.err.println("Failed to insert record: " + e.getMessage());
@@ -185,7 +185,7 @@ public class DatabaseManager {
             pstmt.setString(5, project.getName());
 
             pstmt.executeUpdate();
-            System.out.println("✅ Database record updated for: " + project.getName() + " (version +1)");
+            System.out.println(" Database record updated for: " + project.getName() + " (version +1)");
 
         } catch (SQLException e) {
             System.err.println("Failed to update record: " + e.getMessage());
@@ -325,7 +325,7 @@ public class DatabaseManager {
                 );
             }
 
-            System.out.println("✅ Database exported to: " + outputPath);
+            System.out.println(" Database exported to: " + outputPath);
 
         } catch (SQLException | IOException e) {
             System.err.println("Export failed: " + e.getMessage());

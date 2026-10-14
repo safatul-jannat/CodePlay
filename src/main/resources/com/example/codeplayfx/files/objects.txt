@@ -8,6 +8,8 @@ TYPE | ShapeType.ROUNDED_RECTANGLE | Renders with rounded corners | #88aaff
 TYPE | ShapeType.TRIANGLE | Renders as a triangle shape | #88aaff
 TYPE | ShapeType.IMAGE | Renders using a sprite/image file | #88aaff
 [METHODS]
+BlockPlayer(x,y)|Create player at position|x: float:X coordinate, y: float:Y coordinate|BlockPlayer|BlockPlayer player = new BlockPlayer(5, 3);|CONSTRUCTOR
+BlockPlayer(x,y,colorName)|Create player with color|x: float:X coordinate, y: float:Y coordinate, colorName: String:Color name (RED, BLUE, etc.)|BlockPlayer|BlockPlayer player = new BlockPlayer(5, 3, "RED");|CONSTRUCTOR
 moveRight()|Move player to the right|none|void|player.moveRight();|MOVEMENT
 moveLeft()|Move player to the left|none|void|player.moveLeft();|MOVEMENT
 moveUp()|Move player upward|none|void|player.moveUp();|MOVEMENT
@@ -16,24 +18,24 @@ jump()|Make player jump|none|void|player.jump();|MOVEMENT
 stop()|Stop all player movement|none|void|player.stop();|MOVEMENT
 stopHorizontal()|Stop horizontal movement only|none|void|player.stopHorizontal();|MOVEMENT
 stopVertical()|Stop vertical movement only|none|void|player.stopVertical();|MOVEMENT
-setMovementStyle(style)|Set movement behavior;Use MovementStyle.DIRECT or MovementStyle.VELOCITY|style: MovementStyle|void|player.setMovementStyle(MovementStyle.VELOCITY);|MOVEMENT
+setMovementStyle(style)|Set movement behavior|style: MovementStyle:DIRECT or VELOCITY|void|player.setMovementStyle(MovementStyle.VELOCITY);|MOVEMENT
 getMovementStyle()|Get current movement style|none|MovementStyle|MovementStyle style = player.getMovementStyle();|MOVEMENT
 canJump()|Check if player can currently jump|none|boolean|if(player.canJump()) player.jump();|MOVEMENT
 isAutoJumping()|Check if DIRECT mode auto-jump is active|none|boolean|boolean jumping = player.isAutoJumping();|MOVEMENT
-setSpeed(speed)|Set movement speed for current gravity mode|speed: float|void|player.setSpeed(5.0f);|MOVEMENT
+setSpeed(speed)|Set movement speed for current gravity mode|speed: float:Movement speed in units per second|void|player.setSpeed(5.0f);|MOVEMENT
 getCurrentSpeed()|Get current effective speed|none|float|float speed = player.getCurrentSpeed();|MOVEMENT
-setWalkSpeed(speed)|Set walking speed for gravity ON mode|speed: float|void|player.setWalkSpeed(4.0f);|MOVEMENT
+setWalkSpeed(speed)|Set walking speed for gravity ON mode|speed: float:Walking speed when gravity enabled|void|player.setWalkSpeed(4.0f);|MOVEMENT
 getWalkSpeed()|Get walking speed for gravity mode|none|float|float speed = player.getWalkSpeed();|MOVEMENT
-setFlySpeed(speed)|Set flying speed for gravity OFF mode|speed: float|void|player.setFlySpeed(6.0f);|MOVEMENT
+setFlySpeed(speed)|Set flying speed for gravity OFF mode|speed: float:Flying speed when gravity disabled|void|player.setFlySpeed(6.0f);|MOVEMENT
 getFlySpeed()|Get flying speed for no-gravity mode|none|float|float speed = player.getFlySpeed();|MOVEMENT
-setAcceleration(accel)|Set acceleration rate for VELOCITY mode|accel: float|void|player.setAcceleration(20.0f);|MOVEMENT
+setAcceleration(accel)|Set acceleration rate for VELOCITY mode|accel: float:Acceleration in units/s²|void|player.setAcceleration(20.0f);|MOVEMENT
 getAcceleration()|Get acceleration rate|none|float|float accel = player.getAcceleration();|MOVEMENT
-setJumpPower(power)|Set jump force for VELOCITY mode|power: float|void|player.setJumpPower(12.0f);|MOVEMENT
+setJumpPower(power)|Set jump force for VELOCITY mode|power: float:Initial upward velocity|void|player.setJumpPower(12.0f);|MOVEMENT
 getJumpPower()|Get jump power value|none|float|float power = player.getJumpPower();|MOVEMENT
-setFlyJumpHeight(height)|Set auto-jump height for DIRECT mode|height: float|void|player.setFlyJumpHeight(3.0f);|MOVEMENT
+setFlyJumpHeight(height)|Set auto-jump height for DIRECT mode|height: float:Height in world units|void|player.setFlyJumpHeight(3.0f);|MOVEMENT
 getFlyJumpHeight()|Get DIRECT mode auto-jump height|none|float|float height = player.getFlyJumpHeight();|MOVEMENT
-setGravity(enabled)|Enable or disable gravity;False = fly mode|enabled: boolean|void|player.setGravity(true);|PHYSICS
-setGravity(value)|Set custom gravity strength|value: float|void|player.setGravity(0.8f);|PHYSICS
+setGravity(enabled)|Enable or disable gravity|enabled: boolean:True enables gravity|void|player.setGravity(true);|PHYSICS
+setGravity(value)|Set custom gravity strength|value: float:Gravity strength in units/s²|void|player.setGravity(0.8f);|PHYSICS
 isGravityEnabled()|Check if gravity is enabled|none|boolean|boolean hasGravity = player.isGravityEnabled();|PHYSICS
 isOnGround()|Check if player is touching ground|none|boolean|if(player.isOnGround()) player.jump();|PHYSICS
 isOnCeiling()|Check if player is touching ceiling|none|boolean|boolean hitHead = player.isOnCeiling();|PHYSICS
@@ -43,49 +45,368 @@ isRising()|Check if player is rising upward|none|boolean|if(player.isRising()) p
 isMovingHorizontally()|Check if moving left or right|none|boolean|boolean moving = player.isMovingHorizontally();|PHYSICS
 isMovingVertically()|Check if moving up or down|none|boolean|boolean moving = player.isMovingVertically();|PHYSICS
 getVelocity()|Get current velocity vector|none|Vector2|Vector2 vel = player.getVelocity();|PHYSICS
-setVelocity(vx,vy)|Set velocity directly|vx:float:Horizontal velocity, vy:float:Vertical velocity|void|player.setVelocity(5.0f,0);|PHYSICS
+setVelocity(vx,vy)|Set velocity directly|vx: float:Horizontal velocity, vy: float:Vertical velocity|void|player.setVelocity(5.0f, 0);|PHYSICS
 getSpeed()|Get current movement speed magnitude|none|float|float speed = player.getSpeed();|PHYSICS
-applyForce(fx,fy)|Apply force to player|fx: float, fy: float|void|player.applyForce(10.0f,0);|PHYSICS
-setMass(mass)|Set player mass|mass: float|void|player.setMass(2.0f);|PHYSICS
+applyForce(fx,fy)|Apply force to player|fx: float:Force in X direction, fy: float:Force in Y direction|void|player.applyForce(10.0f, 0);|PHYSICS
+setMass(mass)|Set player mass|mass: float:Mass value (min 0.1)|void|player.setMass(2.0f);|PHYSICS
 getMass()|Get player mass|none|float|float mass = player.getMass();|PHYSICS
-setFriction(friction)|Set ground friction|friction: float|void|player.setFriction(0.95f);|PHYSICS
-takeDamage(amount)|Reduce player health|amount: float|void|player.takeDamage(25.0f);|COMBAT
-heal(amount)|Restore player health|amount: float|void|player.heal(15.0f);|COMBAT
-setHealth(health)|Set health directly|health: float|void|player.setHealth(75.0f);|COMBAT
+setFriction(friction)|Set ground friction|friction: float:Friction coefficient 0-1|void|player.setFriction(0.95f);|PHYSICS
+takeDamage(amount)|Reduce player health|amount: float:Damage amount|void|player.takeDamage(25.0f);|COMBAT
+heal(amount)|Restore player health|amount: float:Health to restore|void|player.heal(15.0f);|COMBAT
+setHealth(health)|Set health directly|health: float:New health value|void|player.setHealth(75.0f);|COMBAT
 getHealth()|Get current health|none|float|float hp = player.getHealth();|COMBAT
 getMaxHealth()|Get maximum health|none|float|float maxHp = player.getMaxHealth();|COMBAT
-setMaxHealth(maxHealth)|Set maximum health|maxHealth: float|void|player.setMaxHealth(150.0f);|COMBAT
-getHealthPercent()|Get health as percentage (0.0 to 1.0)|none|float|float percent = player.getHealthPercent();|COMBAT
+setMaxHealth(maxHealth)|Set maximum health|maxHealth: float:New maximum health|void|player.setMaxHealth(150.0f);|COMBAT
+getHealthPercent()|Get health as percentage 0.0-1.0|none|float|float percent = player.getHealthPercent();|COMBAT
 isAlive()|Check if player is alive|none|boolean|if(player.isAlive()) player.moveRight();|COMBAT
 isDead()|Check if player is dead|none|boolean|if(player.isDead()) showGameOver();|COMBAT
 isFullHealth()|Check if health is at maximum|none|boolean|if(player.isFullHealth()) healDisabled = true;|COMBAT
 isLowHealth()|Check if health is below 25%|none|boolean|if(player.isLowHealth()) playWarning();|COMBAT
 revive()|Revive player with full health|none|void|player.revive();|COMBAT
-revive(health)|Revive player with specified health|health: float|void|player.revive(50.0f);|COMBAT
-setColor(color)|Set player color using Color object|color: Color|void|player.setColor(Color.RED);|APPEARANCE
-setColor(r,g,b)|Set player color using RGB values|r: int, g: int, b: int|void|player.setColor(255,100,50);|APPEARANCE
-setColor(colorName)|Set player color using name or hex|colorName: String|void|player.setColor("gold");|APPEARANCE
-setSize(width,height)|Set player size in world units|width: float, height: float|void|player.setSize(1.5f,1.5f);|APPEARANCE
-setRoundness(roundness)|Make player corners rounded|roundness: float|void|player.setRoundness(0.3f);|APPEARANCE
-loadSprite(imagePath)|Load sprite image for player|imagePath: String|void|player.loadSprite("/player.png");|APPEARANCE
-show()|Make player visible and active in game|none|void|player.show();|LIFECYCLE
-hide()|Hide player (still exists but not rendered)|none|void|player.hide();|LIFECYCLE
-destroy()|Destroy and remove player from game|none|void|player.destroy();|LIFECYCLE
-setName(name)|Set custom player name|name: String|void|player.setName("Hero");|LIFECYCLE
+revive(health)|Revive player with specified health|health: float:Health amount|void|player.revive(50.0f);|COMBAT
+setColor(color)|Set player color using Color object|color: Color:JavaFX Color|void|player.setColor(Color.RED);|APPEARANCE
+setColor(r,g,b)|Set player color using RGB|r: int:Red 0-255, g: int:Green 0-255, b: int:Blue 0-255|void|player.setColor(255, 100, 50);|APPEARANCE
+setColor(colorName)|Set player color by name or hex|colorName: String:Name or #hex code|void|player.setColor("gold");|APPEARANCE
+setSize(width,height)|Set player size in world units|width: float:Width, height: float:Height|void|player.setSize(1.5f, 1.5f);|APPEARANCE
+setRoundness(roundness)|Make player corners rounded|roundness: float:Corner radius|void|player.setRoundness(0.3f);|APPEARANCE
+show()|Make player visible and active|none|void|player.show();|LIFECYCLE
+hide()|Hide player (still exists)|none|void|player.hide();|LIFECYCLE
+destroy()|Destroy and remove player|none|void|player.destroy();|LIFECYCLE
+setName(name)|Set custom player name|name: String:Display name|void|player.setName("Hero");|LIFECYCLE
 getName()|Get player name|none|String|String name = player.getName();|LIFECYCLE
-setPosition(x,y)|Teleport player to coordinates|x: float, y: float|void|player.setPosition(10.0f,5.0f);|POSITION
+setPosition(x,y)|Teleport player to coordinates|x: float:X coordinate, y: float:Y coordinate|void|player.setPosition(10.0f, 5.0f);|POSITION
 getX()|Get X coordinate|none|float|float x = player.getX();|POSITION
 getY()|Get Y coordinate|none|float|float y = player.getY();|POSITION
-move(dx,dy)|Move player by delta amount|dx: float, dy: float|void|player.move(2.0f,0);|POSITION
-isAt(x,y)|Check if player is at specific position|x: float, y: float|boolean|if(player.isAt(0,0)) reachedGoal();|POSITION
-addCollider(width,height)|Add collision box to player|width: float, height: float|void|player.addCollider(0.9f,0.9f);|COLLISION
-hasCollider()|Check if player has collision component|none|boolean|if(player.hasCollider()) enableCollision();|COLLISION
-isColliding(other)|Check collision with another entity|other: Entity|boolean|if(player.isColliding(enemy)) takeDamage(10);|COLLISION
-containsPoint(x,y)|Check if point is inside player bounds|x: float, y: float|boolean|if(player.containsPoint(mouseX,mouseY)) select();|COLLISION
+move(dx,dy)|Move player by delta amount|dx: float:Change in X, dy: float:Change in Y|void|player.move(2.0f, 0);|POSITION
+isAt(x,y)|Check if at specific position|x: float:X coordinate, y: float:Y coordinate|boolean|if(player.isAt(0,0)) reachedGoal();|POSITION
+addCollider(width,height)|Add collision box|width: float:Collider width, height: float:Collider height|void|player.addCollider(0.9f, 0.9f);|COLLISION
+hasCollider()|Check if has collision component|none|boolean|if(player.hasCollider()) enableCollision();|COLLISION
+isColliding(other)|Check collision with another entity|other: Entity:Entity to check|boolean|if(player.isColliding(enemy)) takeDamage(10);|COLLISION
+containsPoint(x,y)|Check if point is inside bounds|x: float:X coordinate, y: float:Y coordinate|boolean|if(player.containsPoint(mouseX,mouseY)) select();|COLLISION
 getId()|Get unique player ID|none|long|long id = player.getId();|UTILITY
-isActive()|Check if player is active in game world|none|boolean|if(player.isActive()) updateGame();|UTILITY
-setActive(active)|Activate or deactivate player|active: boolean|void|player.setActive(false);|UTILITY
-isVisible()|Check if player is visible on screen|none|boolean|if(player.isVisible()) renderPlayer();|UTILITY
-setVisible(visible)|Show or hide player rendering|visible: boolean|void|player.setVisible(false);|UTILITY
+isActive()|Check if active in game world|none|boolean|if(player.isActive()) updateGame();|UTILITY
+setActive(active)|Activate or deactivate player|active: boolean:True activates|void|player.setActive(false);|UTILITY
+isVisible()|Check if visible on screen|none|boolean|if(player.isVisible()) renderPlayer();|UTILITY
+setVisible(visible)|Show or hide player rendering|visible: boolean:True shows|void|player.setVisible(false);|UTILITY
 getWidth()|Get player width in world units|none|float|float width = player.getWidth();|UTILITY
 getHeight()|Get player height in world units|none|float|float height = player.getHeight();|UTILITY
+
+[Enemy]
+[TYPES]
+TYPE | Pattern.STRAIGHT | Patrols left and right between two boundaries | #03edf9
+TYPE | Pattern.ANGULAR | Orbits in a circle around a center point | #ff6ec7
+TYPE | ShapeType.CIRCLE | Renders as a circle shape | #88aaff
+TYPE | ShapeType.RECTANGLE | Renders as a rectangle shape | #88aaff
+[METHODS]
+Enemy(x,y)|Create enemy at position|x: float:X coordinate, y: float:Y coordinate|Enemy|Enemy enemy = new Enemy(5, 3);|CONSTRUCTOR
+setPattern(pattern)|Set movement pattern|pattern: Pattern:STRAIGHT or ANGULAR|void|enemy.setPattern(Pattern.STRAIGHT);|MOVEMENT
+getPattern()|Get current movement pattern|none|Pattern|Pattern p = enemy.getPattern();|MOVEMENT
+setBounds(minX,maxX)|Set patrol boundaries for STRAIGHT pattern|minX: float:Left boundary, maxX: float:Right boundary|void|enemy.setBounds(2.0f, 10.0f);|MOVEMENT
+setOrbit(centerX,radius)|Set orbit for ANGULAR pattern|centerX: float:Center X, radius: float:Orbit radius|void|enemy.setOrbit(5.0f, 3.0f);|MOVEMENT
+setOrbit(centerX,centerY,radius)|Set orbit with explicit center Y|centerX: float:Center X, centerY: float:Center Y, radius: float:Orbit radius|void|enemy.setOrbit(5.0f, 4.0f, 2.5f);|MOVEMENT
+setSpeed(speed)|Set movement speed|speed: float:Speed in units per second|void|enemy.setSpeed(2.0f);|MOVEMENT
+getSpeed()|Get movement speed|none|float|float speed = enemy.getSpeed();|MOVEMENT
+setDamage(damage)|Set damage dealt to player|damage: int:Damage amount per hit|void|enemy.setDamage(15);|COMBAT
+getDamage()|Get damage amount|none|int|int dmg = enemy.getDamage();|COMBAT
+setDamageCooldown(seconds)|Set cooldown between damage ticks|seconds: float:Cooldown in seconds|void|enemy.setDamageCooldown(0.5f);|COMBAT
+getDamageCooldown()|Get damage cooldown|none|float|float cd = enemy.getDamageCooldown();|COMBAT
+takeDamage(amount)|Reduce enemy health|amount: float:Damage amount|void|enemy.takeDamage(25.0f);|COMBAT
+heal(amount)|Restore enemy health|amount: float:Health to restore|void|enemy.heal(10.0f);|COMBAT
+setHealth(health)|Set health directly|health: float:New health value|void|enemy.setHealth(50.0f);|COMBAT
+getHealth()|Get current health|none|float|float hp = enemy.getHealth();|COMBAT
+getMaxHealth()|Get maximum health|none|float|float maxHp = enemy.getMaxHealth();|COMBAT
+setMaxHealth(maxHealth)|Set maximum health|maxHealth: float:New maximum health|void|enemy.setMaxHealth(200.0f);|COMBAT
+getHealthPercent()|Get health as percentage 0.0-1.0|none|float|float percent = enemy.getHealthPercent();|COMBAT
+isAlive()|Check if enemy is alive|none|boolean|if(enemy.isAlive()) attack();|COMBAT
+isDead()|Check if enemy is dead|none|boolean|if(enemy.isDead()) removeFromGame();|COMBAT
+revive()|Revive enemy with full health|none|void|enemy.revive();|COMBAT
+revive(health)|Revive with specific health|health: float:Health amount|void|enemy.revive(75.0f);|COMBAT
+setColor(color)|Set enemy color using Color object|color: Color:JavaFX Color|void|enemy.setColor(Color.PURPLE);|APPEARANCE
+setColor(colorName)|Set enemy color by name or hex|colorName: String:Name or #hex code|void|enemy.setColor("darkred");|APPEARANCE
+setColor(r,g,b)|Set enemy color using RGB|r: int:Red 0-255, g: int:Green 0-255, b: int:Blue 0-255|void|enemy.setColor(128, 0, 128);|APPEARANCE
+setSize(width,height)|Set enemy size|width: float:Width in world units, height: float:Height in world units|void|enemy.setSize(1.2f, 1.2f);|APPEARANCE
+setShape(shapeType)|Set shape type|shapeType: ShapeType:CIRCLE, RECTANGLE, or IMAGE|void|enemy.setShape(ShapeType.CIRCLE);|APPEARANCE
+loadSprite(imagePath)|Load sprite image|imagePath: String:Path to image file|void|enemy.loadSprite("/enemy.png");|APPEARANCE
+show()|Make enemy visible and active|none|void|enemy.show();|LIFECYCLE
+hide()|Hide enemy (still exists)|none|void|enemy.hide();|LIFECYCLE
+destroy()|Destroy and remove enemy|none|void|enemy.destroy();|LIFECYCLE
+setName(name)|Set custom enemy name|name: String:Display name|void|enemy.setName("Goblin");|LIFECYCLE
+getName()|Get enemy name|none|String|String name = enemy.getName();|LIFECYCLE
+setPosition(x,y)|Teleport enemy to coordinates|x: float:X coordinate, y: float:Y coordinate|void|enemy.setPosition(8.0f, 5.0f);|POSITION
+getX()|Get X coordinate|none|float|float x = enemy.getX();|POSITION
+getY()|Get Y coordinate|none|float|float y = enemy.getY();|POSITION
+move(dx,dy)|Move enemy by delta amount|dx: float:Change in X, dy: float:Change in Y|void|enemy.move(1.0f, 0);|POSITION
+getVelocity()|Get current velocity vector|none|Vector2|Vector2 vel = enemy.getVelocity();|PHYSICS
+setVelocity(vx,vy)|Set velocity directly|vx: float:Horizontal velocity, vy: float:Vertical velocity|void|enemy.setVelocity(2.0f, 0);|PHYSICS
+getSpeed()|Get current speed magnitude|none|float|float speed = enemy.getSpeed();|PHYSICS
+applyForce(fx,fy)|Apply force to enemy|fx: float:Force in X, fy: float:Force in Y|void|enemy.applyForce(5.0f, 0);|PHYSICS
+setMass(mass)|Set enemy mass|mass: float:Mass value (min 0.1)|void|enemy.setMass(2.0f);|PHYSICS
+getMass()|Get enemy mass|none|float|float mass = enemy.getMass();|PHYSICS
+setFriction(friction)|Set friction|friction: float:Friction coefficient 0-1|void|enemy.setFriction(0.95f);|PHYSICS
+setGravity(enabled)|Enable or disable gravity|enabled: boolean:True enables gravity|void|enemy.setGravity(false);|PHYSICS
+isGravityEnabled()|Check if gravity is enabled|none|boolean|boolean hasGravity = enemy.isGravityEnabled();|PHYSICS
+isOnGround()|Check if enemy is touching ground|none|boolean|if(enemy.isOnGround()) stopFalling();|PHYSICS
+isOnCeiling()|Check if enemy is touching ceiling|none|boolean|boolean hitCeiling = enemy.isOnCeiling();|PHYSICS
+isOnWall()|Check if enemy is touching wall|none|boolean|boolean onWall = enemy.isOnWall();|PHYSICS
+addCollider(width,height)|Add collision box|width: float:Collider width, height: float:Collider height|void|enemy.addCollider(0.9f, 0.9f);|COLLISION
+hasCollider()|Check if has collision component|none|boolean|if(enemy.hasCollider()) handleCollision();|COLLISION
+isColliding(other)|Check collision with another entity|other: Entity:Entity to check|boolean|if(enemy.isColliding(player)) enemy.attack();|COLLISION
+containsPoint(x,y)|Check if point is inside bounds|x: float:X coordinate, y: float:Y coordinate|boolean|if(enemy.containsPoint(mouseX,mouseY)) select();|COLLISION
+getId()|Get unique enemy ID|none|long|long id = enemy.getId();|UTILITY
+isActive()|Check if active in game world|none|boolean|if(enemy.isActive()) updateMovement();|STATE
+setActive(active)|Activate or deactivate enemy|active: boolean:True activates|void|enemy.setActive(false);|STATE
+isVisible()|Check if visible on screen|none|boolean|if(enemy.isVisible()) render();|STATE
+setVisible(visible)|Show or hide enemy rendering|visible: boolean:True shows|void|enemy.setVisible(true);|STATE
+getWidth()|Get enemy width in world units|none|float|float width = enemy.getWidth();|UTILITY
+getHeight()|Get enemy height in world units|none|float|float height = enemy.getHeight();|UTILITY
+
+[Collectible]
+[TYPES]
+TYPE | Type.COIN | Standard collectible coin that gives points | #ffd700
+TYPE | Type.GEM | Valuable gem worth more points | #00ffff
+TYPE | Type.POWERUP | Special item that grants abilities | #ff00ff
+TYPE | PowerupType.HEALTH | Restores player health when collected | #00ff00
+TYPE | PowerupType.SPEED | Temporarily increases movement speed | #03edf9
+TYPE | PowerupType.INVINCIBILITY | Makes player temporarily invincible | #ffd700
+TYPE | PowerupType.DOUBLE_JUMP | Grants ability to double jump | #ff6ec7
+[METHODS]
+Collectible(x,y)|Create collectible at position (default COIN)|x: float:X coordinate, y: float:Y coordinate|Collectible|Collectible coin = new Collectible(5, 3);|CONSTRUCTOR
+Collectible(x,y,type)|Create collectible with specific type|x: float:X coordinate, y: float:Y coordinate, type: Type:COIN, GEM, or POWERUP|Collectible|Collectible gem = new Collectible(5, 3, Type.GEM);|CONSTRUCTOR
+collect()|Manually trigger collection of this item|none|void|coin.collect();|COLLECTION
+collect(collector)|Collect by specific entity|collector: Entity:Entity that collects this item|void|coin.collect(player);|COLLECTION
+setValue(amount)|Set point value of collectible|amount: int:Point value to assign|Collectible|coin.setValue(100);|VALUE
+setScale(multiplier)|Set score multiplier for combos|multiplier: float:Multiplier value|Collectible|coin.setScale(2.0f);|VALUE
+setRandomValue(min,max)|Set random value between min and max|min: int:Minimum value, max: int:Maximum value|Collectible|coin.setRandomValue(10, 50);|VALUE
+setAsCoin()|Configure as standard coin|none|Collectible|item.setAsCoin();|TYPE
+setAsPowerup(powerupType)|Configure as powerup with specific type|powerupType: PowerupType:HEALTH, SPEED, INVINCIBILITY, or DOUBLE_JUMP|Collectible|item.setAsPowerup(PowerupType.HEALTH);|TYPE
+setAsKey(doorId)|Configure as key for specific door|doorId: String:Identifier of door to unlock|Collectible|key.setAsKey("door_gold");|TYPE
+setAsCollectible(collectionId)|Make part of a collection set|collectionId: String:Collection identifier|Collectible|gem.setAsCollectible("dragon_gems");|TYPE
+destroyOnCollect(destroy)|Set whether to destroy or respawn on collect|destroy: boolean:True destroys, false allows respawn|Collectible|coin.destroyOnCollect(true);|BEHAVIOR
+respawnAfter(seconds)|Set respawn time after collection|seconds: float:Seconds until respawn|Collectible|coin.respawnAfter(3.0f);|BEHAVIOR
+collectibleByPlayers()|Only players can collect this|none|Collectible|powerup.collectibleByPlayers();|ACCESS
+collectibleByEnemies()|Only enemies can collect this|none|Collectible|item.collectibleByEnemies();|ACCESS
+collectibleByAll()|Anyone can collect this|none|Collectible|coin.collectibleByAll();|ACCESS
+collectibleByTag(tag)|Only entities with specific tag can collect|tag: String:Tag name to filter collectors|Collectible|gem.collectibleByTag("hero");|ACCESS
+ignoreCollector(collector)|Ignore specific collector entity|collector: Entity:Entity to ignore|Collectible|coin.ignoreCollector(badGuy);|ACCESS
+requireCondition(condition)|Set custom condition for collection|condition: BooleanSupplier:Condition that must return true|Collectible|coin.requireCondition(() -> player.hasKey());|ACCESS
+canBeCollectedBy(collector)|Check if entity can collect this|collector: Entity:Entity to check|boolean|if(coin.canBeCollectedBy(player)) coin.collect();|ACCESS
+setFloatAnimation(enabled)|Enable floating up/down animation|enabled: boolean:True enables floating|Collectible|coin.setFloatAnimation(true);|ANIMATION
+setRotateAnimation(enabled)|Enable spinning animation|enabled: boolean:True enables rotation|Collectible|coin.setRotateAnimation(true);|ANIMATION
+setPulseAnimation(enabled)|Enable size pulsing animation|enabled: boolean:True enables pulsing|Collectible|coin.setPulseAnimation(true);|ANIMATION
+setPulse(minScale,maxScale,speed)|Configure pulse animation|minScale: float:Minimum scale, maxScale: float:Maximum scale, speed: float:Pulse speed|Collectible|coin.setPulse(0.8f, 1.3f, 3.0f);|ANIMATION
+showBeam(show)|Show/hide light beam effect|show: boolean:True shows light beam|Collectible|gem.showBeam(true);|VISUAL
+showParticles(show)|Show/hide particle effects|show: boolean:True shows particles|Collectible|coin.showParticles(true);|VISUAL
+setGlowColor(color)|Set glow color for the collectible|color: Color:Glow color|Collectible|gem.setGlowColor(Color.GOLD);|VISUAL
+attractToPlayer(radius,speed)|Make collectible attract to player|radius: float:Attraction radius, speed: float:Attraction speed|Collectible|coin.attractToPlayer(5.0f, 8.0f);|MOVEMENT
+spawn()|Make collectible appear in game|none|Collectible|coin.spawn();|SPAWN
+despawn()|Make collectible disappear|none|Collectible|coin.despawn();|SPAWN
+setAvailable(available)|Set available state|available: boolean:True makes available|Collectible|coin.setAvailable(true);|SPAWN
+appearAfter(seconds)|Appear after delay in seconds|seconds: float:Delay in seconds|Collectible|coin.appearAfter(2.0f);|SPAWN
+disappearAfter(seconds)|Disappear after delay in seconds|seconds: float:Delay in seconds|Collectible|coin.disappearAfter(5.0f);|SPAWN
+spawnAtRandomPosition(min,max)|Spawn at random position within rectangle|min: Vector2:Minimum corner, max: Vector2:Maximum corner|Collectible|coin.spawnAtRandomPosition(new Vector2(0,0), new Vector2(10,10));|SPAWN
+spawnAtRandomPosition(center,radius)|Spawn at random position within circle|center: Vector2:Center point, radius: float:Circle radius|Collectible|coin.spawnAtRandomPosition(new Vector2(5,5), 3.0f);|SPAWN
+spawnNearPlayer(minDistance,maxDistance)|Spawn near player|minDistance: float:Minimum distance, maxDistance: float:Maximum distance|Collectible|coin.spawnNearPlayer(2.0f, 5.0f);|SPAWN
+setSpawnArea(min,max)|Set spawn area rectangle|min: Vector2:Minimum corner, max: Vector2:Maximum corner|Collectible|coin.setSpawnArea(new Vector2(1,1), new Vector2(9,8));|SPAWN
+setSpawnArea(center,radius)|Set spawn area circle|center: Vector2:Center point, radius: float:Circle radius|Collectible|coin.setSpawnArea(new Vector2(5,5), 4.0f);|SPAWN
+setGroundCheck(enabled)|Require spawn on ground|enabled: boolean:True requires ground spawn|Collectible|coin.setGroundCheck(true);|SPAWN
+setAvoidWalls(enabled)|Avoid spawning inside walls|enabled: boolean:True avoids walls|Collectible|coin.setAvoidWalls(true);|SPAWN
+setMinDistanceFromOthers(distance)|Minimum distance from other collectibles|distance: float:Minimum distance in world units|Collectible|coin.setMinDistanceFromOthers(1.5f);|SPAWN
+setMaxSpawnAttempts(attempts)|Set max spawn attempts|attempts: int:Maximum attempts to find valid position|Collectible|coin.setMaxSpawnAttempts(20);|SPAWN
+onCollected(callback)|Callback when collected|callback: Consumer<Entity>:Function called on collection|Collectible|coin.onCollected(e -> System.out.println("Collected!"));|EVENTS
+onCollectedByPlayer(callback)|Callback when collected by player|callback: Consumer<BlockPlayer>:Function called on player collect|Collectible|coin.onCollectedByPlayer(p -> p.heal(10));|EVENTS
+onExpired(callback)|Callback when expired|callback: Runnable:Function called on expiration|Collectible|coin.onExpired(() -> respawn());|EVENTS
+onRespawned(callback)|Callback when respawned|callback: Runnable:Function called on respawn|Collectible|coin.onRespawned(() -> showEffect());|EVENTS
+chainCollectible(collectibleId)|Spawn another collectible when collected|collectibleId: String:ID of collectible to spawn|Collectible|coin.chainCollectible("rare_gem");|CHAIN
+unlockDoor(doorId)|Unlock door when collected|doorId: String:Identifier of door to unlock|Collectible|key.unlockDoor("treasure_door");|CHAIN
+triggerEvent(eventName)|Trigger custom event when collected|eventName: String:Event name to trigger|Collectible|coin.triggerEvent("level_complete");|CHAIN
+getPosition()|Get collectible position|none|Vector2|Vector2 pos = coin.getPosition();|POSITION
+distanceFrom(point)|Get distance from point|point: Vector2:Point to measure distance to|float|float dist = coin.distanceFrom(player.getPosition());|POSITION
+isInRange(collector,range)|Check if in range of collector|collector: Entity:Entity to check, range: float:Maximum distance|boolean|if(coin.isInRange(player, 3.0f)) coin.attractToPlayer(5,8);|POSITION
+getPointValue()|Get point value|none|int|int points = coin.getPointValue();|VALUE
+getType()|Get collectible type|none|Type|Type t = coin.getType();|VALUE
+getPowerupType()|Get powerup type (if POWERUP)|none|PowerupType|PowerupType pt = powerup.getPowerupType();|VALUE
+isCollected()|Check if already collected|none|boolean|if(!coin.isCollected()) showOnMap();|STATE
+getTimeUntilRespawn()|Get time until respawn|none|float|float time = coin.getTimeUntilRespawn();|STATE
+getLastCollector()|Get last collector entity|none|Entity|Entity collector = coin.getLastCollector();|STATE
+getDoorId()|Get door ID (if key)|none|String|String doorId = key.getDoorId();|STATE
+getCollectionId()|Get collection ID|none|String|String collectionId = gem.getCollectionId();|STATE
+setColor(fill,stroke)|Set fill and stroke colors|fill: Color:Fill color, stroke: Color:Stroke color|void|coin.setColor(Color.GOLD, Color.ORANGE);|APPEARANCE
+setColor(fillHex)|Set fill color using hex|fillHex: String:Hex color code|void|coin.setColor("#FFD700");|APPEARANCE
+setSize(size)|Set uniform size|size: float:Width and height in world units|void|coin.setSize(0.8f);|APPEARANCE
+setPointValue(points)|Set point value|points: int:Point value|void|coin.setPointValue(25);|VALUE
+show()|Make collectible visible and active|none|void|coin.show();|LIFECYCLE
+hide()|Hide collectible (still exists)|none|void|coin.hide();|LIFECYCLE
+destroy()|Destroy and remove collectible|none|void|coin.destroy();|LIFECYCLE
+setName(name)|Set custom name|name: String:Display name|void|coin.setName("MagicCoin");|LIFECYCLE
+getName()|Get collectible name|none|String|String name = coin.getName();|LIFECYCLE
+setPosition(x,y)|Set position|x: float:X coordinate, y: float:Y coordinate|void|coin.setPosition(5.0f, 3.0f);|POSITION
+getX()|Get X coordinate|none|float|float x = coin.getX();|POSITION
+getY()|Get Y coordinate|none|float|float y = coin.getY();|POSITION
+move(dx,dy)|Move by delta amount|dx: float:Change in X, dy: float:Change in Y|void|coin.move(1.0f, 0);|POSITION
+addCollider(width,height)|Add collision box|width: float:Collider width, height: float:Collider height|void|coin.addCollider(0.5f, 0.5f);|COLLISION
+hasCollider()|Check if has collision component|none|boolean|if(coin.hasCollider()) enableCollection();|COLLISION
+isColliding(other)|Check collision with another entity|other: Entity:Entity to check|boolean|if(coin.isColliding(player)) coin.collect();|COLLISION
+containsPoint(x,y)|Check if point is inside bounds|x: float:X coordinate, y: float:Y coordinate|boolean|if(coin.containsPoint(mouseX,mouseY)) highlight();|COLLISION
+getId()|Get unique ID|none|long|long id = coin.getId();|UTILITY
+isActive()|Check if active in game world|none|boolean|if(coin.isActive()) updateAnimation();|STATE
+setActive(active)|Activate or deactivate|active: boolean:True activates|void|coin.setActive(false);|STATE
+isVisible()|Check if visible on screen|none|boolean|if(coin.isVisible()) render();|STATE
+setVisible(visible)|Show or hide rendering|visible: boolean:True shows|void|coin.setVisible(true);|STATE
+getWidth()|Get width in world units|none|float|float width = coin.getWidth();|UTILITY
+getHeight()|Get height in world units|none|float|float height = coin.getHeight();|UTILITY
+
+[KillZone]
+[TYPES]
+TYPE | Instant Kill Mode | Entity dies immediately on touch (use setInstantKill()) | #ff0000
+TYPE | Damage Over Time Mode | Deals continuous damage while inside (use setDamageOverTime()) | #ff4444
+TYPE | Push Only Mode | Pushes entities without damaging (use setPushOnly()) | #ff8888
+TYPE | Fixed Damage Mode | Deals specific damage amount once on touch (use setDamage()) | #ff6666
+[METHODS]
+KillZone(x,y,width,height)|Create killzone with size|x: float:X coordinate, y: float:Y coordinate, width: float:Width in world units, height: float:Height in world units|KillZone|KillZone lava = new KillZone(2, 3, 6, 1);|CONSTRUCTOR
+KillZone(x,y,width,height,damage)|Create killzone with custom damage|x: float:X coordinate, y: float:Y coordinate, width: float:Width, height: float:Height, damage: int:Damage amount|KillZone|KillZone spikes = new KillZone(5, 4, 1, 1, 25);|CONSTRUCTOR
+setDamage(damage)|Set instant damage amount|damage: int:Damage dealt on touch|KillZone|killzone.setDamage(25);|DAMAGE
+setDamageOverTime(dps)|Set damage per second|dps: float:Damage per second while inside|KillZone|killzone.setDamageOverTime(10.0f);|DAMAGE
+setInstantKill()|Set instant kill mode|none|KillZone|killzone.setInstantKill();|DAMAGE
+setNoDamage()|Clear all damage (safe zone)|none|KillZone|killzone.setNoDamage();|DAMAGE
+setPushOnly(force)|Push entities only|force: float:Push force magnitude|KillZone|killzone.setPushOnly(15.0f);|DAMAGE
+setPushOnly(force,direction)|Push in specific direction|force: float:Push force, direction: Vector2:Push direction|KillZone|killzone.setPushOnly(20.0f, Vector2.UP);|DAMAGE
+killOnlyPlayers()|Only affect players|none|KillZone|killzone.killOnlyPlayers();|TARGET
+killOnlyEnemies()|Only affect enemies|none|KillZone|killzone.killOnlyEnemies();|TARGET
+killAll()|Affect all living entities|none|KillZone|killzone.killAll();|TARGET
+ignoreTag(tag)|Ignore entities with specific tag|tag: String:Tag name to ignore|KillZone|killzone.ignoreTag("boss");|TARGET
+activate()|Activate killzone|none|KillZone|killzone.activate();|ACTIVATION
+deactivate()|Deactivate killzone|none|KillZone|killzone.deactivate();|ACTIVATION
+toggle()|Toggle active state|none|KillZone|killzone.toggle();|ACTIVATION
+setActiveState(active)|Set active state|active: boolean:True activates|KillZone|killzone.setActiveState(true);|ACTIVATION
+disableFor(seconds)|Disable for specified seconds|seconds: float:Seconds to disable|KillZone|killzone.disableFor(3.0f);|ACTIVATION
+enableFor(seconds)|Enable for specified seconds|seconds: float:Seconds to enable|KillZone|killzone.enableFor(5.0f);|ACTIVATION
+setSafeFor(seconds)|Make safe for seconds (no damage)|seconds: float:Seconds of safety|KillZone|killzone.setSafeFor(2.0f);|ACTIVATION
+pulse(interval,duration)|Make killzone pulse on and off|interval: float:Seconds between pulses, duration: float:Seconds each pulse lasts|KillZone|killzone.pulse(1.0f, 0.5f);|ACTIVATION
+isActive()|Check if killzone is active|none|boolean|if(killzone.isActive()) showWarning();|STATE
+isDangerous()|Check if currently dangerous|none|boolean|if(killzone.isDangerous()) playAlert();|STATE
+getDangerLevel(position)|Get danger level at position (0=safe, 1=deadly)|position: Vector2:Position to check|float|float danger = killzone.getDangerLevel(player.getPosition());|STATE
+isTouching(entity)|Check if entity is touching this killzone|entity: Entity:Entity to check|boolean|if(killzone.isTouching(player)) applyDamage();|STATE
+getTouchingObjects()|Get all entities currently touching|none|List<LivingEntity>|List<LivingEntity> inside = killzone.getTouchingObjects();|STATE
+getTouchDuration(entity)|Get how long entity has been touching|entity: LivingEntity:Entity to check|float|float time = killzone.getTouchDuration(player);|STATE
+getTouchPoint(entity)|Get point where entity first touched|entity: Entity:Entity to query|Vector2|Vector2 point = killzone.getTouchPoint(player);|STATE
+isPointInside(point)|Check if point is inside killzone|point: Vector2:Point to check|boolean|if(killzone.isPointInside(mousePos)) showCursor();|POSITION
+isPointInside(x,y)|Check if point is inside killzone|x: float:X coordinate, y: float:Y coordinate|boolean|if(killzone.isPointInside(5, 3)) trigger();|POSITION
+getClosestPoint(from)|Get closest point on killzone boundary|from: Vector2:Reference point|Vector2|Vector2 closest = killzone.getClosestPoint(playerPos);|POSITION
+getCenter()|Get center of killzone|none|Vector2|Vector2 center = killzone.getCenter();|POSITION
+distanceFrom(point)|Get distance from point to killzone|point: Vector2:Point to measure from|float|float dist = killzone.distanceFrom(player.getPosition());|POSITION
+getSafeDirection(from)|Get direction pointing away from killzone|from: Vector2:Position to escape from|Vector2|Vector2 safe = killzone.getSafeDirection(playerPos);|POSITION
+contains(entity)|Check if killzone contains entity|entity: Entity:Entity to check|boolean|if(killzone.contains(player)) damage();|STATE
+getObjectCount()|Get number of entities inside|none|int|int count = killzone.getObjectCount();|STATE
+getRandomPointInside()|Get random point inside killzone|none|Vector2|Vector2 point = killzone.getRandomPointInside();|POSITION
+onObjectEnter(callback)|Callback when entity enters killzone|callback: Consumer<LivingEntity>:Function called on entry|KillZone|killzone.onObjectEnter(e -> playSplashSound());|EVENTS
+onObjectExit(callback)|Callback when entity exits killzone|callback: Consumer<LivingEntity>:Function called on exit|KillZone|killzone.onObjectExit(e -> playExitSound());|EVENTS
+onObjectKilled(callback)|Callback when entity is killed by killzone|callback: Consumer<LivingEntity>:Function called on kill|KillZone|killzone.onObjectKilled(e -> addScore(100));|EVENTS
+clearEvents()|Clear all event callbacks|none|KillZone|killzone.clearEvents();|EVENTS
+showBounds(show)|Show/hide killzone bounds for debugging|show: boolean:True shows debug bounds|KillZone|killzone.showBounds(true);|DEBUG
+setDebugColor(color)|Set debug visualization color|color: Color:Debug color|KillZone|killzone.setDebugColor(Color.YELLOW);|DEBUG
+setActiveColor(color)|Set color when killzone is active|color: Color:Active state color|KillZone|killzone.setActiveColor(Color.RED);|APPEARANCE
+setInactiveColor(color)|Set color when killzone is inactive|color: Color:Inactive state color|KillZone|killzone.setInactiveColor(Color.GRAY);|APPEARANCE
+setColor(colorName)|Set killzone color by name|colorName: String:Color name (RED, ORANGE, BLUE, GREEN, SILVER, BLACK)|void|killzone.setColor("ORANGE");|APPEARANCE
+getBlockWidth()|Get killzone width|none|float|float width = killzone.getBlockWidth();|UTILITY
+getBlockHeight()|Get killzone height|none|float|float height = killzone.getBlockHeight();|UTILITY
+setSize(width,height)|Set killzone size|width: float:New width, height: float:New height|void|killzone.setSize(4.0f, 2.0f);|SIZE
+getWidth()|Get width in world units|none|float|float w = killzone.getWidth();|UTILITY
+getHeight()|Get height in world units|none|float|float h = killzone.getHeight();|UTILITY
+setPosition(x,y)|Set position|x: float:X coordinate, y: float:Y coordinate|void|killzone.setPosition(5.0f, 3.0f);|POSITION
+getX()|Get X coordinate|none|float|float x = killzone.getX();|POSITION
+getY()|Get Y coordinate|none|float|float y = killzone.getY();|POSITION
+move(dx,dy)|Move killzone by delta amount|dx: float:Change in X, dy: float:Change in Y|void|killzone.move(2.0f, 0);|POSITION
+show()|Make killzone visible and active|none|void|killzone.show();|LIFECYCLE
+hide()|Hide killzone (still exists)|none|void|killzone.hide();|LIFECYCLE
+destroy()|Destroy and remove killzone|none|void|killzone.destroy();|LIFECYCLE
+setName(name)|Set custom killzone name|name: String:Display name|void|killzone.setName("LavaPit");|LIFECYCLE
+getName()|Get killzone name|none|String|String name = killzone.getName();|LIFECYCLE
+setActive(active)|Set active state|active: boolean:True activates|void|killzone.setActive(true);|STATE
+isVisible()|Check if visible on screen|none|boolean|if(killzone.isVisible()) render();|STATE
+setVisible(visible)|Show or hide rendering|visible: boolean:True shows|void|killzone.setVisible(true);|STATE
+addCollider(width,height)|Add collision box|width: float:Collider width, height: float:Collider height|void|killzone.addCollider(6.0f, 1.0f);|COLLISION
+hasCollider()|Check if has collision component|none|boolean|if(killzone.hasCollider()) enableDetection();|COLLISION
+isColliding(other)|Check collision with another entity|other: Entity:Entity to check|boolean|if(killzone.isColliding(player)) killzone.onTouch(player);|COLLISION
+containsPoint(x,y)|Check if point is inside bounds|x: float:X coordinate, y: float:Y coordinate|boolean|if(killzone.containsPoint(mouseX,mouseY)) showTooltip();|COLLISION
+setAsTrigger()|Make killzone a trigger zone|none|void|killzone.setAsTrigger();|COLLISION
+setAsSolid()|Make killzone solid (blocks movement)|none|void|killzone.setAsSolid();|COLLISION
+isSolid()|Check if killzone is solid|none|boolean|if(killzone.isSolid()) blockMovement();|COLLISION
+onCollision(other,handler)|Register collision callback|other: Entity:Entity to watch, handler: Runnable:Action to run|void|killzone.onCollision(player, () -> player.takeDamage(10));|COLLISION
+clearCollisionHandler()|Clear collision callback|none|void|killzone.clearCollisionHandler();|COLLISION
+getId()|Get unique ID|none|long|long id = killzone.getId();|UTILITY
+
+[Background]
+[TYPES]
+TYPE | Background | Background image for the game world | #88aaff
+[METHODS]
+setBackground(filename)|Set background image. Available image: bg1.jpg,sky.jpg|filename: String:Path to image file|void|setBackground("/bg1.jpg");|VISUAL
+clearBackground()|Clear background image|none|void|clearBackground();|VISUAL
+
+[HealthBar]
+[TYPES]
+TYPE | HealthBar | Visual display showing player's current health | #00ff00
+[METHODS]
+showHealthHUD(enabled)|Show or hide the health bar|enabled: boolean:True shows, false hides|void|showHealthHUD(true);|UI
+
+[Gravity]
+[TYPES]
+TYPE | Gravity | Global gravity control for the physics system | #03edf9
+[METHODS]
+setGravity(enabled)|Enable or disable global gravity|enabled: boolean:True enables gravity|void|setGravity(true);|PHYSICS
+setGravity(value)|Set custom global gravity strength|value: float:Gravity strength|void|setGravity(0.8f);|PHYSICS
+
+[InputSystem]
+[TYPES]
+TYPE | InputSystem | Keyboard and mouse input detection | #ff6ec7
+[METHODS]
+isKeyPressed(key)|Check if key is currently held down|key: String:Key name (W, A, S, D, SPACE, etc.)|boolean|if(isKeyPressed("SPACE")) jump();|KEYBOARD
+getMouseX()|Get mouse X position in world coordinates|none|float|float x = getMouseX();|MOUSE
+getMouseY()|Get mouse Y position in world coordinates|none|float|float y = getMouseY();|MOUSE
+isMousePressed()|Check if mouse left button is held down|none|boolean|if(isMousePressed()) attack();|MOUSE
+isMouseClicked()|Check if mouse left button was just clicked|none|boolean|if(isMouseClicked()) select();|MOUSE
+
+[MessageBoard]
+[TYPES]
+TYPE | MessageBoard | Display text messages on screen with customizable appearance | #4CAF50
+[METHODS]
+showMessage(text)|Show message permanently until hide() is called|text: String:Message to display|void|messageBoard.showMessage("Welcome!");|DISPLAY
+showFor(text, seconds)|Show message for specified duration then auto-hide|text: String:Message to display, seconds: float:Duration in seconds|void|messageBoard.showFor("Get Ready!", 3);|DISPLAY
+hide()|Hide the message board and clear message|none|void|messageBoard.hide();|DISPLAY
+setSize(width, height)|Set message board size in grid units|width: float:Width in grid cells, height: float:Height in grid cells|void|messageBoard.setSize(10, 3);|APPEARANCE
+setPosition(x, y)|Set position in world coordinates|x: float:X coordinate, y: float:Y coordinate|void|messageBoard.setPosition(5, 10);|POSITION
+setBackgroundColor(color)|Set background color using JavaFX Color|color: Color:JavaFX Color object|void|messageBoard.setBackgroundColor(Color.BLUE);|APPEARANCE
+setBackgroundColor(colorName)|Set background color by name|colorName: String:RED, GREEN, BLUE, YELLOW, BLACK, WHITE, or hex (#RRGGBB)|void|messageBoard.setBackgroundColor("BLACK");|APPEARANCE
+setTextColor(color)|Set text color using JavaFX Color|color: Color:JavaFX Color object|void|messageBoard.setTextColor(Color.YELLOW);|APPEARANCE
+setTextColor(r,g,b)|Set text color using RGB values|r: int:Red 0-255, g: int:Green 0-255, b: int:Blue 0-255|void|messageBoard.setTextColor(255,255,0);|APPEARANCE
+setTextColor(colorName)|Set text color by name|colorName: String:RED, GREEN, BLUE, YELLOW, WHITE, etc. or hex (#RRGGBB)|void|messageBoard.setTextColor("YELLOW");|APPEARANCE
+setFontSize(size)|Set text size in pixels|size: int:Font size (8-72)|void|messageBoard.setFontSize(20);|APPEARANCE
+setPadding(padding)|Set padding around text in grid units|padding: float:Padding value (0-2)|void|messageBoard.setPadding(0.5);|APPEARANCE
+getMessage()|Get current message text|none|String|String text = messageBoard.getMessage();|GET
+isShowing()|Check if message board is currently visible|none|boolean|if(messageBoard.isShowing()) messageBoard.hide();|GET
+
+[Ground]
+[TYPES]
+TYPE | Ground | Solid platform that blocks physical entities with collision detection on all edges | #8B4513
+[TYPESUBTYPE]
+TYPE | GroundType | GROUND | Horizontal ground/platform with darker top edge | #8B4513
+TYPE | GroundType | WALL | Vertical wall with darker side edges | #696969
+TYPE | GroundType | PLATFORM | Platform that can be jumped through from below | #D2B48C
+TYPE | GroundType | SOLID | Generic solid block | #808080
+
+[METHODS]
+Constructor|new Ground(x, y)|Create 1x1 ground tile|x: float:X position, y: float:Y position|Ground|Ground floor = new Ground(5, 5);|CONSTRUCTOR
+Constructor|new Ground(x, y, width, height)|Create ground with custom size|x: float:X position, y: float:Y position, width: float:Width in grid units, height: float:Height in grid units|Ground|Ground platform = new Ground(5, 5, 10, 1);|CONSTRUCTOR
+Constructor|new Ground(x, y, width, height, groundType)|Create ground with custom size and type|x: float:X position, y: float:Y position, width: float:Width, height: float:Height, groundType: GroundType:GROUND, WALL, PLATFORM, or SOLID|Ground|Ground wall = new Ground(5, 5, 1, 10, Ground.GroundType.WALL);|CONSTRUCTOR
+Constructor|new Ground(x, y, width, height, groundType, color)|Create fully customized ground|x: float:X position, y: float:Y position, width: float:Width, height: float:Height, groundType: GroundType:Type of ground, color: Color:Fill color|Ground|Ground grass = new Ground(0, 0, 20, 1, Ground.GroundType.GROUND, Color.GREEN);|CONSTRUCTOR
+setColor(color)|Change ground color|color: Color:JavaFX Color|void|ground.setColor(Color.BROWN);|APPEARANCE
+setColor(r,g,b)|Change ground color using RGB|r: int:Red 0-255, g: int:Green 0-255, b: int:Blue 0-255|void|ground.setColor(139, 69, 19);|APPEARANCE
+setColor(colorName)|Change ground color by name|colorName: String:RED, GREEN, BLUE, GRAY, BROWN, etc.|void|ground.setColor("BROWN");|APPEARANCE
+setGroundType(type)|Change ground behavior and appearance|type: GroundType:GROUND, WALL, PLATFORM, or SOLID|void|ground.setGroundType(Ground.GroundType.PLATFORM);|BEHAVIOR
+getGroundType()|Get current ground type|none|GroundType|GroundType type = ground.getGroundType();|GET
+getColor()|Get current ground color|none|Color|Color c = ground.getColor();|GET
+isCollidingLeft()|Check if entity is colliding with left side|none|boolean|if(ground.isCollidingLeft()) reset();|GET
+isCollidingRight()|Check if entity is colliding with right side|none|boolean|if(ground.isCollidingRight()) bounce();|GET
+isCollidingTop()|Check if entity is colliding with top side (landing)|none|boolean|if(ground.isCollidingTop()) player.setOnGround(true);|GET
+isCollidingBottom()|Check if entity is colliding with bottom side (hitting head)|none|boolean|if(ground.isCollidingBottom()) player.headHit();|GET
+isCollidingAny()|Check if any collision is happening|none|boolean|if(ground.isCollidingAny()) playSound();|GET
+

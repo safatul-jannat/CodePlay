@@ -47,6 +47,8 @@ public class TemplateExpander {
         template.append("import javafx.scene.paint.Color;\n");
         template.append("import com.example.codeplayfx.world.render.ShapeType;\n");
         template.append("import com.example.codeplayfx.world.entity.Collectible;\n");
+        template.append("import com.example.codeplayfx.world.entity.MessageBoard;\n");
+
 
         template.append("\n");
 

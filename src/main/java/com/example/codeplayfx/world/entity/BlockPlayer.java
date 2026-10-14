@@ -178,7 +178,7 @@ public class BlockPlayer extends LivingEntity {
             } else {
                 // VELOCITY mode: Physics-based jump
                 if (isOnGround() && !isAutoJumping && !jumpRequested) {
-                    super.jump(jumpPower);  // Call parent jump method
+                    super.jump(-jumpPower);  // Call parent jump method
                     isAutoJumping = true;
                     jumpRequested = true;
                     System.out.println("Physics jump executed with power: " + jumpPower);
@@ -196,7 +196,7 @@ public class BlockPlayer extends LivingEntity {
             }
         }
     }
-    // ✅ ADD THIS - Start the auto jump
+    // ADD THIS - Start the auto jump
     private void startAutoJump() {
         isAutoJumping = true;
         jumpStartY = getY();
@@ -259,7 +259,7 @@ public class BlockPlayer extends LivingEntity {
                 setPosition(getX(), jumpStartY);
                 isAutoJumping = false;
 
-                // ✅ Reset jump state completely
+                //  Reset jump state completely
                 jumpRequested = false;
 
                 if (useGravity && movementStyle == MovementStyle.DIRECT) {
@@ -305,7 +305,7 @@ public class BlockPlayer extends LivingEntity {
     public void setOnGround(boolean onGround) {
         super.setOnGround(onGround);
 
-        // ✅ FIXED - Reset auto-jump when landing
+        //  FIXED - Reset auto-jump when landing
         if (onGround && useGravity && movementStyle == MovementStyle.VELOCITY) {
             isAutoJumping = false;
         }

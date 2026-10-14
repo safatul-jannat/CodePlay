@@ -1,34 +1,20 @@
-[APP_DESCRIPTION]
-CodePlay is an OOP-based gaming platform where users interact with high-level objects like Player, Ground, Enemy, and Game. Physics and input handling are encapsulated within objects - users just call methods on these objects to create amazing games!
+ABOUT CODEPLAY
 
-Key Features:
-• Object-oriented game development
-• Pre-built game objects (Player, Enemy, Ground, etc.)
-• Encapsulated physics and input systems
-• Real-time object interaction
-• Visual feedback for all object actions
-• Simple method calls for complex behaviors
+CodePlay is an educational gaming platform built to teach Object-Oriented Programming through game development.
 
-This is a longer description that will definitely exceed the box height so we can test the truncation and read more functionality. We want to make sure that when the text is too long, users can click to see the full content in a beautiful popup window that maintains the same aesthetic as the main application.
+HOW IT WORKS
 
+Users write Java code using pre-built game entities like BlockPlayer (the character), Collectible (coins/powerups), Enemy, Ground, and KillZone. Each entity has built-in physics, collision detection, and customizable properties.
 
-aaaaaaaaaaaaaaaaaaaaaaa
-a
+The game runs in real-time with:
+• Gravity and movement physics
+• Keyboard/mouse input handling
+• Health and damage systems
+• Score tracking for collectibles
 
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaa
-a
-aaaaaaaaaaaaaaaaaaaaa
-a
-aaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaa
-a
-a
-a
-a
-a
-aa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-a
-aaaa
+WHY WE MADE IT
+
+Learning OOP concepts like inheritance, polymorphism, and encapsulation can be abstract and difficult. CodePlay makes these concepts tangible by letting students see how Java classes interact in a living, playable game world.
+
+VERSION 1.0.0
+

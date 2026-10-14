@@ -42,12 +42,12 @@ public class Ground extends StaticEntity {
 
     /** 1×1 ground tile */
     public Ground(float x, float y) {
-        this(x, y, 1.0f, 1.0f, GroundType.GROUND);
+        this(x, y, 1.0f, 1.0f, GroundType.SOLID);
     }
 
     /** Ground with custom size */
     public Ground(float x, float y, float width, float height) {
-        this(x, y, width, height, GroundType.GROUND);
+        this(x, y, width, height, GroundType.SOLID);
     }
 
     /** Ground with custom size and type */

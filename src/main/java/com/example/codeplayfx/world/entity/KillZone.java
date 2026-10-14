@@ -739,6 +739,27 @@ public class KillZone extends StaticEntity {
         return height;
     }
 
+// Add at the end of KillZone class (before toString)
+
+    public int getDamageAmount() {
+        return damageAmount;
+    }
+
+    public float getDamagePerSecond() {
+        return damagePerSecond;
+    }
+
+    public boolean isInstantKill() {
+        return instantKill;
+    }
+
+    public float getPushForce() {
+        return pushForce;
+    }
+
+    public Vector2 getPushDirection() {
+        return pushDirection;
+    }
 
     // ========== TO STRING ==========
     // OVERRIDES: Object.toString()

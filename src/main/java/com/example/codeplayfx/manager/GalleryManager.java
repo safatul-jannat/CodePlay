@@ -33,12 +33,12 @@ public class GalleryManager {
             Project project = dbManager.loadProject(metadata.name);
             if (project != null) {
                 projects.add(project);
-                System.out.println("✅ Loaded: " + metadata.name);
+                System.out.println(" Loaded: " + metadata.name);
             } else {
-                System.err.println("❌ Failed to load: " + metadata.name);
+                System.err.println(" Failed to load: " + metadata.name);
             }
         }
-        System.out.println("📚 Loaded " + projects.size() + " projects from database");
+        System.out.println(" Loaded " + projects.size() + " projects from database");
     }
 
     /**
@@ -85,7 +85,7 @@ public class GalleryManager {
             Project fullProject = loadFullProject(project.getName());
             if (fullProject != null) {
                 java.nio.file.Files.write(destination.toPath(), fullProject.getCode().getBytes());
-                System.out.println("📤 Exported project to: " + destination.getAbsolutePath());
+                System.out.println(" Exported project to: " + destination.getAbsolutePath());
             }
         } catch (Exception e) {
             System.err.println("Failed to export project: " + project.getName());
@@ -99,7 +99,7 @@ public class GalleryManager {
     public void importProject(File file) {
         try {
             String code = new String(java.nio.file.Files.readAllBytes(file.toPath()));
-            String name = file.getName().replace(".java", "").replace(".cpg", "");
+            String name = file.getName().replace(".java", "");
 
             // Remove timestamp if present (e.g., "MyProject_20241201_123456" -> "MyProject")
             if (name.contains("_")) {
@@ -107,7 +107,7 @@ public class GalleryManager {
             }
 
             saveProject(name, code, "");
-            System.out.println("📥 Imported project: " + name);
+            System.out.println(" Imported project: " + name);
 
         } catch (Exception e) {
             System.err.println("Failed to import project: " + file.getName());
@@ -141,6 +141,6 @@ public class GalleryManager {
 
     public void exportDatabaseToCSV() {
         dbManager.exportToCSV(System.getProperty("user.home") + "/Desktop/CodePlayDB_Export.csv");
-        System.out.println("✅ Database exported to Desktop for teacher viewing");
+        System.out.println(" Database exported to Desktop for teacher viewing");
     }
 }

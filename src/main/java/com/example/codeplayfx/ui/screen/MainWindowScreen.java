@@ -303,7 +303,19 @@ public class MainWindowScreen extends Screen {
      */
     public void newProject() {
         // Clear code editor with default template
-        String defaultCode = "// Welcome to CodePlayFX!\n// Start coding here...\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello World!\");\n    }\n}";
+        String defaultCode = "public class Game {\n" +
+                "        \n" +
+                "       boolean init=false; \n" +
+                "        public void execute() {\n" +
+                "           clearBackground();\n" +
+                "            if(!init) {\n" +
+                "            \n" +
+                "            \n" +
+                "            init=true;\n" +
+                "            }\n" +
+                "        }\n" +
+                "        \n" +
+                "    }";
         codePanel.setCodeContent(defaultCode);
 
         // Clear documentation with default text

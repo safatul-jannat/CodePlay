@@ -3,10 +3,8 @@ package com.example.codeplayfx.scripting.runtime;
 import com.example.codeplayfx.world.entity.Collectible;
 import com.example.codeplayfx.world.GameWorld;
 import com.example.codeplayfx.engine.system.InputSystem;
-import com.example.codeplayfx.engine.system.PhysicsSystem;
 import com.example.codeplayfx.world.entity.Entity;
 import com.example.codeplayfx.engine.core.GameEngine;
-import com.example.codeplayfx.world.entity.KillZone;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,6 +152,7 @@ public abstract class UserGame {
             world.getHUDRenderer().setEnabled(enabled);
         }
     }
+
 
 
 

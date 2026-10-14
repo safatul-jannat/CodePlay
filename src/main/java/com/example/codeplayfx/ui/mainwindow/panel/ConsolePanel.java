@@ -35,6 +35,16 @@ public class ConsolePanel extends UIPanel {
                         "-fx-font-family: 'Consolas', 'Monaco', 'Courier New', monospace; " +
                         "-fx-font-size: 12px;"
         );
+//        System.setOut(new java.io.PrintStream(System.out) {
+//            @Override
+//            public void println(String x) {
+//                if (x != null) {
+//                    Platform.runLater(() -> userOutput(x));
+//                }
+//                super.println(x); // Remove this line if you don't want it in real console
+//            }
+//        });
+
         log("Console initialized. Ready for output.");
     }
 
@@ -218,6 +228,7 @@ public class ConsolePanel extends UIPanel {
             }
         });
     }
+
     public Pane getRoot() {
         return (Pane) root;
     }
