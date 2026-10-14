@@ -23,7 +23,6 @@ public class GameEngine {
     private Time time;
     private SystemManager systemManager;
     private ScriptRuntime scriptRuntime;
-
     // Background image
     private Image backgroundImage = null;
 
@@ -96,12 +95,16 @@ public class GameEngine {
                 renderEntityFallback(entity);
             }
         }
+        //4.health
+        gameWorld.getHUDRenderer().render(gameWorld, graphicsContext);
+        // 5. Draw MessageBoard on top (ADD THIS)
 
-        // 4. FPS overlay (always on top)
+        // 6. FPS overlay (always on top)
         if (config.isShowFPS()) {
             renderFPS();
         }
     }
+
 
     private void renderEntityFallback(Entity entity) {
         var screenPos = entity.getScreenPosition();
@@ -187,6 +190,8 @@ public class GameEngine {
         gameLoop.start();
         Logger.info("GameEngine started");
     }
+
+
 
     public void pause() {
         if (!state.canPause()) {

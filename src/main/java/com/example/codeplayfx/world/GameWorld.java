@@ -1,9 +1,11 @@
 package com.example.codeplayfx.world;
 
+import com.example.codeplayfx.engine.system.CollisionSystem;
 import com.example.codeplayfx.engine.system.PhysicsSystem;
 import com.example.codeplayfx.util.Logger;
 import com.example.codeplayfx.world.entity.Entity;
 import com.example.codeplayfx.world.physics.CoordinateSystem;
+import com.example.codeplayfx.world.render.HUDRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +17,12 @@ public class GameWorld {
     private List<Entity> entities;
     private List<Entity> entitiesToAdd;    // Entities to add next frame
     private List<Entity> entitiesToRemove; // Entities to remove next frame
+    private HUDRenderer hudRenderer;
 
     // Coordinate system
     private CoordinateSystem coordinateSystem;
+    private CollisionSystem collisionSystem;
+
 
     // Game state
     private boolean running;
@@ -30,9 +35,12 @@ public class GameWorld {
         this.entities = new CopyOnWriteArrayList<>();
         this.entitiesToAdd = new ArrayList<>();
         this.entitiesToRemove = new ArrayList<>();
+        this.hudRenderer = new HUDRenderer();
+        this.hudRenderer.setEnabled(false); // OFF by default
 
         // Create coordinate system (50px grid by default)
         this.coordinateSystem = new CoordinateSystem(50.0);
+        this.collisionSystem = new CollisionSystem(this);
 
         // Give all entities access to coordinate system
         Entity.setCoordinateSystem(coordinateSystem);
@@ -133,6 +141,9 @@ public class GameWorld {
             if (entity.isActive()) {
                 entity.update(deltaTime);
             }
+        }
+        if (collisionSystem != null) {
+            collisionSystem.update(deltaTime);
         }
 
         if (physicsSystem != null) {
@@ -258,6 +269,9 @@ public class GameWorld {
         }
         return count;
     }
+    public HUDRenderer getHUDRenderer() {
+        return hudRenderer;
+    }
 
     // ========== COORDINATE SYSTEM ==========
 
@@ -295,6 +309,9 @@ public class GameWorld {
 
     public float getTotalTime() {
         return totalTime;
+    }
+    public CollisionSystem getCollisionSystem() {
+        return collisionSystem;
     }
 
     @Override

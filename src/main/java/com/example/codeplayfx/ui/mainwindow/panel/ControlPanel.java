@@ -5,6 +5,7 @@ import com.example.codeplayfx.engine.core.GameEngine;
 import com.example.codeplayfx.compiler.GameCompiler;
 import com.example.codeplayfx.compiler.CompilationException;
 import com.example.codeplayfx.scripting.runtime.UserGame;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -40,9 +41,14 @@ public class ControlPanel extends UIPanel {
         setupButtonActions();
         updateButtonStates();
         updateStatus("Ready - Click Run to start");
+        setupRunButtonFocus();
     }
 
     private void setupButtonActions() {
+        runButton.setFocusTraversable(false);
+        pauseButton.setFocusTraversable(false);
+        stopButton.setFocusTraversable(false);
+
         runButton.setOnAction(e -> onRunClicked());
         pauseButton.setOnAction(e -> onPauseClicked());
         stopButton.setOnAction(e -> onStopClicked());
@@ -84,6 +90,8 @@ public class ControlPanel extends UIPanel {
      */
     private void startGame(GameEngine engine, String code) {
         try {
+            mainWindow.getCodePanel().setEditorFocusable(false);
+
             engine.getGameWorld().clear();
             engine.stop();
             // Clear console before compilation
@@ -101,7 +109,10 @@ public class ControlPanel extends UIPanel {
 
             // Start engine
             engine.start();
-
+            // Request focus for game canvas
+            Platform.runLater(() -> {
+                mainWindow.getGamePanel().getGameCanvas().requestFocus();
+            });
             isRunning = true;
             isPaused = false;
             codeModified = false;
@@ -111,6 +122,8 @@ public class ControlPanel extends UIPanel {
             mainWindow.getConsolePanel().log("✓ Game started successfully");
 
         } catch (CompilationException e) {
+            mainWindow.getCodePanel().setEditorFocusable(true);
+
             // Compilation failed - show error in console
             updateStatus("Compilation failed");
             mainWindow.getConsolePanel().error("Compilation failed:");
@@ -145,6 +158,8 @@ public class ControlPanel extends UIPanel {
 
         } else if (isPaused) {
             engine.resume();
+            // Request focus for game canvas
+            mainWindow.getGamePanel().requestGameFocus();
             isPaused = false;
             updateButtonStates();
             updateStatus("Game running...");
@@ -158,6 +173,8 @@ public class ControlPanel extends UIPanel {
         if (isRunning) {
             engine.stop();
             mainWindow.getGamePanel().clearGameObjects();
+
+            mainWindow.getCodePanel().setEditorFocusable(true);
 
             isRunning = false;
             isPaused = false;
@@ -205,6 +222,16 @@ public class ControlPanel extends UIPanel {
         return isRunning;
     }
 
+    public void setupRunButtonFocus() {
+        if (runButton != null) {
+            runButton.setOnAction(event -> {
+                onRunClicked();
+                if (mainWindow.getGamePanel() != null) {
+                    mainWindow.getGamePanel().getGameCanvas().requestFocus();
+                }
+            });
+        }
+    }
     public boolean isPaused() {
         return isPaused;
     }

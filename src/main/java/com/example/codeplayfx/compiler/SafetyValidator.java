@@ -67,7 +67,7 @@ public class SafetyValidator {
     /**
      * Validate user code for safety
      */
-    public void validate() {
+    public void validate() throws CompilationException {
         violations.clear();
         
         // Check forbidden imports

@@ -94,6 +94,8 @@ public class MainWindowScreen extends Screen {
         toolPanel.initialize();
         topNavPanel.initialize();
         consolePanel.initialize();
+        codePanel.focusEditor();
+
 
         if (!isFirstShow && !savedCodeContent.isEmpty()) {
             codePanel.setCodeContent(savedCodeContent);
@@ -126,6 +128,10 @@ public class MainWindowScreen extends Screen {
         Platform.runLater(() -> {
             if (codePanel != null) {
                 codePanel.setupKeyboardShortcuts();
+            }
+
+            if (gamePanel != null && gamePanel.getGameEngine() != null) {
+                gamePanel.getGameEngine().attachInputToScene(getScene());
             }
         });
     }
@@ -200,8 +206,20 @@ public class MainWindowScreen extends Screen {
     public void focusCodeEditor() { if (codePanel != null) codePanel.focusEditor(); }
     public void returnToCodeView() { focusCodeEditor(); }
 
-    public void onCreateTabClicked() { focusCodeEditor(); }
+    public void onCreateTabClicked() {
+        // If game is running, don't switch focus to editor
+        if (controlPanel != null && controlPanel.isRunning()) {
+            focusGame();
+        } else {
+            focusCodeEditor();
+        }
+    }
 
+    private void focusGame() {
+        if (gamePanel != null) {
+            gamePanel.getGameCanvas().requestFocus();
+        }
+    }
     public void onGalleryTabClicked() {
         System.out.println("MainWindow: Gallery button clicked");
         onHide();
@@ -266,17 +284,51 @@ public class MainWindowScreen extends Screen {
         updateProjectTitle();
     }
 
-    public void setupKeyboardShortcuts() {
-        // Add Ctrl+S shortcut
+    private void setupKeyboardShortcuts() {
         Scene scene = getScene();
         if (scene != null) {
             scene.getAccelerators().put(
                     new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN),
                     this::quickSave
             );
+
+            // DON'T add accelerator for SPACE - let game handle it
+            // Remove any existing space accelerators
+            scene.getAccelerators().remove(new KeyCodeCombination(KeyCode.SPACE));
         }
     }
 
+    /**
+     * Create a new project - clears editor and resets to untitled
+     */
+    public void newProject() {
+        // Clear code editor with default template
+        String defaultCode = "public class Game {\n" +
+                "        \n" +
+                "       boolean init=false; \n" +
+                "        public void execute() {\n" +
+                "           clearBackground();\n" +
+                "            if(!init) {\n" +
+                "            \n" +
+                "            \n" +
+                "            init=true;\n" +
+                "            }\n" +
+                "        }\n" +
+                "        \n" +
+                "    }";
+        codePanel.setCodeContent(defaultCode);
+
+        // Clear documentation with default text
+        String defaultDoc = "// Project Documentation\n// Describe your project here...\n\n## Overview\n## Features\n## Usage";
+
+        // Update project name to untitled
+        currentProjectName = "untitled";
+        isNewProject = true;
+        updateProjectTitle();
+
+        showTemporaryMessage("New project created - 'untitled'");
+        System.out.println("📄 New project created, editor cleared, name reset to 'untitled'");
+    }
     /**
      * Quick save - if project has a name, save directly without popup
      * If it's untitled, show save popup
@@ -298,14 +350,19 @@ public class MainWindowScreen extends Screen {
     }
     public void showSavePopup(boolean isSaveAs) {
         String currentCode = codePanel.getCode();
+        String currentDoc = ""; // Get documentation if you have it
         Button anchorButton = isSaveAs ? toolPanel.getSaveAsButton() : toolPanel.getSaveButton();
 
-        // Use the 4-parameter version
         PopupManager.showSavePopup(
                 anchorButton,
                 stage,
                 currentCode,
+                currentDoc,
+                isSaveAs ? currentProjectName : null,  // Pass current name for Save As
                 (savedProjectName) -> {
+                    // ACTUALLY SAVE the project here
+                    GalleryManager.getInstance().saveProject(savedProjectName, currentCode, currentDoc);
+
                     this.currentProjectName = savedProjectName;
                     this.isNewProject = false;
                     updateProjectTitle();

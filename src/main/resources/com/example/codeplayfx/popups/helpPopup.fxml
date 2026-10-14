@@ -17,58 +17,108 @@
         <Insets bottom="15" left="15" right="15" top="15" />
     </padding>
 
-    <Label style="-fx-text-fill: #ff6ec7; -fx-font-weight: bold; -fx-font-size: 18px;" text="❓ How to Create a Game" />
+    <Label style="-fx-text-fill: #ff6ec7; -fx-font-weight: bold; -fx-font-size: 18px;" text="❓ How to Use CodePlay" />
 
     <ScrollPane fitToWidth="true" prefHeight="400.0" style="-fx-background: #1a0b2e; -fx-background-color: #1a0b2e;">
         <VBox spacing="15" style="-fx-background-color: #1a0b2e; -fx-padding: 10;">
 
+            <!-- SECTION 1: Run / Stop -->
             <VBox spacing="5">
-                <Label style="-fx-text-fill: #00f7ff; -fx-font-weight: bold; -fx-font-size: 14px;" text="📌 Step 1: Create a Class" />
+                <Label style="-fx-text-fill: #00f7ff; -fx-font-weight: bold; -fx-font-size: 14px;" text="▶  Running Your Game" />
+                <Label wrapText="true" style="-fx-text-fill: #cccccc;"
+                       text="Click the ▶ Run button in the toolbar to start your game." />
+                <Label wrapText="true" style="-fx-text-fill: #ffaa00;"
+                       text="⚠  While the game is running, the code editor is locked — you cannot type or make changes." />
+                <Label wrapText="true" style="-fx-text-fill: #cccccc;"
+                       text="To edit your code again: click ■ Stop, make your changes, then click ▶ Run again." />
+            </VBox>
+
+            <Separator style="-fx-background-color: #5905f5;" />
+
+            <!-- SECTION 2: show() is required -->
+            <VBox spacing="5">
+                <Label style="-fx-text-fill: #00f7ff; -fx-font-weight: bold; -fx-font-size: 14px;" text="👁  Always Call show()" />
+                <Label wrapText="true" style="-fx-text-fill: #cccccc;"
+                       text="Creating an object does NOT make it appear on screen. You must call .show() or nothing will be visible." />
                 <Label style="-fx-text-fill: #cccccc; -fx-font-family: 'Monospace';"
-                       text="public class MyGame extends UserGame {\n    // Your code here\n}" />
+                       text="player = new BlockPlayer(5, 5);&#10;player.show();  // ← required!" />
             </VBox>
 
             <Separator style="-fx-background-color: #5905f5;" />
 
+            <!-- SECTION 3: execute() runs every frame -->
             <VBox spacing="5">
-                <Label style="-fx-text-fill: #00f7ff; -fx-font-weight: bold; -fx-font-size: 14px;" text="📌 Step 2: Create a Player" />
+                <Label style="-fx-text-fill: #00f7ff; -fx-font-weight: bold; -fx-font-size: 14px;" text="⚠  execute() Runs Every Frame" />
+                <Label wrapText="true" style="-fx-text-fill: #cccccc;"
+                       text="execute() is called ~60 times per second. Without a null check, a new object spawns every frame and the game will crash or lag." />
+                <Label wrapText="true" style="-fx-text-fill: #ffaa00;" text="Always guard your object creation like this:" />
                 <Label style="-fx-text-fill: #cccccc; -fx-font-family: 'Monospace';"
-                       text="BlockPlayer player;\n\npublic void execute() {\n    if (player == null) {\n        player = new BlockPlayer(5, 5);\n        player.show();\n    }\n}" />
+                       text="if (player == null) {&#10;    player = new BlockPlayer(5, 5);&#10;    player.show();&#10;}" />
             </VBox>
 
             <Separator style="-fx-background-color: #5905f5;" />
 
+            <!-- SECTION 4: Background -->
             <VBox spacing="5">
-                <Label style="-fx-text-fill: #00f7ff; -fx-font-weight: bold; -fx-font-size: 14px;" text="📌 Step 3: Add Controls" />
+                <Label style="-fx-text-fill: #00f7ff; -fx-font-weight: bold; -fx-font-size: 14px;" text="🎨  Setting a Background" />
+                <Label wrapText="true" style="-fx-text-fill: #cccccc;"
+                       text="Use setBackground() to set a background color. If you call it every frame without clearing first, backgrounds will stack up." />
+                <Label wrapText="true" style="-fx-text-fill: #ffaa00;" text="Always pair them:" />
                 <Label style="-fx-text-fill: #cccccc; -fx-font-family: 'Monospace';"
-                       text="if (isKeyPressed('RIGHT')) {\n    player.moveRight();\n}\nif (isKeyPressed('LEFT')) {\n    player.moveLeft();\n}\nif (isKeyPressed('SPACE')) {\n    player.jump();\n}" />
+                       text="clearBackground();&#10;setBackground(&quot;darkblue&quot;);" />
+                <Label wrapText="true" style="-fx-text-fill: #cccccc;"
+                       text="If your background only needs to be set once, put it inside the null check so it only runs at startup." />
             </VBox>
 
             <Separator style="-fx-background-color: #5905f5;" />
 
+            <!-- SECTION 5: Gravity -->
             <VBox spacing="5">
-                <Label style="-fx-text-fill: #00f7ff; -fx-font-weight: bold; -fx-font-size: 14px;" text="📌 Step 4: Run Your Game" />
-                <Label style="-fx-text-fill: #cccccc;"
-                       text="Click the '▶ Run' button in the top toolbar to start your game!" />
+                <Label style="-fx-text-fill: #00f7ff; -fx-font-weight: bold; -fx-font-size: 14px;" text="🌍  Gravity is ON by Default" />
+                <Label wrapText="true" style="-fx-text-fill: #cccccc;"
+                       text="Your player will fall as soon as the game starts. For top-down or puzzle games, turn gravity off:" />
+                <Label style="-fx-text-fill: #cccccc; -fx-font-family: 'Monospace';"
+                       text="setGravity(false);" />
+                <Label wrapText="true" style="-fx-text-fill: #cccccc;" text="Or adjust the gravity strength:" />
+                <Label style="-fx-text-fill: #cccccc; -fx-font-family: 'Monospace';"
+                       text="setGravity(0.3f);  // weaker gravity" />
             </VBox>
 
             <Separator style="-fx-background-color: #5905f5;" />
 
+            <!-- SECTION 6: Key names -->
             <VBox spacing="5">
-                <Label style="-fx-text-fill: #00f7ff; -fx-font-weight: bold; -fx-font-size: 14px;" text="🎮 Available Methods" />
-                <Label style="-fx-text-fill: #ffaa00;" text="Movement:" />
-                <Label style="-fx-text-fill: #cccccc;" text="  • moveRight(), moveLeft()" />
-                <Label style="-fx-text-fill: #cccccc;" text="  • moveUp(), moveDown()" />
-                <Label style="-fx-text-fill: #cccccc;" text="  • jump()" />
-
-                <Label style="-fx-text-fill: #ffaa00;" text="Input:" />
-                <Label style="-fx-text-fill: #cccccc;" text="  • isKeyPressed('W') - check if key pressed" />
-                <Label style="-fx-text-fill: #cccccc;" text="  • getMouseX(), getMouseY() - mouse position" />
-
-                <Label style="-fx-text-fill: #ffaa00;" text="Gravity:" />
-                <Label style="-fx-text-fill: #cccccc;" text="  • setGravity(true/false) - toggle gravity" />
-                <Label style="-fx-text-fill: #cccccc;" text="  • setGravity(0.8) - set gravity strength" />
+                <Label style="-fx-text-fill: #00f7ff; -fx-font-weight: bold; -fx-font-size: 14px;" text="⌨  Key Names Are Strings" />
+                <Label wrapText="true" style="-fx-text-fill: #cccccc;"
+                       text="Pass key names as text strings — not characters or numbers:" />
+                <Label style="-fx-text-fill: #cccccc; -fx-font-family: 'Monospace';"
+                       text="isKeyPressed(&quot;LEFT&quot;)&#10;isKeyPressed(&quot;RIGHT&quot;)&#10;isKeyPressed(&quot;SPACE&quot;)&#10;isKeyPressed(&quot;W&quot;) / &quot;A&quot; / &quot;S&quot; / &quot;D&quot;" />
             </VBox>
+
+            <Separator style="-fx-background-color: #5905f5;" />
+
+            <!-- SECTION 7: Enemies -->
+            <VBox spacing="5">
+                <Label style="-fx-text-fill: #00f7ff; -fx-font-weight: bold; -fx-font-size: 14px;" text="👾  Setting Up Enemies" />
+                <Label wrapText="true" style="-fx-text-fill: #cccccc;"
+                       text="Set the enemy's movement pattern and bounds BEFORE calling show(), otherwise it won't move:" />
+                <Label style="-fx-text-fill: #cccccc; -fx-font-family: 'Monospace';"
+                       text="enemy.setPattern(Enemy.Pattern.STRAIGHT);&#10;enemy.setBounds(3, 12);&#10;enemy.show();" />
+                <Label wrapText="true" style="-fx-text-fill: #cccccc;"
+                       text="Collision damage is automatic. When an enemy touches the player, damage is applied with no extra code needed." />
+            </VBox>
+
+            <Separator style="-fx-background-color: #5905f5;" />
+
+            <!-- SECTION 8: Library -->
+            <VBox spacing="5">
+                <Label style="-fx-text-fill: #00f7ff; -fx-font-weight: bold; -fx-font-size: 14px;" text="📚  Learning About Objects" />
+                <Label wrapText="true" style="-fx-text-fill: #cccccc;"
+                       text="For full documentation on BlockPlayer, Enemy, and all available objects and their methods, click the Library button in the toolbar." />
+                <Label wrapText="true" style="-fx-text-fill: #ffaa00;"
+                       text="The Library is your main reference — this Help panel is just for understanding how the app works." />
+            </VBox>
+
         </VBox>
     </ScrollPane>
 

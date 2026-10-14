@@ -12,18 +12,20 @@ import javafx.scene.paint.Color;
 public class BlockPlayer extends LivingEntity {
 
     // ========== CORE FIELDS ==========
-    private float moveSpeed = 0.3f;           // Base movement speed (backward compatibility)
+    private float moveSpeed = 3;           // Base movement speed (backward compatibility)
     private float jumpPower = 8.0f;            // Jump force
     private float flyJumpDistance = 2.0f;      // Auto-jump height
-    //private boolean onGround = false;
     private boolean isAutoJumping = false;
     private float jumpStartY;
     private float jumpTargetY;
     private boolean jumpGoingUp = true;
 
+    //  ADD THIS - Prevent multiple jump triggers
+    private boolean jumpRequested = false;
+
     // ========== MODE-SPECIFIC SPEEDS ==========
-    private float flySpeed = 2.0f;              // Speed for flying mode (gravity OFF)
-    private float walkSpeed = 5.0f;              // Speed for gravity mode (gravity ON)
+    private float flySpeed = 3f;              // Speed for flying mode (gravity OFF)
+    private float walkSpeed = 3f;              // Speed for gravity mode (gravity ON)
     private float acceleration = 15.0f;          // Acceleration rate for gravity mode
 
     // ========== MOVEMENT STYLE ==========
@@ -154,37 +156,61 @@ public class BlockPlayer extends LivingEntity {
         }
     }
 
+    //  FIXED JUMP METHOD
     public void jump() {
+        System.out.println("jump() called - useGravity=" + useGravity +
+                ", isOnGround=" + isOnGround() +
+                ", isAutoJumping=" + isAutoJumping +
+                ", jumpRequested=" + jumpRequested);
+
         if (useGravity) {
             if (movementStyle == MovementStyle.DIRECT) {
-                // DIRECT: Auto up-down
-                if (!isAutoJumping) {
-                    isAutoJumping = true;
-                    jumpStartY = getY();
-                    jumpTargetY = getY() + flyJumpDistance;
-                    jumpGoingUp = true;
+                // DIRECT mode: Auto up-down jump
+                if (!isAutoJumping && !jumpRequested && isOnGround()) {
+                    jumpRequested = true;
+                    System.out.println("Jump requested for DIRECT mode");
+                } else {
+                    System.out.println("Cannot jump - DIRECT mode: " +
+                            "autoJump=" + isAutoJumping +
+                            ", requested=" + jumpRequested +
+                            ", onGround=" + isOnGround());
                 }
             } else {
-                // VELOCITY: Use the physics jump
-                jump(jumpPower);  // Call the PhysicalEntity.jump() method
+                // VELOCITY mode: Physics-based jump
+                if (isOnGround() && !isAutoJumping && !jumpRequested) {
+                    super.jump(-jumpPower);  // Call parent jump method
+                    isAutoJumping = true;
+                    jumpRequested = true;
+                    System.out.println("Physics jump executed with power: " + jumpPower);
+                } else {
+                    System.out.println("Cannot jump - VELOCITY mode: " +
+                            "onGround=" + isOnGround() +
+                            ", autoJump=" + isAutoJumping);
+                }
             }
         } else {
             // FLYING MODE
-            if (!isAutoJumping) {
-                isAutoJumping = true;
-                jumpStartY = getY();
-                jumpTargetY = getY() + flyJumpDistance;
-                jumpGoingUp = true;
+            if (!isAutoJumping && !jumpRequested) {
+                jumpRequested = true;
+                System.out.println("Jump requested for FLYING mode");
             }
         }
     }
-
+    // ADD THIS - Start the auto jump
+    private void startAutoJump() {
+        isAutoJumping = true;
+        jumpStartY = getY();
+        jumpTargetY = getY() + flyJumpDistance;
+        jumpGoingUp = true;
+        // jumpRequested already reset in update()
+    }
     // ========== STOP METHODS ==========
 
     @Override
     public void stop() {
         super.stop();
         isAutoJumping = false;
+        jumpRequested = false;
     }
 
     public void stopHorizontal() {
@@ -199,48 +225,56 @@ public class BlockPlayer extends LivingEntity {
 
     @Override
     public void update(float deltaTime) {
-        // Handle auto-jump
-        if (!useGravity && isAutoJumping) {
-            handleAutoJump();
+        // Handle jump request
+        if (jumpRequested && !isAutoJumping) {
+            startAutoJump();
+            jumpRequested = false; // CRITICAL: Reset immediately
         }
-        if (useGravity && movementStyle == MovementStyle.DIRECT && isAutoJumping) {
+
+        // Handle auto-jump
+        if (isAutoJumping) {
             handleAutoJump();
         }
 
         // Update physics
         super.update(deltaTime);
 
-//        // Ground detection
-//        if (useGravity) {
-//            if (getY() <= 0) {
-//                setPosition(getX(), 0);
-//                setOnGround(true);
-//                if (velocity.y > 0) {
-//                    setVelocity(velocity.x, 0);
-//                }
-//            } else {
-//                setOnGround(false);
-//            }
-//        } else {
-//            setOnGround(false);
-//        }
     }
 
+    //  FIXED - Better auto-jump handling
     private void handleAutoJump() {
-        float jumpSpeed = 0.2f;
+        float jumpSpeed = 0.3f;
 
         if (jumpGoingUp) {
-            move(0, +jumpSpeed);
+            setPosition(getX(), getY() + jumpSpeed);
+
             if (getY() >= jumpTargetY) {
                 setPosition(getX(), jumpTargetY);
                 jumpGoingUp = false;
             }
         } else {
-            move(0, -jumpSpeed);
+            setPosition(getX(), getY() - jumpSpeed);
+
             if (getY() <= jumpStartY) {
                 setPosition(getX(), jumpStartY);
                 isAutoJumping = false;
+
+                //  Reset jump state completely
+                jumpRequested = false;
+
+                if (useGravity && movementStyle == MovementStyle.DIRECT) {
+                    setOnGround(true);
+                }
             }
+        }
+    }
+    public boolean canJump() {
+        if (useGravity && movementStyle == MovementStyle.VELOCITY) {
+            return isOnGround() && !isAutoJumping && !jumpRequested;
+        } else if (useGravity && movementStyle == MovementStyle.DIRECT) {
+            return isOnGround() && !isAutoJumping && !jumpRequested;
+        } else {
+            return !isAutoJumping && !jumpRequested;
         }
     }
 
@@ -248,11 +282,33 @@ public class BlockPlayer extends LivingEntity {
 
     @Override
     public boolean isOnGround() {
-        return super.isOnGround();  // Calls PhysicalEntity.isOnGround()
+        // If we're in auto-jump, we're not on ground
+        if (isAutoJumping) return false;
+
+        // Check parent's ground detection
+        boolean onGround = super.isOnGround();
+
+        // Additional check for DIRECT movement style
+        if (movementStyle == MovementStyle.DIRECT && useGravity) {
+            // For direct movement, check if Y position is at integer boundary
+            float yPos = getY();
+            float floorY = (float)Math.floor(yPos);
+            onGround = Math.abs(yPos - floorY) < 0.5f;
+            if (onGround && Math.abs(yPos - floorY) > 0.01f) {
+                setPosition(getX(), floorY);
+            }
+        }
+
+        return onGround;
     }
 
     public void setOnGround(boolean onGround) {
-        super.setOnGround(onGround);  // Calls PhysicalEntity.setOnGround()
+        super.setOnGround(onGround);
+
+        //  FIXED - Reset auto-jump when landing
+        if (onGround && useGravity && movementStyle == MovementStyle.VELOCITY) {
+            isAutoJumping = false;
+        }
     }
 
     public boolean isMovingHorizontally() {
@@ -290,7 +346,7 @@ public class BlockPlayer extends LivingEntity {
 
     public void setGravity(float gravityValue) {
         this.gravityStrength = gravityValue;
-        setUseGravity(true);  // Setting a value automatically enables gravity
+        setUseGravity(true);
     }
 
     public boolean isGravityEnabled() {
@@ -309,7 +365,6 @@ public class BlockPlayer extends LivingEntity {
 
         if (useGravity) {
             this.walkSpeed = clampedSpeed;
-
         } else {
             this.flySpeed = clampedSpeed;
         }

@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
 
    <!-- Top: Logo and Tabs -->
    <top>
@@ -126,6 +126,8 @@
       <VBox fx:id="toolContainer" prefHeight="630.0" prefWidth="62.0" style="-fx-background-color: linear-gradient(from 0% 0% to 100% 100%,                   #050a1a 0%, #0d0824 40%, #110a30 70%, #000408 100%);" BorderPane.alignment="CENTER">
          <children>
             <ToggleButton fx:id="codeButton" mnemonicParsing="false" prefHeight="62.0" prefWidth="62.0" text="Code" />
+            <Separator prefWidth="200.0" />
+            <Button fx:id="newButton" mnemonicParsing="false" prefHeight="62.0" prefWidth="62.0" text="New" />
             <Separator prefWidth="200.0" />
             <Button fx:id="saveButton" mnemonicParsing="false" prefHeight="62.0" prefWidth="62.0" text="Save" />
             <Separator prefWidth="200.0" />

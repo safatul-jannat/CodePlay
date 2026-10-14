@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -14,20 +15,23 @@ import java.util.function.Consumer;
 
 public class PopupManager {
 
-    public static void showSavePopup(Node anchorButton, Stage ownerStage, String codeToSave, Consumer<String> onSaveSuccess) {
+    public static void showSavePopup(Node anchorButton, Stage ownerStage,
+                                     String codeToSave, String docToSave,
+                                     String currentNameForSaveAs,
+                                     Consumer<String> onSaveSuccess) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(PopupManager.class.getResource("/com/example/codeplayfx/popups/SavePopup.fxml"));
 
             if (loader.getLocation() == null) {
                 System.err.println("CRITICAL: SavePopup.fxml not found!");
-                System.err.println("Expected at: /com/example/codeplayfx/popups/SavePopup.fxml");
                 return;
             }
 
             Parent root = loader.load();
             SavePopupController controller = loader.getController();
 
+            // Create POPUP (not Stage)
             Popup popup = new Popup();
             popup.setAutoHide(true);
             popup.setHideOnEscape(true);
@@ -35,9 +39,12 @@ public class PopupManager {
 
             controller.setPopup(popup);
             controller.setCodeToSave(codeToSave);
+            controller.setDocumentationToSave(docToSave);
+            controller.setCurrentName(currentNameForSaveAs);
             controller.setOnSaveSuccess(onSaveSuccess);
 
-            Point2D point = anchorButton.localToScreen(anchorButton.getLayoutBounds().getWidth(), 0);
+            // Position near the anchor button
+            Point2D point = anchorButton.localToScreen(0, anchorButton.getLayoutBounds().getHeight());
             popup.show(ownerStage, point.getX(), point.getY());
 
         } catch (IOException e) {

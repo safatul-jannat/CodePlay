@@ -65,11 +65,14 @@ public class SyntaxHighlighter {
         return """
     public class Game {
         
-        
+       boolean init=false; 
         public void execute() {
-            // Game logic goes here
+           clearBackground();
+            if(!init) {
             
             
+            init=true;
+            }
         }
         
     }

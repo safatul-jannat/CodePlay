@@ -7,16 +7,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.application.Platform;
 
 public class GamePanel extends UIPanel {
 
     private Canvas gridCanvas;     // Bottom layer for grid
     private Canvas gameCanvas;     // Top layer for game objects
     private MainWindowScreen mainWindow;
-    private double gridSize = 50.0;  // CHANGED: Bigger grid (was 20.0)
+    private double gridSize = 40.0;  // CHANGED: Bigger grid (was 20.0)
     private Label coordLabel;
     private GameEngine gameEngine;
     private GameWorld gameWorld;
@@ -29,9 +32,22 @@ public class GamePanel extends UIPanel {
         // Get coordinate label
         this.coordLabel = (Label) loader.getNamespace().get("coordLabel");
 
+
+
         // Create TWO canvases in layers
         gridCanvas = new Canvas(800, 600);
         gameCanvas = new Canvas(800, 600);
+
+        gridCanvas.setFocusTraversable(true);
+
+        gameCanvas.setFocusTraversable(true);
+
+        gameCanvas.setOnMouseClicked(e -> gameCanvas.requestFocus());
+        gameCanvas.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            System.out.println("GameCanvas got key: " + event.getCode());
+            // Don't consume - let it go to scene
+            // event.consume(); // DO NOT DO THIS
+        });
 
         // Bind both to container size
         gridCanvas.widthProperty().bind(container.widthProperty());
@@ -66,6 +82,44 @@ public class GamePanel extends UIPanel {
 
         // Draw initial grid
         drawGrid();
+        setupFocusHandlers();
+    }
+    private void setupFocusHandlers() {
+        // Make both canvases request focus for gameCanvas
+        gameCanvas.setOnMouseClicked(event -> {
+            gameCanvas.requestFocus();
+            event.consume();
+        });
+
+        gridCanvas.setOnMouseClicked(event -> {
+            gameCanvas.requestFocus();
+            event.consume();
+        });
+
+        // Force focus when game starts
+        gameCanvas.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                System.out.println("Game canvas focused - keyboard input active");
+            } else if (isGameRunning()) {
+                // Re-request focus if game is running and we lose focus
+                Platform.runLater(() -> gameCanvas.requestFocus());
+            }
+        });
+
+        // Prevent scene-level shortcuts when game has focus
+//        gameCanvas.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+//            if (gameCanvas.isFocused() && mainWindow.getControlPanel().isRunning()) {
+//                // Consume space to prevent welcome screen navigation
+//                if (event.getCode() == KeyCode.SPACE) {
+//                    event.consume();
+//                }
+//            }
+//        });
+    }
+
+    private boolean isGameRunning() {
+        return mainWindow.getControlPanel() != null &&
+                mainWindow.getControlPanel().isRunning();
     }
 
     @Override
@@ -198,6 +252,37 @@ public class GamePanel extends UIPanel {
         if (gameEngine != null) {
             gameEngine.stop();
         }
+    }
+
+    /**
+     * Request focus for the game canvas
+     */
+    public void requestGameFocus() {
+        if (gameCanvas != null) {
+            Platform.runLater(() -> {
+                gameCanvas.requestFocus();
+                // Prevent focus from leaving game canvas
+                gameCanvas.getScene().getRoot().setFocusTraversable(false);
+            });
+        }
+    }
+
+    public void setGameFocusMode(boolean active) {
+        if (gameCanvas != null) {
+            Platform.runLater(() -> {
+                if (active) {
+                    gameCanvas.requestFocus();
+                    gameCanvas.setFocusTraversable(true);
+                }
+                // Game canvas focus mode can be toggled
+            });
+        }
+    }
+    /**
+     * Check if game canvas has focus
+     */
+    public boolean hasGameFocus() {
+        return gameCanvas != null && gameCanvas.isFocused();
     }
 
     public Pane getCanvasContainer() {

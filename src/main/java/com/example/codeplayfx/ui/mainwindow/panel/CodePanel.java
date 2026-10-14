@@ -97,6 +97,12 @@ public class CodePanel extends UIPanel {
     }
 
     private void setupButtonActions() {
+        undoButton.setFocusTraversable(false);
+        redoButton.setFocusTraversable(false);
+        clearButton.setFocusTraversable(false);
+        fontUp.setFocusTraversable(false);
+        fontDown.setFocusTraversable(false);
+
         undoButton.setOnAction(e -> undo());
         redoButton.setOnAction(e -> redo());
         clearButton.setOnAction(e -> clear());
@@ -217,8 +223,28 @@ public class CodePanel extends UIPanel {
                 codeEditor.setStyleSpans(0, SyntaxHighlighter.computeHighlighting(code))
         );
     }
+    public void setEditorFocusable(boolean focusable) {
+        if (codeEditor != null) {
+            codeEditor.setFocusTraversable(focusable);
+            if (!focusable) {
+                // Remove focus from editor if it has it
+                Platform.runLater(() -> {
+                    if (codeEditor.isFocused()) {
+                        codeEditor.getParent().requestFocus();
+                    }
+                });
+            }
+        }
+    }
+
+    public boolean isEditorFocused() {
+        return codeEditor != null && codeEditor.isFocused();
+    }
 
     public String getCode() { return codeEditor.getText(); }
-    public void focusEditor() { codeEditor.requestFocus(); }
-    public CodeArea getCodeEditor() { return codeEditor; }
+    public void focusEditor() {
+        if (codeEditor != null) {
+            codeEditor.requestFocus();
+        }
+    }    public CodeArea getCodeEditor() { return codeEditor; }
 }

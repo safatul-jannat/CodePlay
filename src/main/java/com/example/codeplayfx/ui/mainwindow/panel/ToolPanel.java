@@ -12,6 +12,7 @@ public class ToolPanel extends UIPanel {
     private Button docButton;
     private Button helpButton;
     private Button backButton;
+    private Button newButton;
     private MainWindowScreen mainWindow;
 
     public ToolPanel(FXMLLoader loader, MainWindowScreen mainWindow) {
@@ -22,10 +23,17 @@ public class ToolPanel extends UIPanel {
         docButton = (Button) loader.getNamespace().get("docButton");
         helpButton = (Button) loader.getNamespace().get("helpButton");
         backButton = (Button) loader.getNamespace().get("backButton");
+        newButton = (Button) loader.getNamespace().get("newButton");
     }
 
     @Override
     public void initialize() {
+        if (saveButton != null) saveButton.setFocusTraversable(false);
+        if (saveAsButton != null) saveAsButton.setFocusTraversable(false);
+        if (docButton != null) docButton.setFocusTraversable(false);
+        if (helpButton != null) helpButton.setFocusTraversable(false);
+        if (newButton != null) newButton.setFocusTraversable(false);
+
         setupButtonActions();
     }
 
@@ -63,6 +71,12 @@ public class ToolPanel extends UIPanel {
                 mainWindow.onHomeTabClicked();
             });
         }
+        if (newButton != null) {
+            newButton.setOnAction(e -> {
+                System.out.println("New button clicked - creating new project");
+                mainWindow.newProject();  // Call newProject method
+            });
+        }
     }
 
     public Button getSaveButton() { return saveButton; }
@@ -72,4 +86,6 @@ public class ToolPanel extends UIPanel {
     public Button getDocButton() { return docButton; }
     public Button getHelpButton() { return helpButton; }
     public Button getBackButton() { return backButton; }
+    public Button getNewButton() { return newButton; }  // Added getter
+
 }

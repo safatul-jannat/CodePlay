@@ -12,7 +12,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-
+import javafx.scene.control.Hyperlink;
+import java.awt.Desktop;
+import java.net.URI;
 import java.net.URL;
 import java.io.InputStream;
 import java.io.IOException;
@@ -37,9 +39,9 @@ public class AboutController implements Initializable {
 
     // About content
     @FXML private TextArea appDescriptionArea;
-    // Note: Developer cards are in FXML, not dynamically created here
-    // But you could add more TextAreas if needed
-
+    @FXML private Hyperlink githubLink;
+    @FXML private Hyperlink twitterLink;
+    @FXML private Hyperlink discordLink;
     private AboutAnimator animator;
 
     @Override
@@ -63,6 +65,7 @@ public class AboutController implements Initializable {
 
         animator.initializeAbout();
         loadAboutContent();
+        setupHyperlinks();
     }
 
     private void loadAboutContent() {
@@ -85,6 +88,26 @@ public class AboutController implements Initializable {
         if (animator != null) animator.shutdown();
     }
 
+    private void setupHyperlinks() {
+        if (githubLink != null) {
+            githubLink.setOnAction(e -> {
+                try { Desktop.getDesktop().browse(new URI("https://github.com/sha-fa-at/CodePlay")); }
+                catch (Exception ex) { ex.printStackTrace(); }
+            });
+        }
+        if (twitterLink != null) {
+            twitterLink.setOnAction(e -> {
+                try { Desktop.getDesktop().browse(new URI("https://twitter.com/codeplay")); }
+                catch (Exception ex) { ex.printStackTrace(); }
+            });
+        }
+        if (discordLink != null) {
+            discordLink.setOnAction(e -> {
+                try { Desktop.getDesktop().browse(new URI("https://discord.gg/codeplay")); }
+                catch (Exception ex) { ex.printStackTrace(); }
+            });
+        }
+    }
     // Navigation methods
     @FXML
     public void goBack(ActionEvent event) {

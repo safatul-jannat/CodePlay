@@ -18,6 +18,7 @@ module com.example.codeplayfx {
     //requires bootstrapfx.core;
 
     requires com.almasb.fxgl.all;
+    requires java.sql;
     // ===== EXPORTS =====
     exports com.example.codeplayfx;
     exports com.example.codeplayfx.compiler;
